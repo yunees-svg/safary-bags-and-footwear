@@ -1,36 +1,32 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Safary Bags and Footwear - Management System
 
-## Getting Started
+A responsive retail web application built with **Next.js (App Router)**, **TypeScript**, **Tailwind CSS**, and **Supabase (PostgreSQL & Auth)**.
 
-First, run the development server:
+## Quick Start
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+1. Install dependencies:
+   ```bash
+   npm install
+   ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+2. Run development server:
+   ```bash
+   npm run dev
+   ```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+3. Open [http://localhost:3000](http://localhost:3000) for the Customer Website.
+4. Open [http://localhost:3000/login](http://localhost:3000/login) for the Admin Management Portal (one-click demo access for Owner & Staff).
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Key Modules
 
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- **Customer Website**: Home showcase, full search & filters (size, colour, category), live inventory availability checker, and dynamic prefilled WhatsApp ordering links.
+- **Admin Dashboard**:
+  - **Overview**: Real-time KPI cards (Today's Sales, Bill Count, Total Revenue, Est. Gross Profit, Low Stock items).
+  - **Catalog**: Products, Categories, and dynamic Colour & Size Variant Matrix.
+  - **Inventory**: Real-time stock counts by colour and size, audited stock movements ledger.
+  - **Billing / POS**: Fast Point of Sale counter terminal, atomic stock reduction, Cash/UPI/Card/Credit split payments, printable 80mm thermal receipt & A4 invoice.
+  - **Purchases**: Supplier invoices, purchase entries, automatic inventory increment upon confirmation.
+  - **Returns & Exchanges**: Original bill lookup, restock condition validation (sellable vs damaged), refund issuance.
+  - **Credit Management**: Customer credit tracking, balance settlements, and debit/credit ledger.
+  - **Finance**: Daily expense logging and comprehensive P&L financial reports with CSV export.
+  - **System**: Role-based access control (Owner vs Staff) and shop settings.
