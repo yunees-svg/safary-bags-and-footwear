@@ -129,7 +129,7 @@ export function CreditClient({ customers }: CreditClientProps) {
                 <th className="py-3 px-4 font-semibold">Phone</th>
                 <th className="py-3 px-4 font-semibold">Lifetime Purchases</th>
                 <th className="py-3 px-4 font-semibold">Outstanding Due</th>
-                <th className="py-3 px-4 font-semibold text-right">Collect Payment</th>
+                <th className="py-3 px-4 font-semibold text-right">Actions & Reminders</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100 text-slate-700">
@@ -156,13 +156,30 @@ export function CreditClient({ customers }: CreditClientProps) {
                       {formatCurrency(c.outstanding_balance || 0)}
                     </td>
                     <td className="py-3.5 px-4 text-right">
-                      <button
-                        onClick={() => openSettlementModal(c)}
-                        className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-xs font-semibold shadow-xs transition"
-                      >
-                        <ArrowDownCircle className="w-3.5 h-3.5" />
-                        Record Payment
-                      </button>
+                      <div className="flex items-center justify-end gap-2">
+                        <a
+                          href={`https://wa.me/91${c.phone.replace(/\D/g, "")}?text=${encodeURIComponent(
+                            `Hello ${c.name}, this is a gentle reminder from Safary Bags and Footwear. Your pending credit (Khata) balance is ${formatCurrency(
+                              c.outstanding_balance || 0
+                            )}. Kindly clear via GPay or visit our shop counter. Thank you!`
+                          )}`}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-300 rounded-lg text-xs font-semibold transition"
+                          title="Send Due Reminder on WhatsApp"
+                        >
+                          <Phone className="w-3.5 h-3.5 text-emerald-600" />
+                          <span>WhatsApp Due</span>
+                        </a>
+
+                        <button
+                          onClick={() => openSettlementModal(c)}
+                          className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-xs font-semibold shadow-xs transition"
+                        >
+                          <ArrowDownCircle className="w-3.5 h-3.5" />
+                          Record Payment
+                        </button>
+                      </div>
                     </td>
                   </tr>
                 ))

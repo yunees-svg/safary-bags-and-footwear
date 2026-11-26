@@ -1,10 +1,11 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { Supplier, Product, ProductVariant } from "@/lib/types/database";
 import { createPurchaseEntryAction } from "@/lib/actions/purchases";
+import { parseSupplierInvoiceAction, ParsedInvoiceResult } from "@/lib/actions/ai-document";
 import { formatCurrency } from "@/lib/utils";
 import {
   ArrowLeft,
@@ -14,6 +15,11 @@ import {
   AlertCircle,
   Loader2,
   Package,
+  Sparkles,
+  FileText,
+  Upload,
+  CheckCircle2,
+  Scan,
 } from "lucide-react";
 
 interface VariantOption extends ProductVariant {
@@ -47,6 +53,73 @@ export function NewPurchaseClient({ suppliers, variants }: NewPurchaseClientProp
 
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+
+  // AI Invoice Scanner State
+  const [isScanning, setIsScanning] = useState(false);
+  const [scanResult, setScanResult] = useState<ParsedInvoiceResult | null>(null);
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
+
+  async function handleScanFile(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setIsScanning(true);
+    setError(null);
+
+    const reader = new FileReader();
+    reader.onload = async () => {
+      const base64 = reader.result as string;
+      const res = await parseSupplierInvoiceAction({
+        fileBase64: base64,
+        fileName: file.name,
+        fileType: file.type,
+      });
+
+      applyScanResult(res);
+      setIsScanning(false);
+    };
+    reader.onerror = () => {
+      setError("Failed to read invoice file.");
+      setIsScanning(false);
+    };
+    reader.readAsDataURL(file);
+  }
+
+  async function handleSampleScan(templateId: "vkc-wholesale" | "safary-bags") {
+    setIsScanning(true);
+    setError(null);
+    const res = await parseSupplierInvoiceAction({ sampleTemplateId: templateId });
+    applyScanResult(res);
+    setIsScanning(false);
+  }
+
+  function applyScanResult(res: ParsedInvoiceResult) {
+    if (!res.success) {
+      setError(res.error || "Failed to parse invoice.");
+      return;
+    }
+
+    setScanResult(res);
+
+    if (res.matchedSupplierId) {
+      setSupplierId(res.matchedSupplierId);
+    }
+    if (res.invoiceNumber) {
+      setInvoiceNumber(res.invoiceNumber);
+    }
+    if (res.invoiceDate) {
+      setPurchaseDate(res.invoiceDate);
+    }
+
+    if (res.items && res.items.length > 0) {
+      const newItems = res.items.map((it) => ({
+        variant_id: it.matchedVariantId || variants[0]?.id || "",
+        quantity: it.quantity,
+        unit_cost: it.unitCost,
+      }));
+      setItems(newItems);
+    }
+  }
 
   function addItemRow() {
     setItems([
@@ -145,6 +218,89 @@ export function NewPurchaseClient({ suppliers, variants }: NewPurchaseClientProp
           <span>{error}</span>
         </div>
       )}
+
+      {/* AI Document Processing Card (Velom Concept) */}
+      <div className="bg-gradient-to-r from-indigo-900 via-slate-900 to-blue-950 text-white p-5 rounded-2xl border border-indigo-500/30 shadow-md space-y-4">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div className="flex items-center gap-2.5">
+            <div className="w-8 h-8 rounded-xl bg-indigo-500/30 border border-indigo-400/40 text-indigo-300 flex items-center justify-center">
+              <Sparkles className="w-4 h-4 text-indigo-300 animate-pulse" />
+            </div>
+            <div>
+              <h2 className="text-sm font-bold text-white flex items-center gap-1.5">
+                AI Document Processing <span className="text-2xs font-semibold px-2 py-0.5 rounded-full bg-indigo-500/30 text-indigo-200 border border-indigo-400/30">Velom Smart Ingest</span>
+              </h2>
+              <p className="text-2xs text-slate-300">
+                Upload or photograph a wholesale supplier invoice. AI will extract supplier, bill number, line items, and quantities automatically.
+              </p>
+            </div>
+          </div>
+
+          {/* Hidden File Input */}
+          <input
+            type="file"
+            ref={fileInputRef}
+            onChange={handleScanFile}
+            accept="image/*,.pdf"
+            className="hidden"
+          />
+
+          <div className="flex flex-wrap items-center gap-2 shrink-0">
+            <button
+              type="button"
+              disabled={isScanning}
+              onClick={() => fileInputRef.current?.click()}
+              className="px-3.5 py-2 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl text-xs font-semibold shadow-xs transition flex items-center gap-1.5 disabled:opacity-50"
+            >
+              {isScanning ? (
+                <>
+                  <Loader2 className="w-3.5 h-3.5 animate-spin" /> Scanning Document...
+                </>
+              ) : (
+                <>
+                  <Upload className="w-3.5 h-3.5" /> Upload Invoice Bill
+                </>
+              )}
+            </button>
+          </div>
+        </div>
+
+        {/* Quick Instant Demo Samples */}
+        <div className="pt-2 border-t border-white/10 flex flex-wrap items-center gap-2 text-2xs">
+          <span className="text-slate-400">Quick Test Templates:</span>
+          <button
+            type="button"
+            disabled={isScanning}
+            onClick={() => handleSampleScan("vkc-wholesale")}
+            className="px-2.5 py-1 rounded-lg bg-white/10 hover:bg-white/20 text-indigo-200 border border-white/10 transition flex items-center gap-1"
+          >
+            <span>⚡</span> VKC Footwear Bill (60 pairs)
+          </button>
+          <button
+            type="button"
+            disabled={isScanning}
+            onClick={() => handleSampleScan("safary-bags")}
+            className="px-2.5 py-1 rounded-lg bg-white/10 hover:bg-white/20 text-blue-200 border border-white/10 transition flex items-center gap-1"
+          >
+            <span>⚡</span> Safari Backpacks & Ortho Bill (50 items)
+          </button>
+        </div>
+
+        {/* Scan Confirmation Notice if scanned */}
+        {scanResult && scanResult.success && (
+          <div className="p-3 rounded-xl bg-emerald-950/70 border border-emerald-500/40 text-emerald-200 text-xs flex items-center justify-between gap-2">
+            <div className="flex items-center gap-2">
+              <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
+              <span>
+                <strong>AI Recognized:</strong> {scanResult.rawSummary} Extracted {scanResult.items.length} line items (Total {formatCurrency(scanResult.totalAmount)}).
+              </span>
+            </div>
+            <span className="text-2xs font-semibold px-2 py-0.5 rounded-full bg-emerald-900 text-emerald-300">
+              Form Auto-Filled ✓
+            </span>
+          </div>
+        )}
+      </div>
 
       {/* Invoice Meta Box */}
       <div className="bg-white p-5 rounded-xl border border-slate-200 shadow-xs space-y-4">

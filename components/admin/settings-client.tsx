@@ -25,6 +25,7 @@ export function SettingsClient({ settings, isOwner }: SettingsClientProps) {
   const [address, setAddress] = useState(settings.address);
   const [phone, setPhone] = useState(settings.phone);
   const [whatsapp, setWhatsapp] = useState(settings.whatsapp_number);
+  const [upiId, setUpiId] = useState(settings.upi_id || "safarybags@okaxis");
   const [hours, setHours] = useState(settings.opening_hours);
   const [billPrefix, setBillPrefix] = useState(settings.bill_prefix);
   const [lowStockDefault, setLowStockDefault] = useState(settings.low_stock_default);
@@ -56,6 +57,7 @@ export function SettingsClient({ settings, isOwner }: SettingsClientProps) {
       address,
       phone,
       whatsapp_number: whatsapp,
+      upi_id: upiId,
       opening_hours: hours,
       bill_prefix: billPrefix,
       low_stock_default: Number(lowStockDefault),
@@ -165,6 +167,21 @@ export function SettingsClient({ settings, isOwner }: SettingsClientProps) {
               className="w-full px-3 py-2 border border-slate-300 rounded-lg text-xs text-slate-900 font-mono focus:outline-none focus:ring-1 focus:ring-blue-500"
             />
             <span className="text-2xs text-slate-400">Target phone for website customer click-to-chat links</span>
+          </div>
+
+          <div>
+            <label className="block text-xs font-semibold text-slate-700 mb-1">
+              Store GPay / UPI ID *
+            </label>
+            <input
+              type="text"
+              required
+              placeholder="e.g. yourname@okaxis"
+              value={upiId}
+              onChange={(e) => setUpiId(e.target.value)}
+              className="w-full px-3 py-2 border border-slate-300 rounded-lg text-xs text-slate-900 font-mono focus:outline-none focus:ring-1 focus:ring-blue-500"
+            />
+            <span className="text-2xs text-slate-400">Used for auto-generating dynamic QR codes at POS counter</span>
           </div>
 
           <div className="sm:col-span-2">

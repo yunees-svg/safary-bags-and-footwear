@@ -36,6 +36,7 @@ const initialSettings: ShopSettings = {
   address: "Shop No. 4, Ground Floor, Central Retail Arcade, Main Market, MG Road",
   phone: "+91 98765 43210",
   whatsapp_number: "+91 98765 43210",
+  upi_id: "safarybags@okaxis",
   currency: "INR",
   opening_hours: "Mon - Sat: 10:00 AM - 9:00 PM | Sun: 11:00 AM - 7:00 PM",
   tax_rate: 0.0,

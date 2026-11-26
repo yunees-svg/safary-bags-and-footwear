@@ -225,6 +225,7 @@ export interface ShopSettings {
   address: string;
   phone: string;
   whatsapp_number: string;
+  upi_id?: string | null;
   currency: string;
   opening_hours: string;
   tax_rate: number;

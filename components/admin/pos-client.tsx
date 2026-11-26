@@ -557,20 +557,56 @@ export function PosClient({ products, categories, customers, settings }: PosClie
             </div>
           )}
 
-          {/* UPI reference number if UPI */}
+          {/* Dynamic GPay / UPI QR Code at POS Checkout */}
           {paymentMethod === "upi" && (
-            <div className="p-2 bg-white rounded-lg border border-slate-200 flex items-center justify-between text-xs">
-              <div className="flex items-center gap-1 text-slate-600">
-                <QrCode className="w-3.5 h-3.5 text-blue-600" />
-                <span>UPI Ref / UTR:</span>
+            <div className="p-3 bg-white rounded-xl border border-blue-200 shadow-xs space-y-2.5">
+              <div className="flex items-center justify-between text-xs">
+                <span className="font-semibold text-slate-800 flex items-center gap-1.5">
+                  <QrCode className="w-4 h-4 text-blue-600" /> Dynamic GPay / UPI QR
+                </span>
+                <span className="text-2xs font-mono bg-blue-50 text-blue-700 px-2 py-0.5 rounded-full border border-blue-200">
+                  {settings.upi_id || "safarybags@okaxis"}
+                </span>
               </div>
-              <input
-                type="text"
-                placeholder="Optional Ref No."
-                value={referenceNumber}
-                onChange={(e) => setReferenceNumber(e.target.value)}
-                className="w-32 px-2 py-0.5 text-right font-mono text-xs border border-slate-200 rounded"
-              />
+
+              {/* Live QR Image Box */}
+              <div className="bg-slate-50 p-3 rounded-lg border border-slate-100 flex flex-col items-center justify-center text-center">
+                {finalTotal > 0 ? (
+                  <>
+                    <div className="p-2 bg-white rounded-xl shadow-xs border border-slate-200 inline-block mb-1.5">
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img
+                        src={`https://api.qrserver.com/v1/create-qr-code/?size=160x160&data=${encodeURIComponent(
+                          `upi://pay?pa=${settings.upi_id || "safarybags@okaxis"}&pn=${encodeURIComponent(
+                            settings.shop_name
+                          )}&am=${finalTotal}&cu=INR&tn=${encodeURIComponent("Safary Footwear POS")}`
+                        )}`}
+                        alt="GPay QR Code"
+                        className="w-32 h-32 object-contain"
+                      />
+                    </div>
+                    <span className="text-sm font-bold text-slate-900 block">
+                      Pay {formatCurrency(finalTotal)}
+                    </span>
+                    <span className="text-2xs text-slate-500">
+                      Scan with Google Pay, PhonePe, Paytm, or BHIM
+                    </span>
+                  </>
+                ) : (
+                  <span className="text-xs text-slate-400 py-3">Add items to generate dynamic QR</span>
+                )}
+              </div>
+
+              <div className="flex items-center justify-between gap-2 text-xs pt-1">
+                <span className="text-2xs text-slate-500">UTR / Ref No:</span>
+                <input
+                  type="text"
+                  placeholder="Optional 12-digit Ref"
+                  value={referenceNumber}
+                  onChange={(e) => setReferenceNumber(e.target.value)}
+                  className="w-36 px-2 py-1 text-right font-mono text-xs border border-slate-200 rounded-lg bg-slate-50"
+                />
+              </div>
             </div>
           )}
 

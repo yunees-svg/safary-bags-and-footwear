@@ -2,6 +2,21 @@
 
 import { mockStore } from "@/lib/data/mock-store";
 import { getCurrentUser } from "@/lib/actions/auth";
+import { formatCurrency, formatDate } from "@/lib/utils";
+
+export interface PulseFeedItem {
+  id: string;
+  type: "sale" | "stock_alert" | "credit_warning" | "purchase" | "enquiry";
+  title: string;
+  description: string;
+  timestamp: string;
+  badge?: string;
+  badgeColor?: "emerald" | "amber" | "red" | "blue" | "purple";
+  actionLabel?: string;
+  actionHref?: string;
+  whatsAppUrl?: string;
+  billId?: string;
+}
 
 export async function getDashboardMetrics() {
   const user = await getCurrentUser();
@@ -10,6 +25,10 @@ export async function getDashboardMetrics() {
   const bills = mockStore.getBills();
   const variants = mockStore.getVariantsWithProduct();
   const expenses = mockStore.getExpenses();
+  const snapshot = mockStore.getSnapshot();
+  const customers = mockStore.getCustomers();
+  const purchases = (snapshot as any).purchases || [];
+  const enquiries = snapshot.enquiries || [];
 
   const todayStr = new Date().toISOString().slice(0, 10);
 
@@ -76,6 +95,96 @@ export async function getDashboardMetrics() {
     .sort((a, b) => b.quantity - a.quantity)
     .slice(0, 5);
 
+  // Synthesize Live Pulse Feed (Velom Activity Stream)
+  const pulseFeed: PulseFeedItem[] = [];
+
+  // 1. Add Recent Completed Sales
+  bills.slice(0, 5).forEach((b) => {
+    const paymentMode = b.payments?.[0]?.payment_method || "cash";
+    const itemSummary = b.items?.map((it) => `${it.product_name_snapshot} (${it.quantity})`).slice(0, 2).join(", ");
+    pulseFeed.push({
+      id: `pulse_sale_${b.id}`,
+      type: "sale",
+      title: `Bill #${b.bill_number} Issued`,
+      description: `${itemSummary || "Slippers"} • Total: ${formatCurrency(b.total_amount)}`,
+      timestamp: b.created_at,
+      badge: paymentMode.toUpperCase(),
+      badgeColor: "emerald",
+      billId: b.id,
+      actionLabel: "View Receipt",
+    });
+  });
+
+  // 2. Add Urgent Low Stock Warnings
+  lowStockItems.slice(0, 4).forEach((ls) => {
+    pulseFeed.push({
+      id: `pulse_stock_${ls.id}`,
+      type: "stock_alert",
+      title: `Low Stock: ${ls.product.name}`,
+      description: `${ls.colour}, Size ${ls.size} — Only ${ls.stock_quantity} pairs remaining in rack!`,
+      timestamp: ls.product?.created_at || new Date().toISOString(),
+      badge: `${ls.stock_quantity} LEFT`,
+      badgeColor: "amber",
+      actionLabel: "Restock Now",
+      actionHref: "/admin/inventory",
+    });
+  });
+
+  // 3. Add High Credit (Khata) Balance Warnings
+  customers
+    .filter((c) => (c.outstanding_balance ?? 0) > 0)
+    .sort((a, b) => (b.outstanding_balance ?? 0) - (a.outstanding_balance ?? 0))
+    .slice(0, 3)
+    .forEach((c) => {
+      const balance = c.outstanding_balance ?? 0;
+      const cleanPhone = c.phone.replace(/\D/g, "");
+      const msg = `Hello ${c.name}, this is a gentle reminder from Safary Bags and Footwear. Your pending credit balance is ${formatCurrency(balance)}. Kindly settle via GPay or visit the shop. Thank you!`;
+      pulseFeed.push({
+        id: `pulse_credit_${c.id}`,
+        type: "credit_warning",
+        title: `Pending Khata: ${c.name}`,
+        description: `Unpaid balance ${formatCurrency(balance)} • Phone: ${c.phone}`,
+        timestamp: c.created_at || new Date().toISOString(),
+        badge: "DUE OVERDRAFT",
+        badgeColor: "red",
+        actionLabel: "WhatsApp Due Reminder",
+        whatsAppUrl: `https://wa.me/91${cleanPhone}?text=${encodeURIComponent(msg)}`,
+      });
+    });
+
+  // 4. Add Wholesale Purchases
+  purchases.slice(0, 3).forEach((p: any) => {
+    pulseFeed.push({
+      id: `pulse_pur_${p.id}`,
+      type: "purchase",
+      title: `Stock-In: Invoice #${p.invoice_number}`,
+      description: `Wholesale dispatch confirmed • ${p.items?.length || 0} line items added to stock`,
+      timestamp: p.purchase_date || p.created_at || new Date().toISOString(),
+      badge: "PURCHASE",
+      badgeColor: "purple",
+      actionLabel: "View Invoices",
+      actionHref: "/admin/purchases",
+    });
+  });
+
+  // 5. Add Online WhatsApp Enquiries
+  enquiries.slice(0, 3).forEach((eq: any) => {
+    pulseFeed.push({
+      id: `pulse_enq_${eq.id}`,
+      type: "enquiry",
+      title: `Online Enquiry: ${eq.product_name || "Catalog Footwear"}`,
+      description: `Customer ${eq.customer_name || "Visitor"} (${eq.customer_phone || "WhatsApp"})`,
+      timestamp: eq.created_at || new Date().toISOString(),
+      badge: "WEB LEAD",
+      badgeColor: "blue",
+      actionLabel: "View Enquiries",
+      actionHref: "/admin/enquiries",
+    });
+  });
+
+  // Sort chronological by timestamp descending
+  pulseFeed.sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
+
   return {
     todaySales,
     todayBillCount,
@@ -85,6 +194,8 @@ export async function getDashboardMetrics() {
     lowStockItems,
     recentBills,
     bestSellers,
+    pulseFeed: pulseFeed.slice(0, 10),
+    settings: mockStore.getSettings(),
     isOwner,
   };
 }

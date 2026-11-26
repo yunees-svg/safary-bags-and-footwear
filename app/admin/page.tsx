@@ -1,4 +1,5 @@
 import { getDashboardMetrics } from "@/lib/actions/dashboard";
+import { DashboardPulseFeed } from "@/components/admin/dashboard-pulse-feed";
 import { formatCurrency, formatDate } from "@/lib/utils";
 import Link from "next/link";
 import {
@@ -153,6 +154,13 @@ export default async function AdminOverviewPage() {
           </Link>
         </div>
       )}
+
+      {/* Live Store Heartbeat & Activity Pulse (Velom Concept) */}
+      <DashboardPulseFeed
+        feed={data.pulseFeed}
+        settings={data.settings}
+        bills={data.recentBills}
+      />
 
       {/* Main Grid: Recent Transactions & Best Sellers */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
