@@ -48,6 +48,7 @@ interface CartItem {
 }
 
 export function PosClient({ products, categories, customers, settings }: PosClientProps) {
+  const [mobileTab, setMobileTab] = useState<"catalog" | "cart">("catalog");
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [search, setSearch] = useState("");
   const [cart, setCart] = useState<CartItem[]>([]);
@@ -200,9 +201,45 @@ export function PosClient({ products, categories, customers, settings }: PosClie
   }
 
   return (
-    <div className="h-[calc(100vh-6rem)] flex flex-col lg:flex-row gap-4">
-      {/* LEFT PANE: Product Catalog & Search */}
-      <div className="flex-1 bg-white rounded-xl border border-slate-200 shadow-xs flex flex-col min-w-0 overflow-hidden">
+    <div className="h-[calc(100vh-5.5rem)] flex flex-col gap-3">
+      {/* Mobile Tab Switcher */}
+      <div className="lg:hidden flex items-center bg-slate-200/90 p-1 rounded-xl shrink-0">
+        <button
+          type="button"
+          onClick={() => setMobileTab("catalog")}
+          className={`flex-1 py-2 text-xs font-semibold rounded-lg transition flex items-center justify-center gap-1.5 ${
+            mobileTab === "catalog"
+              ? "bg-white text-blue-600 shadow-xs"
+              : "text-slate-600 hover:text-slate-900"
+          }`}
+        >
+          <Search className="w-3.5 h-3.5" /> Products ({filteredProducts.length})
+        </button>
+        <button
+          type="button"
+          onClick={() => setMobileTab("cart")}
+          className={`flex-1 py-2 text-xs font-semibold rounded-lg transition flex items-center justify-center gap-1.5 ${
+            mobileTab === "cart"
+              ? "bg-white text-blue-600 shadow-xs"
+              : "text-slate-600 hover:text-slate-900"
+          }`}
+        >
+          <ShoppingCart className="w-3.5 h-3.5" /> Cart & Bill ({cart.reduce((a, b) => a + b.quantity, 0)})
+          {cart.length > 0 && (
+            <span className="px-1.5 py-0.5 rounded-full text-2xs bg-blue-600 text-white font-bold ml-1">
+              {formatCurrency(finalTotal)}
+            </span>
+          )}
+        </button>
+      </div>
+
+      <div className="flex-1 flex flex-col lg:flex-row gap-4 min-h-0">
+        {/* LEFT PANE: Product Catalog & Search */}
+        <div
+          className={`flex-1 bg-white rounded-xl border border-slate-200 shadow-xs flex-col min-w-0 overflow-hidden relative ${
+            mobileTab === "catalog" ? "flex" : "hidden lg:flex"
+          }`}
+        >
         {/* Top Filter & Search */}
         <div className="p-4 border-b border-slate-100 space-y-3">
           <div className="flex items-center gap-2">
@@ -303,10 +340,45 @@ export function PosClient({ products, categories, customers, settings }: PosClie
             </div>
           )}
         </div>
+
+        {/* Mobile Floating Checkout Pill on Catalog Screen */}
+        {cart.length > 0 && (
+          <div className="lg:hidden p-3 bg-blue-50 border-t border-blue-200 flex items-center justify-between">
+            <div>
+              <span className="text-xs font-bold text-blue-950 block">
+                {cart.reduce((a, b) => a + b.quantity, 0)} Items Added
+              </span>
+              <span className="text-xs font-semibold text-blue-700">
+                Total: {formatCurrency(finalTotal)}
+              </span>
+            </div>
+            <button
+              onClick={() => setMobileTab("cart")}
+              className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-semibold shadow-xs flex items-center gap-1.5"
+            >
+              Go to Bill & Pay →
+            </button>
+          </div>
+        )}
       </div>
 
       {/* RIGHT PANE: Cart & POS Checkout */}
-      <div className="w-full lg:w-96 bg-white rounded-xl border border-slate-200 shadow-xs flex flex-col overflow-hidden">
+      <div
+        className={`w-full lg:w-96 bg-white rounded-xl border border-slate-200 shadow-xs flex-col shrink-0 overflow-hidden ${
+          mobileTab === "cart" ? "flex flex-1" : "hidden lg:flex"
+        }`}
+      >
+        {/* Mobile Navigation Header */}
+        <div className="lg:hidden p-2.5 bg-slate-100 border-b border-slate-200 flex items-center justify-between">
+          <button
+            type="button"
+            onClick={() => setMobileTab("catalog")}
+            className="text-xs font-semibold text-blue-600 hover:underline flex items-center gap-1"
+          >
+            ← Add More Slippers
+          </button>
+          <span className="text-xs font-semibold text-slate-700">Billing Counter</span>
+        </div>
         {/* Customer Select Header */}
         <div className="p-3 bg-slate-50 border-b border-slate-200 space-y-2">
           <div className="flex items-center justify-between text-xs">
@@ -522,6 +594,7 @@ export function PosClient({ products, categories, customers, settings }: PosClie
             )}
           </button>
         </div>
+      </div>
       </div>
 
       {/* Variant Selector Dialog */}

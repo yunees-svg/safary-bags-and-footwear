@@ -29,6 +29,7 @@ interface SidebarProps {
   role: UserRole;
   isCollapsed: boolean;
   onToggleCollapse: () => void;
+  onNavigate?: () => void;
 }
 
 interface NavSection {
@@ -42,7 +43,7 @@ interface NavSection {
   }[];
 }
 
-export function AdminSidebar({ role, isCollapsed, onToggleCollapse }: SidebarProps) {
+export function AdminSidebar({ role, isCollapsed, onToggleCollapse, onNavigate }: SidebarProps) {
   const pathname = usePathname();
 
   const navSections: NavSection[] = [
@@ -154,6 +155,7 @@ export function AdminSidebar({ role, isCollapsed, onToggleCollapse }: SidebarPro
                     <Link
                       key={item.href}
                       href={item.href}
+                      onClick={onNavigate}
                       title={isCollapsed ? item.label : undefined}
                       className={cn(
                         "flex items-center gap-3 px-2.5 py-2 rounded-lg text-xs font-medium transition group relative",

@@ -150,12 +150,22 @@ export function CatalogClient({
               <span className="text-xs font-semibold text-slate-900 flex items-center gap-1.5">
                 <Filter className="w-3.5 h-3.5 text-blue-600" /> Filters
               </span>
-              <button
-                onClick={resetFilters}
-                className="text-2xs font-semibold text-blue-600 hover:underline"
-              >
-                Reset All
-              </button>
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={resetFilters}
+                  className="text-2xs font-semibold text-blue-600 hover:underline"
+                >
+                  Reset All
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setMobileFilterOpen(false)}
+                  className="lg:hidden p-1 text-slate-400 hover:text-slate-600 rounded-lg"
+                  aria-label="Close Filters"
+                >
+                  <X className="w-4 h-4" />
+                </button>
+              </div>
             </div>
 
             {/* Search */}
@@ -263,6 +273,17 @@ export function CatalogClient({
                 />
                 <span>In Stock Only</span>
               </label>
+            </div>
+
+            {/* Mobile Done Button */}
+            <div className="pt-2 lg:hidden">
+              <button
+                type="button"
+                onClick={() => setMobileFilterOpen(false)}
+                className="w-full py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-semibold shadow-xs"
+              >
+                Apply & View {filteredProducts.length} Results
+              </button>
             </div>
           </aside>
 

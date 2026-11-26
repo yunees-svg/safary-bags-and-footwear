@@ -46,6 +46,7 @@ export default function AdminLayout({
               role={user?.role || "staff"}
               isCollapsed={false}
               onToggleCollapse={() => setIsMobileOpen(false)}
+              onNavigate={() => setIsMobileOpen(false)}
             />
           </div>
         </div>

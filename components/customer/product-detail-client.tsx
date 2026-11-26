@@ -59,7 +59,7 @@ export function ProductDetailClient({
 
   return (
     <CustomerLayout categories={categories} settings={settings}>
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full space-y-12">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 pb-28 md:pb-12 w-full space-y-12">
         {/* Breadcrumb */}
         <div className="flex items-center gap-2 text-xs text-slate-500">
           <Link href="/" className="hover:text-blue-600">Home</Link>
@@ -261,6 +261,25 @@ export function ProductDetailClient({
             </div>
           </section>
         )}
+        {/* Mobile Sticky Order Bar (Bottom Floating Dock) */}
+        <div className="md:hidden fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-md border-t border-slate-200 px-4 py-3 z-40 shadow-2xl flex items-center justify-between gap-3">
+          <div className="min-w-0">
+            <span className="text-sm font-bold text-slate-900 block leading-tight">
+              {formatCurrency(product.selling_price)}
+            </span>
+            <span className="text-2xs text-slate-500 truncate block">
+              {selectedColour} • Size {selectedSize}
+            </span>
+          </div>
+          <a
+            href={whatsAppUrl}
+            target="_blank"
+            rel="noreferrer"
+            className="flex-1 py-3 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-semibold shadow-md transition flex items-center justify-center gap-1.5"
+          >
+            <Phone className="w-4 h-4" /> Order on WhatsApp
+          </a>
+        </div>
       </div>
     </CustomerLayout>
   );
