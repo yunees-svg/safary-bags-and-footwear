@@ -37,7 +37,7 @@ export function SettingsClient({ settings, isOwner }: SettingsClientProps) {
     return (
       <div className="bg-white p-8 rounded-xl border border-slate-200 text-center max-w-lg mx-auto space-y-3">
         <ShieldAlert className="w-10 h-10 text-amber-500 mx-auto" />
-        <h2 className="text-base font-bold text-slate-900">Restricted Access</h2>
+        <h2 className="text-base font-semibold text-slate-900">Restricted Access</h2>
         <p className="text-xs text-slate-500">
           Only the Shop Owner can configure store profile details, receipts, and billing parameters.
         </p>
@@ -74,7 +74,7 @@ export function SettingsClient({ settings, isOwner }: SettingsClientProps) {
       {/* Header Bar */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 bg-white p-5 rounded-xl border border-slate-200 shadow-xs">
         <div>
-          <h1 className="text-xl font-bold text-slate-900 tracking-tight flex items-center gap-2">
+          <h1 className="text-xl font-semibold text-slate-900 tracking-tight flex items-center gap-2">
             <Settings className="w-5 h-5 text-blue-600" />
             Shop Configuration & Settings
           </h1>
@@ -110,7 +110,7 @@ export function SettingsClient({ settings, isOwner }: SettingsClientProps) {
       <div className="bg-white p-5 rounded-xl border border-slate-200 shadow-xs space-y-4">
         <div className="flex items-center gap-2 pb-3 border-b border-slate-100">
           <Store className="w-4 h-4 text-blue-600" />
-          <h2 className="text-sm font-bold text-slate-900">Store Profile</h2>
+          <h2 className="text-sm font-semibold text-slate-900">Store Profile</h2>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -123,7 +123,7 @@ export function SettingsClient({ settings, isOwner }: SettingsClientProps) {
               required
               value={shopName}
               onChange={(e) => setShopName(e.target.value)}
-              className="w-full px-3 py-2 border border-slate-300 rounded-lg text-xs text-slate-900 font-bold focus:outline-none focus:ring-1 focus:ring-blue-500"
+              className="w-full px-3 py-2 border border-slate-300 rounded-lg text-xs text-slate-900 font-semibold focus:outline-none focus:ring-1 focus:ring-blue-500"
             />
           </div>
 
@@ -164,7 +164,7 @@ export function SettingsClient({ settings, isOwner }: SettingsClientProps) {
               onChange={(e) => setWhatsapp(e.target.value)}
               className="w-full px-3 py-2 border border-slate-300 rounded-lg text-xs text-slate-900 font-mono focus:outline-none focus:ring-1 focus:ring-blue-500"
             />
-            <span className="text-[10px] text-slate-400">Target phone for website customer click-to-chat links</span>
+            <span className="text-2xs text-slate-400">Target phone for website customer click-to-chat links</span>
           </div>
 
           <div className="sm:col-span-2">
@@ -186,7 +186,7 @@ export function SettingsClient({ settings, isOwner }: SettingsClientProps) {
       <div className="bg-white p-5 rounded-xl border border-slate-200 shadow-xs space-y-4">
         <div className="flex items-center gap-2 pb-3 border-b border-slate-100">
           <Receipt className="w-4 h-4 text-blue-600" />
-          <h2 className="text-sm font-bold text-slate-900">Point of Sale & Numbering Rules</h2>
+          <h2 className="text-sm font-semibold text-slate-900">Point of Sale & Numbering Rules</h2>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -200,7 +200,7 @@ export function SettingsClient({ settings, isOwner }: SettingsClientProps) {
               onChange={(e) => setBillPrefix(e.target.value.toUpperCase())}
               className="w-full px-3 py-2 border border-slate-300 rounded-lg text-xs font-mono uppercase text-slate-900 focus:outline-none focus:ring-1 focus:ring-blue-500"
             />
-            <span className="text-[10px] text-slate-400">e.g., SLIP-20261125-0001</span>
+            <span className="text-2xs text-slate-400">e.g., SLIP-20261125-0001</span>
           </div>
 
           <div>
@@ -212,9 +212,9 @@ export function SettingsClient({ settings, isOwner }: SettingsClientProps) {
               min="1"
               value={lowStockDefault}
               onChange={(e) => setLowStockDefault(parseInt(e.target.value) || 5)}
-              className="w-full px-3 py-2 border border-slate-300 rounded-lg text-xs font-bold text-slate-900 focus:outline-none focus:ring-1 focus:ring-blue-500"
+              className="w-full px-3 py-2 border border-slate-300 rounded-lg text-xs font-semibold text-slate-900 focus:outline-none focus:ring-1 focus:ring-blue-500"
             />
-            <span className="text-[10px] text-slate-400">Alert triggers when variant stock ≤ threshold</span>
+            <span className="text-2xs text-slate-400">Alert triggers when variant stock ≤ threshold</span>
           </div>
         </div>
       </div>

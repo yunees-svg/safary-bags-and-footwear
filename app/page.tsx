@@ -37,7 +37,7 @@ export default async function StorefrontHomePage() {
               <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-blue-500/20 text-blue-300 border border-blue-400/30">
                 <Sparkles className="w-3.5 h-3.5 text-blue-400" /> Premium Footwear Collection
               </span>
-              <h1 className="text-3xl sm:text-5xl font-black tracking-tight leading-tight">
+              <h1 className="text-3xl sm:text-5xl font-bold tracking-tight leading-tight">
                 Step Into Everyday Comfort.
               </h1>
               <p className="text-sm sm:text-base text-slate-300 leading-relaxed">
@@ -46,7 +46,7 @@ export default async function StorefrontHomePage() {
               <div className="flex flex-wrap items-center justify-center md:justify-start gap-3 pt-2">
                 <Link
                   href="/products"
-                  className="px-6 py-3 bg-blue-600 hover:bg-blue-500 text-white rounded-full text-xs font-bold shadow-md transition flex items-center gap-2"
+                  className="px-6 py-3 bg-blue-600 hover:bg-blue-500 text-white rounded-full text-xs font-semibold shadow-md transition flex items-center gap-2"
                 >
                   Browse Slipper Catalog <ArrowRight className="w-4 h-4" />
                 </Link>
@@ -65,7 +65,7 @@ export default async function StorefrontHomePage() {
                 <Footprints className="w-12 h-12" />
               </div>
               <div>
-                <h3 className="font-bold text-white text-base">Instant WhatsApp Ordering</h3>
+                <h3 className="font-semibold text-white text-base">Instant WhatsApp Ordering</h3>
                 <p className="text-xs text-slate-300 mt-1">
                   Choose your colour and size, tap Order, and confirm availability directly with our retail shop counter.
                 </p>
@@ -81,16 +81,13 @@ export default async function StorefrontHomePage() {
         <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
           <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-2 border-b border-slate-200 pb-4">
             <div>
-              <span className="text-xs font-bold uppercase tracking-wider text-blue-600">
-                Explore Collections
-              </span>
-              <h2 className="text-2xl font-bold text-slate-900 tracking-tight mt-0.5">
+              <h2 className="text-2xl font-semibold text-slate-900 tracking-tight">
                 Shop By Category
               </h2>
             </div>
             <Link
               href="/products"
-              className="text-xs font-bold text-blue-600 hover:text-blue-700 flex items-center gap-1"
+              className="text-xs font-semibold text-blue-600 hover:text-blue-700 flex items-center gap-1"
             >
               View Full Catalog →
             </Link>
@@ -106,10 +103,10 @@ export default async function StorefrontHomePage() {
                 <div className="w-12 h-12 mx-auto rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center group-hover:scale-110 transition">
                   <Footprints className="w-6 h-6" />
                 </div>
-                <h3 className="text-xs font-bold text-slate-900 group-hover:text-blue-600 transition">
+                <h3 className="text-xs font-semibold text-slate-900 group-hover:text-blue-600 transition">
                   {c.name}
                 </h3>
-                <p className="text-[10px] text-slate-400 line-clamp-2">
+                <p className="text-2xs text-slate-500 line-clamp-2">
                   {c.description}
                 </p>
               </Link>
@@ -121,16 +118,13 @@ export default async function StorefrontHomePage() {
         <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
           <div className="flex items-center justify-between border-b border-slate-200 pb-4">
             <div>
-              <span className="text-xs font-bold uppercase tracking-wider text-blue-600">
-                Just Unboxed
-              </span>
-              <h2 className="text-2xl font-bold text-slate-900 tracking-tight mt-0.5">
+              <h2 className="text-2xl font-semibold text-slate-900 tracking-tight">
                 New Arrivals
               </h2>
             </div>
             <Link
               href="/products"
-              className="text-xs font-bold text-blue-600 hover:underline"
+              className="text-xs font-semibold text-blue-600 hover:underline"
             >
               See All →
             </Link>
@@ -147,16 +141,13 @@ export default async function StorefrontHomePage() {
         <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
           <div className="flex items-center justify-between border-b border-slate-200 pb-4">
             <div>
-              <span className="text-xs font-bold uppercase tracking-wider text-blue-600">
-                Customer Favorites
-              </span>
-              <h2 className="text-2xl font-bold text-slate-900 tracking-tight mt-0.5">
+              <h2 className="text-2xl font-semibold text-slate-900 tracking-tight">
                 Popular Daily Slippers
               </h2>
             </div>
             <Link
               href="/products"
-              className="text-xs font-bold text-blue-600 hover:underline"
+              className="text-xs font-semibold text-blue-600 hover:underline"
             >
               See All →
             </Link>
@@ -173,10 +164,7 @@ export default async function StorefrontHomePage() {
         <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="bg-slate-900 text-white rounded-3xl p-8 md:p-12 flex flex-col md:flex-row items-center justify-between gap-6">
             <div className="space-y-3 max-w-lg text-center md:text-left">
-              <span className="text-xs font-bold text-blue-400 uppercase tracking-wider">
-                Visit Our Retail Counter
-              </span>
-              <h2 className="text-2xl sm:text-3xl font-black">
+              <h2 className="text-2xl sm:text-3xl font-bold">
                 {settings.shop_name}
               </h2>
               <p className="text-xs sm:text-sm text-slate-300">
@@ -195,7 +183,7 @@ export default async function StorefrontHomePage() {
             <div className="flex flex-col sm:flex-row items-center gap-3 w-full md:w-auto">
               <Link
                 href="/contact"
-                className="w-full sm:w-auto text-center px-6 py-3 bg-white text-slate-900 hover:bg-slate-100 rounded-full text-xs font-bold shadow-xs transition"
+                className="w-full sm:w-auto text-center px-6 py-3 bg-white text-slate-900 hover:bg-slate-100 rounded-full text-xs font-semibold shadow-xs transition"
               >
                 View Directions & Map
               </Link>
@@ -203,7 +191,7 @@ export default async function StorefrontHomePage() {
                 href={`https://wa.me/${settings.whatsapp_number.replace(/\D/g, "")}`}
                 target="_blank"
                 rel="noreferrer"
-                className="w-full sm:w-auto text-center px-6 py-3 bg-emerald-600 hover:bg-emerald-500 text-white rounded-full text-xs font-bold shadow-xs transition"
+                className="w-full sm:w-auto text-center px-6 py-3 bg-emerald-600 hover:bg-emerald-500 text-white rounded-full text-xs font-semibold shadow-xs transition"
               >
                 Chat on WhatsApp
               </a>

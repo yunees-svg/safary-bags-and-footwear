@@ -150,7 +150,7 @@ export function NewPurchaseClient({ suppliers, variants }: NewPurchaseClientProp
       <div className="bg-white p-5 rounded-xl border border-slate-200 shadow-xs space-y-4">
         <div className="flex items-center gap-2 pb-3 border-b border-slate-100">
           <Truck className="w-4 h-4 text-blue-600" />
-          <h2 className="text-sm font-bold text-slate-900">Purchase Invoice Details</h2>
+          <h2 className="text-sm font-semibold text-slate-900">Purchase Invoice Details</h2>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
@@ -219,16 +219,16 @@ export function NewPurchaseClient({ suppliers, variants }: NewPurchaseClientProp
         <div className="flex items-center justify-between pb-3 border-b border-slate-100">
           <div className="flex items-center gap-2">
             <Package className="w-4 h-4 text-blue-600" />
-            <h2 className="text-sm font-bold text-slate-900">Purchased Slipper Items</h2>
+            <h2 className="text-sm font-semibold text-slate-900">Purchased Slipper Items</h2>
           </div>
-          <span className="text-xs font-bold text-slate-800">
+          <span className="text-xs font-semibold text-slate-800">
             Total Purchase Cost: {formatCurrency(grandTotal)}
           </span>
         </div>
 
         <div className="overflow-x-auto border border-slate-200 rounded-lg">
           <table className="w-full text-left text-xs">
-            <thead className="bg-slate-50 text-slate-500 uppercase text-[10px] tracking-wider border-b border-slate-200">
+            <thead className="bg-slate-50 text-slate-500 text-2xs border-b border-slate-200">
               <tr>
                 <th className="py-2.5 px-3 font-semibold">Slipper Variant</th>
                 <th className="py-2.5 px-3 font-semibold w-28">Quantity</th>
@@ -274,7 +274,7 @@ export function NewPurchaseClient({ suppliers, variants }: NewPurchaseClientProp
                       className="w-full px-2 py-1.5 border border-slate-200 rounded text-xs font-semibold text-slate-900"
                     />
                   </td>
-                  <td className="py-2 px-3 font-bold text-slate-900 text-right">
+                  <td className="py-2 px-3 font-semibold text-slate-900 text-right">
                     {formatCurrency(row.quantity * row.unit_cost)}
                   </td>
                   <td className="py-2 px-3 text-center">

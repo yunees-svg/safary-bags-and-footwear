@@ -83,7 +83,7 @@ export function CreditClient({ customers }: CreditClientProps) {
       {/* Header Bar */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 bg-white p-5 rounded-xl border border-slate-200 shadow-xs">
         <div>
-          <h1 className="text-xl font-bold text-slate-900 tracking-tight flex items-center gap-2">
+          <h1 className="text-xl font-semibold text-slate-900 tracking-tight flex items-center gap-2">
             <WalletCards className="w-5 h-5 text-blue-600" />
             Credit Management & Khata Ledger
           </h1>
@@ -92,10 +92,10 @@ export function CreditClient({ customers }: CreditClientProps) {
           </p>
         </div>
         <div className="p-3 bg-red-50 border border-red-200 rounded-xl text-right">
-          <p className="text-[10px] uppercase font-bold text-red-600 tracking-wider">
+          <p className="text-2xs font-semibold text-red-600">
             Total Outstanding Credit
           </p>
-          <p className="text-xl font-black text-red-700">{formatCurrency(totalOutstanding)}</p>
+          <p className="text-xl font-bold text-red-700">{formatCurrency(totalOutstanding)}</p>
         </div>
       </div>
 
@@ -123,7 +123,7 @@ export function CreditClient({ customers }: CreditClientProps) {
 
         <div className="overflow-x-auto">
           <table className="w-full text-left text-xs">
-            <thead className="bg-slate-50 text-slate-500 uppercase text-[10px] tracking-wider border-b border-slate-100">
+            <thead className="bg-slate-50 text-slate-500 text-2xs border-b border-slate-100">
               <tr>
                 <th className="py-3 px-4 font-semibold">Customer</th>
                 <th className="py-3 px-4 font-semibold">Phone</th>
@@ -143,7 +143,7 @@ export function CreditClient({ customers }: CreditClientProps) {
               ) : (
                 creditCustomers.map((c) => (
                   <tr key={c.id} className="hover:bg-slate-50/70 transition">
-                    <td className="py-3.5 px-4 font-bold text-slate-900">
+                    <td className="py-3.5 px-4 font-semibold text-slate-900">
                       {c.name}
                     </td>
                     <td className="py-3.5 px-4 font-mono text-slate-600">
@@ -152,7 +152,7 @@ export function CreditClient({ customers }: CreditClientProps) {
                     <td className="py-3.5 px-4 font-medium text-slate-700">
                       {formatCurrency(c.totalPurchased)} ({c.totalBills} bills)
                     </td>
-                    <td className="py-3.5 px-4 font-black text-sm text-red-600">
+                    <td className="py-3.5 px-4 font-bold text-sm text-red-600">
                       {formatCurrency(c.outstanding_balance || 0)}
                     </td>
                     <td className="py-3.5 px-4 text-right">
@@ -176,11 +176,11 @@ export function CreditClient({ customers }: CreditClientProps) {
       {settlingCustomer && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-xs">
           <div className="bg-white rounded-xl max-w-md w-full p-6 shadow-xl border border-slate-200">
-            <h2 className="text-base font-bold text-slate-900 mb-1">
+            <h2 className="text-base font-semibold text-slate-900 mb-1">
               Record Credit Settlement
             </h2>
             <p className="text-xs text-slate-500 mb-4">
-              Receiving payment from <span className="font-bold text-slate-900">{settlingCustomer.name}</span> (Current Balance: {formatCurrency(settlingCustomer.outstanding_balance || 0)})
+              Receiving payment from <span className="font-semibold text-slate-900">{settlingCustomer.name}</span> (Current Balance: {formatCurrency(settlingCustomer.outstanding_balance || 0)})
             </p>
 
             <form onSubmit={handleSettle} className="space-y-4">
@@ -201,7 +201,7 @@ export function CreditClient({ customers }: CreditClientProps) {
                   required
                   value={amount}
                   onChange={(e) => setAmount(e.target.value)}
-                  className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm font-bold text-slate-900 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                  className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm font-semibold text-slate-900 focus:outline-none focus:ring-1 focus:ring-blue-500"
                 />
               </div>
 

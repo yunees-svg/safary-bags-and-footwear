@@ -25,8 +25,8 @@ export function ReceiptModal({ bill, settings, onClose }: ReceiptModalProps) {
               <Check className="w-4 h-4" />
             </div>
             <div>
-              <p className="text-xs font-bold">Transaction Confirmed</p>
-              <p className="text-[10px] text-slate-400 font-mono">{bill.bill_number}</p>
+              <p className="text-xs font-semibold">Transaction Confirmed</p>
+              <p className="text-2xs text-slate-400 font-mono">{bill.bill_number}</p>
             </div>
           </div>
           <div className="flex items-center gap-2">
@@ -53,22 +53,22 @@ export function ReceiptModal({ bill, settings, onClose }: ReceiptModalProps) {
             <div className="inline-flex items-center justify-center w-10 h-10 rounded-xl bg-slate-100 text-slate-800 mb-2">
               <Footprints className="w-6 h-6" />
             </div>
-            <h2 className="text-base font-black tracking-tight text-slate-900 uppercase">
+            <h2 className="text-base font-bold tracking-tight text-slate-900 uppercase">
               {settings.shop_name}
             </h2>
-            <p className="text-[11px] text-slate-500 mt-0.5 leading-snug">
+            <p className="text-2xs text-slate-500 mt-0.5 leading-snug">
               {settings.address}
             </p>
-            <p className="text-[11px] text-slate-500 font-medium">
+            <p className="text-2xs text-slate-500 font-medium">
               Phone / WhatsApp: {settings.phone}
             </p>
           </div>
 
           {/* Bill Meta */}
-          <div className="py-3 text-[11px] border-b border-dashed border-slate-300 space-y-1">
+          <div className="py-3 text-2xs border-b border-dashed border-slate-300 space-y-1">
             <div className="flex justify-between">
               <span className="text-slate-500">Bill No:</span>
-              <span className="font-mono font-bold text-slate-900">{bill.bill_number}</span>
+              <span className="font-mono font-semibold text-slate-900">{bill.bill_number}</span>
             </div>
             <div className="flex justify-between">
               <span className="text-slate-500">Date & Time:</span>
@@ -88,9 +88,9 @@ export function ReceiptModal({ bill, settings, onClose }: ReceiptModalProps) {
 
           {/* Line Items */}
           <div className="py-3 border-b border-dashed border-slate-300">
-            <table className="w-full text-[11px]">
+            <table className="w-full text-2xs">
               <thead>
-                <tr className="text-slate-400 font-semibold uppercase text-[9px] border-b border-slate-200">
+                <tr className="text-slate-400 font-semibold uppercase text-2xs border-b border-slate-200">
                   <th className="text-left pb-1.5">Item</th>
                   <th className="text-center pb-1.5 w-10">Qty</th>
                   <th className="text-right pb-1.5 w-14">Rate</th>
@@ -104,7 +104,7 @@ export function ReceiptModal({ bill, settings, onClose }: ReceiptModalProps) {
                       <p className="font-semibold text-slate-900 leading-tight">
                         {item.product_name_snapshot}
                       </p>
-                      <p className="text-[10px] text-slate-500">
+                      <p className="text-2xs text-slate-500">
                         {item.colour_snapshot} • Size {item.size_snapshot}
                       </p>
                     </td>
@@ -112,7 +112,7 @@ export function ReceiptModal({ bill, settings, onClose }: ReceiptModalProps) {
                     <td className="py-1.5 text-right text-slate-600">
                       ₹{item.unit_price}
                     </td>
-                    <td className="py-1.5 text-right font-bold text-slate-900">
+                    <td className="py-1.5 text-right font-semibold text-slate-900">
                       ₹{item.subtotal}
                     </td>
                   </tr>
@@ -133,20 +133,20 @@ export function ReceiptModal({ bill, settings, onClose }: ReceiptModalProps) {
                 <span>-{formatCurrency(bill.discount)}</span>
               </div>
             )}
-            <div className="flex justify-between font-black text-sm text-slate-900 pt-1 border-t border-slate-200">
+            <div className="flex justify-between font-bold text-sm text-slate-900 pt-1 border-t border-slate-200">
               <span>Net Total:</span>
               <span>{formatCurrency(bill.total_amount)}</span>
             </div>
 
             {/* Payment Record */}
             {bill.payments && bill.payments.length > 0 && (
-              <div className="pt-2 text-[11px] text-slate-600">
+              <div className="pt-2 text-2xs text-slate-600">
                 <div className="flex justify-between">
                   <span>Paid via {bill.payments[0].payment_method.toUpperCase()}:</span>
                   <span className="font-semibold">{formatCurrency(bill.payments[0].amount)}</span>
                 </div>
                 {bill.payments[0].reference_number && (
-                  <div className="flex justify-between text-[10px] text-slate-400 font-mono">
+                  <div className="flex justify-between text-2xs text-slate-400 font-mono">
                     <span>Ref / UPI:</span>
                     <span>{bill.payments[0].reference_number}</span>
                   </div>
@@ -162,10 +162,10 @@ export function ReceiptModal({ bill, settings, onClose }: ReceiptModalProps) {
           </div>
 
           {/* Receipt Footer */}
-          <div className="pt-4 text-center text-[10px] text-slate-400 space-y-1">
+          <div className="pt-4 text-center text-2xs text-slate-400 space-y-1">
             <p className="font-semibold text-slate-600">Thank you for shopping with us!</p>
             <p>Exchange allowed within 7 days with original bill and unused slippers.</p>
-            <p className="font-mono text-[9px] pt-1">*** END OF RECEIPT ***</p>
+            <p className="font-mono text-2xs pt-1">*** END OF RECEIPT ***</p>
           </div>
         </div>
 

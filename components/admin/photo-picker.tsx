@@ -36,8 +36,8 @@ export function PhotoPicker({ photo, onChange, onError, onBusyChange }: PhotoPic
   }
 
   return (
-    <div>
-      <div className="flex aspect-4/3 items-center justify-center overflow-hidden rounded-lg border-2 border-dashed border-slate-300 bg-slate-50">
+    <div className="max-w-xs">
+      <div className="flex h-40 items-center justify-center overflow-hidden rounded-lg border-2 border-dashed border-slate-300 bg-slate-50">
         {busy ? (
           <Loader2 className="w-6 h-6 animate-spin text-slate-400" />
         ) : photo ? (

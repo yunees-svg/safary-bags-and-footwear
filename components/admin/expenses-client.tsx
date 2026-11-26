@@ -62,7 +62,7 @@ export function ExpensesClient({ expenses }: ExpensesClientProps) {
       {/* Header Bar */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 bg-white p-5 rounded-xl border border-slate-200 shadow-xs">
         <div>
-          <h1 className="text-xl font-bold text-slate-900 tracking-tight flex items-center gap-2">
+          <h1 className="text-xl font-semibold text-slate-900 tracking-tight flex items-center gap-2">
             <ReceiptText className="w-5 h-5 text-blue-600" />
             Daily Shop Expenses
           </h1>
@@ -72,8 +72,8 @@ export function ExpensesClient({ expenses }: ExpensesClientProps) {
         </div>
         <div className="flex items-center gap-3">
           <div className="text-right">
-            <span className="text-[10px] uppercase font-bold text-slate-400">Total Recorded</span>
-            <p className="text-lg font-black text-slate-900">{formatCurrency(totalExpenseAmount)}</p>
+            <span className="text-2xs uppercase font-semibold text-slate-400">Total Recorded</span>
+            <p className="text-lg font-bold text-slate-900">{formatCurrency(totalExpenseAmount)}</p>
           </div>
           <button
             onClick={() => setIsOpenAdd(true)}
@@ -96,7 +96,7 @@ export function ExpensesClient({ expenses }: ExpensesClientProps) {
       <div className="bg-white rounded-xl border border-slate-200 shadow-xs overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-left text-xs">
-            <thead className="bg-slate-50 text-slate-500 uppercase text-[10px] tracking-wider border-b border-slate-100">
+            <thead className="bg-slate-50 text-slate-500 text-2xs border-b border-slate-100">
               <tr>
                 <th className="py-3 px-4 font-semibold">Date</th>
                 <th className="py-3 px-4 font-semibold">Category</th>
@@ -116,7 +116,7 @@ export function ExpensesClient({ expenses }: ExpensesClientProps) {
               ) : (
                 expenses.map((e) => (
                   <tr key={e.id} className="hover:bg-slate-50/70 transition">
-                    <td className="py-3.5 px-4 font-mono text-[11px] text-slate-400">
+                    <td className="py-3.5 px-4 font-mono text-2xs text-slate-400">
                       {e.expense_date}
                     </td>
                     <td className="py-3.5 px-4">
@@ -127,10 +127,10 @@ export function ExpensesClient({ expenses }: ExpensesClientProps) {
                     <td className="py-3.5 px-4 text-slate-600 max-w-xs">
                       {e.description || "—"}
                     </td>
-                    <td className="py-3.5 px-4 uppercase text-[10px] font-semibold text-slate-500">
+                    <td className="py-3.5 px-4 uppercase text-2xs font-semibold text-slate-500">
                       {e.payment_method}
                     </td>
-                    <td className="py-3.5 px-4 font-bold text-slate-900">
+                    <td className="py-3.5 px-4 font-semibold text-slate-900">
                       {formatCurrency(e.amount)}
                     </td>
                     <td className="py-3.5 px-4 text-slate-400">
@@ -148,7 +148,7 @@ export function ExpensesClient({ expenses }: ExpensesClientProps) {
       {isOpenAdd && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-xs">
           <div className="bg-white rounded-xl max-w-md w-full p-6 shadow-xl border border-slate-200">
-            <h2 className="text-base font-bold text-slate-900 mb-1">
+            <h2 className="text-base font-semibold text-slate-900 mb-1">
               Record Shop Expense
             </h2>
             <p className="text-xs text-slate-500 mb-4">
@@ -193,7 +193,7 @@ export function ExpensesClient({ expenses }: ExpensesClientProps) {
                   placeholder="e.g., 250.00"
                   value={amount}
                   onChange={(e) => setAmount(e.target.value)}
-                  className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm font-bold text-slate-900 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                  className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm font-semibold text-slate-900 focus:outline-none focus:ring-1 focus:ring-blue-500"
                 />
               </div>
 

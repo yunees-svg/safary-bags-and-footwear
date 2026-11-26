@@ -36,7 +36,7 @@ export function CustomerNavbar({ categories, settings }: CustomerNavbarProps) {
   return (
     <header className="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-slate-200">
       {/* Top Notification Strip */}
-      <div className="bg-slate-900 text-slate-300 text-[11px] py-1.5 px-4 text-center flex items-center justify-between">
+      <div className="bg-slate-900 text-slate-300 text-2xs py-1.5 px-4 text-center flex items-center justify-between">
         <div className="hidden sm:block">
           📍 {settings.address}
         </div>
@@ -62,10 +62,10 @@ export function CustomerNavbar({ categories, settings }: CustomerNavbarProps) {
             <Footprints className="w-5 h-5" />
           </div>
           <div>
-            <span className="font-black text-slate-900 text-base tracking-tight block leading-tight">
+            <span className="font-bold text-slate-900 text-base tracking-tight block leading-tight">
               {settings.shop_name}
             </span>
-            <span className="text-[10px] text-slate-500 font-semibold tracking-wider uppercase">
+            <span className="text-2xs text-slate-500 font-semibold">
               Footwear & Comfort
             </span>
           </div>
@@ -89,13 +89,13 @@ export function CustomerNavbar({ categories, settings }: CustomerNavbarProps) {
         <nav className="hidden lg:flex items-center gap-5 text-xs font-semibold text-slate-700">
           <Link
             href="/"
-            className={pathname === "/" ? "text-blue-600 font-bold" : "hover:text-blue-600 transition"}
+            className={pathname === "/" ? "text-blue-600 font-semibold" : "hover:text-blue-600 transition"}
           >
             Home
           </Link>
           <Link
             href="/products"
-            className={pathname === "/products" ? "text-blue-600 font-bold" : "hover:text-blue-600 transition"}
+            className={pathname === "/products" ? "text-blue-600 font-semibold" : "hover:text-blue-600 transition"}
           >
             All Slippers
           </Link>
@@ -119,13 +119,13 @@ export function CustomerNavbar({ categories, settings }: CustomerNavbarProps) {
           </Link>
           <Link
             href="/about"
-            className={pathname === "/about" ? "text-blue-600 font-bold" : "hover:text-blue-600 transition"}
+            className={pathname === "/about" ? "text-blue-600 font-semibold" : "hover:text-blue-600 transition"}
           >
             About
           </Link>
           <Link
             href="/contact"
-            className={pathname === "/contact" ? "text-blue-600 font-bold" : "hover:text-blue-600 transition"}
+            className={pathname === "/contact" ? "text-blue-600 font-semibold" : "hover:text-blue-600 transition"}
           >
             Contact
           </Link>
@@ -137,7 +137,7 @@ export function CustomerNavbar({ categories, settings }: CustomerNavbarProps) {
             href={`https://wa.me/${cleanWhatsApp}?text=${encodeURIComponent("Hello, I would like to enquire about slippers available at your store.")}`}
             target="_blank"
             rel="noreferrer"
-            className="inline-flex items-center gap-1.5 px-3.5 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-full text-xs font-bold shadow-xs transition"
+            className="inline-flex items-center gap-1.5 px-3.5 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-full text-xs font-semibold shadow-xs transition"
           >
             <Phone className="w-3.5 h-3.5" />
             <span className="hidden sm:inline">WhatsApp Order</span>
@@ -233,7 +233,7 @@ export function CustomerNavbar({ categories, settings }: CustomerNavbarProps) {
             <span>Staff or Owner?</span>
             <Link
               href="/login"
-              className="font-bold text-blue-600 flex items-center gap-1"
+              className="font-semibold text-blue-600 flex items-center gap-1"
             >
               Sign In to Dashboard →
             </Link>

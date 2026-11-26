@@ -52,7 +52,7 @@ export function StockMovementsClient({ movements }: StockMovementsClientProps) {
               <ArrowLeft className="w-3.5 h-3.5" /> Back to Inventory
             </Link>
           </div>
-          <h1 className="text-xl font-bold text-slate-900 tracking-tight flex items-center gap-2">
+          <h1 className="text-xl font-semibold text-slate-900 tracking-tight flex items-center gap-2">
             <History className="w-5 h-5 text-blue-600" />
             Stock Movement History & Audit Log
           </h1>
@@ -96,7 +96,7 @@ export function StockMovementsClient({ movements }: StockMovementsClientProps) {
       <div className="bg-white rounded-xl border border-slate-200 shadow-xs overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-left text-xs">
-            <thead className="bg-slate-50 text-slate-500 uppercase text-[10px] tracking-wider border-b border-slate-100">
+            <thead className="bg-slate-50 text-slate-500 text-2xs border-b border-slate-100">
               <tr>
                 <th className="py-3 px-4 font-semibold">Timestamp</th>
                 <th className="py-3 px-4 font-semibold">Product & Variant</th>
@@ -117,21 +117,21 @@ export function StockMovementsClient({ movements }: StockMovementsClientProps) {
               ) : (
                 filtered.map((m) => (
                   <tr key={m.id} className="hover:bg-slate-50/70 transition">
-                    <td className="py-3.5 px-4 text-slate-400 font-mono text-[11px]">
+                    <td className="py-3.5 px-4 text-slate-400 font-mono text-2xs">
                       {formatDate(m.created_at)}
                     </td>
                     <td className="py-3.5 px-4">
                       <div className="font-semibold text-slate-900">{m.productName}</div>
-                      <div className="text-[11px] text-slate-500">
+                      <div className="text-2xs text-slate-500">
                         {m.colour} • Size {m.size}
                       </div>
                     </td>
-                    <td className="py-3.5 px-4 font-mono text-[11px] text-slate-500">
+                    <td className="py-3.5 px-4 font-mono text-2xs text-slate-500">
                       {m.sku}
                     </td>
                     <td className="py-3.5 px-4">
                       <span
-                        className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-semibold capitalize ${
+                        className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-2xs font-semibold capitalize ${
                           m.quantity > 0
                             ? "bg-emerald-50 text-emerald-700"
                             : "bg-rose-50 text-rose-700"
@@ -145,7 +145,7 @@ export function StockMovementsClient({ movements }: StockMovementsClientProps) {
                         {m.movement_type.replace("_", " ")}
                       </span>
                     </td>
-                    <td className="py-3.5 px-4 font-bold text-sm">
+                    <td className="py-3.5 px-4 font-semibold text-sm">
                       <span
                         className={
                           m.quantity > 0 ? "text-emerald-600" : "text-rose-600"

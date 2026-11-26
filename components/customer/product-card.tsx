@@ -28,15 +28,15 @@ export function ProductCard({ product }: ProductCardProps) {
         ) : (
           <Footprints className="w-16 h-16 text-slate-300 group-hover:scale-110 transition duration-300" />
         )}
-        <span className="absolute top-3 left-3 text-[10px] font-mono font-bold bg-white/90 backdrop-blur-xs px-2 py-0.5 rounded-md text-slate-700 shadow-xs">
+        <span className="absolute top-3 left-3 text-2xs font-mono font-semibold bg-white/90 backdrop-blur-xs px-2 py-0.5 rounded-md text-slate-700 shadow-xs">
           {product.product_code}
         </span>
         {isOutOfStock ? (
-          <span className="absolute top-3 right-3 text-[10px] font-bold bg-red-100 text-red-700 px-2 py-0.5 rounded-full">
+          <span className="absolute top-3 right-3 text-2xs font-semibold bg-red-100 text-red-700 px-2 py-0.5 rounded-full">
             Out of Stock
           </span>
         ) : (
-          <span className="absolute top-3 right-3 text-[10px] font-semibold bg-emerald-50 text-emerald-700 px-2 py-0.5 rounded-full">
+          <span className="absolute top-3 right-3 text-2xs font-semibold bg-emerald-50 text-emerald-700 px-2 py-0.5 rounded-full">
             In Stock
           </span>
         )}
@@ -45,11 +45,11 @@ export function ProductCard({ product }: ProductCardProps) {
       {/* Product Details */}
       <div className="p-4 flex-1 flex flex-col justify-between space-y-3">
         <div>
-          <span className="text-[11px] font-semibold text-blue-600 uppercase tracking-wider block">
+          <span className="text-2xs font-semibold text-blue-600 block">
             {product.brand}
           </span>
           <Link href={`/products/${product.id}`}>
-            <h3 className="font-bold text-slate-900 text-sm group-hover:text-blue-600 transition line-clamp-1 mt-0.5">
+            <h3 className="font-semibold text-slate-900 text-sm group-hover:text-blue-600 transition line-clamp-1 mt-0.5">
               {product.name}
             </h3>
           </Link>
@@ -59,7 +59,7 @@ export function ProductCard({ product }: ProductCardProps) {
         </div>
 
         {/* Colours & Sizes summary */}
-        <div className="space-y-1.5 pt-2 border-t border-slate-100 text-[11px]">
+        <div className="space-y-1.5 pt-2 border-t border-slate-100 text-2xs">
           <div className="flex items-center justify-between text-slate-500">
             <span>Colours:</span>
             <span className="font-medium text-slate-700">{colours.join(", ") || "Standard"}</span>
@@ -73,10 +73,10 @@ export function ProductCard({ product }: ProductCardProps) {
         {/* Price & Action */}
         <div className="pt-2 flex items-center justify-between">
           <div>
-            <span className="text-base font-black text-slate-900 block leading-tight">
+            <span className="text-base font-bold text-slate-900 block leading-tight">
               {formatCurrency(product.selling_price)}
             </span>
-            <span className="text-[10px] text-slate-400">Fixed Retail Price</span>
+            <span className="text-2xs text-slate-400">Fixed Retail Price</span>
           </div>
           <Link
             href={`/products/${product.id}`}

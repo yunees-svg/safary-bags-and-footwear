@@ -87,7 +87,7 @@ export function QuickAddSlipperClient({ categories }: { categories: Category[] }
       )}
 
       <div className="bg-white p-5 rounded-xl border border-slate-200 shadow-xs space-y-4">
-        <h1 className="text-lg font-bold text-slate-900">Add Slipper Model</h1>
+        <h1 className="text-lg font-semibold text-slate-900">Add Slipper Model</h1>
 
         <div>
           <span className={labelClass}>Photo *</span>
@@ -117,13 +117,13 @@ export function QuickAddSlipperClient({ categories }: { categories: Category[] }
         <div>
           <label htmlFor="colours" className={labelClass}>Colour *</label>
           <input id="colours" placeholder="e.g., Black, Brown" value={colours} onChange={(e) => setColours(e.target.value)} required className={inputClass} />
-          <span className="text-[11px] text-slate-400">Separate colours with commas.</span>
+          <span className="text-2xs text-slate-400">Separate colours with commas.</span>
         </div>
 
         <div>
           <label htmlFor="sizes" className={labelClass}>Available Sizes *</label>
           <input id="sizes" required placeholder="e.g., 6, 7, 8, 9" value={sizes} onChange={(e) => setSizes(e.target.value)} className={inputClass} />
-          <span className="text-[11px] text-slate-400">Separate sizes with commas.</span>
+          <span className="text-2xs text-slate-400">Separate sizes with commas.</span>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -138,7 +138,7 @@ export function QuickAddSlipperClient({ categories }: { categories: Category[] }
           <div>
             <label htmlFor="stock" className={labelClass}>Pairs in stock per colour &amp; size</label>
             <input id="stock" type="number" min="0" step="1" placeholder="0" value={stock} onChange={(e) => setStock(e.target.value)} className={inputClass} />
-            <span className="text-[11px] text-slate-400">At 0 it shows as Out of Stock.</span>
+            <span className="text-2xs text-slate-400">At 0 it shows as Out of Stock.</span>
           </div>
         </div>
 

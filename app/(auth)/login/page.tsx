@@ -1,8 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { loginWithEmail, loginAsDemo } from "@/lib/actions/auth";
-import { Footprints, ShieldCheck, UserCheck, Lock, Mail, AlertCircle, Loader2 } from "lucide-react";
+import { loginWithEmail } from "@/lib/actions/auth";
+import { Footprints, Lock, Mail, AlertCircle, Loader2 } from "lucide-react";
 
 export default function LoginPage() {
   const [error, setError] = useState<string | null>(null);
@@ -20,19 +20,13 @@ export default function LoginPage() {
     }
   }
 
-  async function handleDemoLogin(role: "owner" | "staff") {
-    setError(null);
-    setIsLoading(true);
-    await loginAsDemo(role);
-  }
-
   return (
     <div className="min-h-screen bg-slate-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
       <div className="sm:mx-auto sm:w-full sm:max-w-md text-center">
         <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-blue-600 text-white shadow-lg mb-4">
           <Footprints className="w-9 h-9" />
         </div>
-        <h2 className="text-2xl font-bold tracking-tight text-slate-900">
+        <h2 className="text-2xl font-semibold tracking-tight text-slate-900">
           Safary Bags & Footwear
         </h2>
         <p className="mt-1 text-sm text-slate-500">
@@ -51,7 +45,7 @@ export default function LoginPage() {
             )}
 
             <div>
-              <label className="block text-xs font-semibold uppercase tracking-wider text-slate-700 mb-1">
+              <label className="block text-xs font-semibold text-slate-700 mb-1">
                 Email Address
               </label>
               <div className="relative">
@@ -60,14 +54,14 @@ export default function LoginPage() {
                   type="email"
                   name="email"
                   required
-                  placeholder="owner@safary.com"
+                  placeholder="you@example.com"
                   className="w-full pl-9 pr-3 py-2 border border-slate-300 rounded-lg text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                 />
               </div>
             </div>
 
             <div>
-              <label className="block text-xs font-semibold uppercase tracking-wider text-slate-700 mb-1">
+              <label className="block text-xs font-semibold text-slate-700 mb-1">
                 Password
               </label>
               <div className="relative">
@@ -98,35 +92,6 @@ export default function LoginPage() {
             </button>
           </form>
 
-          {/* Quick Demo Access Bar */}
-          <div className="mt-6 pt-6 border-t border-slate-200">
-            <p className="text-xs font-medium text-slate-500 uppercase tracking-wider text-center mb-3">
-              One-Click Demo Credentials
-            </p>
-            <div className="grid grid-cols-2 gap-3">
-              <button
-                type="button"
-                onClick={() => handleDemoLogin("owner")}
-                disabled={isLoading}
-                className="flex items-center justify-center gap-1.5 py-2 px-3 border border-blue-200 bg-blue-50 hover:bg-blue-100 text-blue-800 text-xs font-semibold rounded-lg transition"
-              >
-                <ShieldCheck className="w-4 h-4 text-blue-600" />
-                Owner Role
-              </button>
-              <button
-                type="button"
-                onClick={() => handleDemoLogin("staff")}
-                disabled={isLoading}
-                className="flex items-center justify-center gap-1.5 py-2 px-3 border border-emerald-200 bg-emerald-50 hover:bg-emerald-100 text-emerald-800 text-xs font-semibold rounded-lg transition"
-              >
-                <UserCheck className="w-4 h-4 text-emerald-600" />
-                Staff Role
-              </button>
-            </div>
-            <p className="text-[11px] text-slate-400 text-center mt-2">
-              Staff role hides sensitive cost prices, profit reports & system settings.
-            </p>
-          </div>
         </div>
 
         {/* Back to Customer Store Link */}

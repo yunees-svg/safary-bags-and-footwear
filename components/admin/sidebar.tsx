@@ -107,10 +107,10 @@ export function AdminSidebar({ role, isCollapsed, onToggleCollapse }: SidebarPro
           </div>
           {!isCollapsed && (
             <div className="truncate">
-              <span className="font-bold text-slate-900 text-sm block leading-tight">
+              <span className="font-semibold text-slate-900 text-sm block leading-tight">
                 Safary Hub
               </span>
-              <span className="text-[11px] text-slate-400 font-medium capitalize">
+              <span className="text-2xs text-slate-400 font-medium capitalize">
                 {role} Console
               </span>
             </div>
@@ -138,7 +138,7 @@ export function AdminSidebar({ role, isCollapsed, onToggleCollapse }: SidebarPro
           return (
             <div key={section.title}>
               {!isCollapsed && (
-                <p className="text-[10px] font-semibold text-slate-400 tracking-wider px-2.5 mb-1.5 uppercase">
+                <p className="text-2xs font-semibold text-slate-400 px-2.5 mb-1.5">
                   {section.title}
                 </p>
               )}
@@ -174,7 +174,7 @@ export function AdminSidebar({ role, isCollapsed, onToggleCollapse }: SidebarPro
                         <span className="truncate flex-1">{item.label}</span>
                       )}
                       {!isCollapsed && item.badge && (
-                        <span className="px-1.5 py-0.5 text-[9px] font-bold rounded bg-blue-100 text-blue-700">
+                        <span className="px-1.5 py-0.5 text-2xs font-semibold rounded bg-blue-100 text-blue-700">
                           {item.badge}
                         </span>
                       )}

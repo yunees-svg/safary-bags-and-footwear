@@ -109,7 +109,7 @@ export function CategoriesClient({ categories, productCounts }: CategoriesClient
       {/* Header Bar */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 bg-white p-5 rounded-xl border border-slate-200 shadow-xs">
         <div>
-          <h1 className="text-xl font-bold text-slate-900 tracking-tight flex items-center gap-2">
+          <h1 className="text-xl font-semibold text-slate-900 tracking-tight flex items-center gap-2">
             <Layers className="w-5 h-5 text-blue-600" />
             Category Management
           </h1>
@@ -148,7 +148,7 @@ export function CategoriesClient({ categories, productCounts }: CategoriesClient
       <div className="bg-white rounded-xl border border-slate-200 shadow-xs overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-left text-xs">
-            <thead className="bg-slate-50 text-slate-500 uppercase text-[10px] tracking-wider border-b border-slate-100">
+            <thead className="bg-slate-50 text-slate-500 text-2xs border-b border-slate-100">
               <tr>
                 <th className="py-3 px-4 font-semibold">Category Name</th>
                 <th className="py-3 px-4 font-semibold">Slug</th>
@@ -174,21 +174,21 @@ export function CategoriesClient({ categories, productCounts }: CategoriesClient
                       <td className="py-3.5 px-4 font-semibold text-slate-900">
                         {cat.name}
                       </td>
-                      <td className="py-3.5 px-4 text-slate-400 font-mono text-[11px]">
+                      <td className="py-3.5 px-4 text-slate-400 font-mono text-2xs">
                         /{cat.slug}
                       </td>
                       <td className="py-3.5 px-4 text-slate-500 max-w-xs truncate">
                         {cat.description || "—"}
                       </td>
                       <td className="py-3.5 px-4">
-                        <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-semibold bg-slate-100 text-slate-700">
+                        <span className="inline-flex items-center px-2 py-0.5 rounded-full text-2xs font-semibold bg-slate-100 text-slate-700">
                           {count} {count === 1 ? "product" : "products"}
                         </span>
                       </td>
                       <td className="py-3.5 px-4">
                         <button
                           onClick={() => handleToggleStatus(cat)}
-                          className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-semibold transition ${
+                          className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-2xs font-semibold transition ${
                             cat.is_active
                               ? "bg-emerald-50 text-emerald-700 hover:bg-emerald-100"
                               : "bg-slate-100 text-slate-500 hover:bg-slate-200"
@@ -242,7 +242,7 @@ export function CategoriesClient({ categories, productCounts }: CategoriesClient
       {isOpenAdd && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-xs">
           <div className="bg-white rounded-xl max-w-md w-full p-6 shadow-xl border border-slate-200">
-            <h2 className="text-base font-bold text-slate-900 mb-1">Create Slipper Category</h2>
+            <h2 className="text-base font-semibold text-slate-900 mb-1">Create Slipper Category</h2>
             <p className="text-xs text-slate-500 mb-4">
               Add a new product group for the customer catalog and shop inventory.
             </p>
@@ -311,7 +311,7 @@ export function CategoriesClient({ categories, productCounts }: CategoriesClient
       {editingCat && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-xs">
           <div className="bg-white rounded-xl max-w-md w-full p-6 shadow-xl border border-slate-200">
-            <h2 className="text-base font-bold text-slate-900 mb-1">Edit Category</h2>
+            <h2 className="text-base font-semibold text-slate-900 mb-1">Edit Category</h2>
             <p className="text-xs text-slate-500 mb-4">
               Update category details and storefront display.
             </p>

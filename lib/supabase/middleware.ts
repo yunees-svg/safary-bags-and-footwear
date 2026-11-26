@@ -1,5 +1,6 @@
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
+import { SESSION_COOKIE, isValidSessionToken } from "@/lib/session";
 
 export async function updateSession(request: NextRequest) {
   let supabaseResponse = NextResponse.next({
@@ -34,9 +35,9 @@ export async function updateSession(request: NextRequest) {
   const isAuthRoute = request.nextUrl.pathname.startsWith("/login");
   const isAdminRoute = request.nextUrl.pathname.startsWith("/admin");
 
-  // Check demo cookie as fallback
-  const demoUserCookie = request.cookies.get("demo_user")?.value;
-  const isAuthenticated = Boolean(user || demoUserCookie);
+  // Owner session from the .env.local login
+  const hasSession = await isValidSessionToken(request.cookies.get(SESSION_COOKIE)?.value);
+  const isAuthenticated = Boolean(user) || hasSession;
 
   if (isAdminRoute && !isAuthenticated) {
     const url = request.nextUrl.clone();

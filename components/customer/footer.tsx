@@ -21,7 +21,7 @@ export function CustomerFooter({ settings }: FooterProps) {
               <div className="w-8 h-8 rounded-xl bg-blue-600 text-white flex items-center justify-center">
                 <Footprints className="w-4 h-4" />
               </div>
-              <span className="font-bold text-white text-base">
+              <span className="font-semibold text-white text-base">
                 {settings.shop_name}
               </span>
             </div>
@@ -37,7 +37,7 @@ export function CustomerFooter({ settings }: FooterProps) {
 
           {/* Quick Categories */}
           <div className="space-y-3">
-            <h3 className="text-xs font-bold uppercase tracking-wider text-white">
+            <h3 className="text-xs font-semibold text-white">
               Slipper Collections
             </h3>
             <ul className="space-y-2 text-xs">
@@ -71,7 +71,7 @@ export function CustomerFooter({ settings }: FooterProps) {
 
           {/* Store Info & Hours */}
           <div className="space-y-3">
-            <h3 className="text-xs font-bold uppercase tracking-wider text-white">
+            <h3 className="text-xs font-semibold text-white">
               Store Information
             </h3>
             <div className="space-y-2 text-xs text-slate-400">
@@ -88,7 +88,7 @@ export function CustomerFooter({ settings }: FooterProps) {
 
           {/* WhatsApp Direct Order Box */}
           <div className="space-y-3 bg-slate-800/60 p-4 rounded-xl border border-slate-700/60">
-            <h3 className="text-xs font-bold uppercase tracking-wider text-white flex items-center gap-1.5">
+            <h3 className="text-xs font-semibold text-white flex items-center gap-1.5">
               <Phone className="w-3.5 h-3.5 text-emerald-400" /> WhatsApp Orders
             </h3>
             <p className="text-xs text-slate-400">
@@ -98,7 +98,7 @@ export function CustomerFooter({ settings }: FooterProps) {
               href={`https://wa.me/${cleanWhatsApp}`}
               target="_blank"
               rel="noreferrer"
-              className="inline-flex items-center justify-center gap-1.5 w-full py-2 bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg text-xs font-bold shadow-xs transition"
+              className="inline-flex items-center justify-center gap-1.5 w-full py-2 bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg text-xs font-semibold shadow-xs transition"
             >
               Chat on WhatsApp ({settings.whatsapp_number})
             </a>

@@ -71,7 +71,7 @@ export function EnquiriesClient({ enquiries, variants }: EnquiriesClientProps) {
       {/* Header Bar */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 bg-white p-5 rounded-xl border border-slate-200 shadow-xs">
         <div>
-          <h1 className="text-xl font-bold text-slate-900 tracking-tight flex items-center gap-2">
+          <h1 className="text-xl font-semibold text-slate-900 tracking-tight flex items-center gap-2">
             <MessageSquareQuote className="w-5 h-5 text-blue-600" />
             WhatsApp Orders & Enquiries Tracker
           </h1>
@@ -99,7 +99,7 @@ export function EnquiriesClient({ enquiries, variants }: EnquiriesClientProps) {
       <div className="p-3 bg-blue-50/70 border border-blue-200 rounded-xl text-xs text-blue-900 flex items-start gap-2.5">
         <MessageSquareQuote className="w-4 h-4 text-blue-600 mt-0.5 shrink-0" />
         <div>
-          <span className="font-bold">WhatsApp Workflow Policy:</span> Customers send availability enquiries from the storefront directly to the shop's WhatsApp. Staff manually record the enquiry below, verify inventory, confirm the sale via Point of Sale (POS), and update status to <span className="font-semibold text-emerald-700">Converted</span>. Enquiries never reduce stock automatically.
+          <span className="font-semibold">WhatsApp Workflow Policy:</span> Customers send availability enquiries from the storefront directly to the shop's WhatsApp. Staff manually record the enquiry below, verify inventory, confirm the sale via Point of Sale (POS), and update status to <span className="font-semibold text-emerald-700">Converted</span>. Enquiries never reduce stock automatically.
         </div>
       </div>
 
@@ -107,7 +107,7 @@ export function EnquiriesClient({ enquiries, variants }: EnquiriesClientProps) {
       <div className="bg-white rounded-xl border border-slate-200 shadow-xs overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-left text-xs">
-            <thead className="bg-slate-50 text-slate-500 uppercase text-[10px] tracking-wider border-b border-slate-100">
+            <thead className="bg-slate-50 text-slate-500 text-2xs border-b border-slate-100">
               <tr>
                 <th className="py-3 px-4 font-semibold">Date Logged</th>
                 <th className="py-3 px-4 font-semibold">Customer</th>
@@ -127,18 +127,18 @@ export function EnquiriesClient({ enquiries, variants }: EnquiriesClientProps) {
               ) : (
                 enquiries.map((e) => (
                   <tr key={e.id} className="hover:bg-slate-50/70 transition">
-                    <td className="py-3.5 px-4 text-slate-400 font-mono text-[11px]">
+                    <td className="py-3.5 px-4 text-slate-400 font-mono text-2xs">
                       {formatDate(e.created_at)}
                     </td>
-                    <td className="py-3.5 px-4 font-bold text-slate-900">
+                    <td className="py-3.5 px-4 font-semibold text-slate-900">
                       <div>{e.customer_name}</div>
-                      <div className="text-[11px] font-normal text-slate-500">{e.phone}</div>
+                      <div className="text-2xs font-normal text-slate-500">{e.phone}</div>
                     </td>
                     <td className="py-3.5 px-4 font-medium text-slate-800">
                       {e.productName ? (
                         <div>
                           <span>{e.productName}</span>
-                          <span className="text-[11px] text-slate-500 block">
+                          <span className="text-2xs text-slate-500 block">
                             {e.colour} • Size {e.size}
                           </span>
                         </div>
@@ -153,7 +153,7 @@ export function EnquiriesClient({ enquiries, variants }: EnquiriesClientProps) {
                       <select
                         value={e.status}
                         onChange={(evt) => handleStatusChange(e.id, evt.target.value as any)}
-                        className={`text-[10px] font-bold px-2 py-1 rounded-full border border-slate-200 capitalize focus:outline-none ${
+                        className={`text-2xs font-semibold px-2 py-1 rounded-full border border-slate-200 capitalize focus:outline-none ${
                           e.status === "converted"
                             ? "bg-emerald-50 text-emerald-700"
                             : e.status === "contacted"
@@ -192,7 +192,7 @@ export function EnquiriesClient({ enquiries, variants }: EnquiriesClientProps) {
       {isOpenAdd && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-xs">
           <div className="bg-white rounded-xl max-w-md w-full p-6 shadow-xl border border-slate-200">
-            <h2 className="text-base font-bold text-slate-900 mb-1">
+            <h2 className="text-base font-semibold text-slate-900 mb-1">
               Log Customer WhatsApp Enquiry
             </h2>
             <p className="text-xs text-slate-500 mb-4">

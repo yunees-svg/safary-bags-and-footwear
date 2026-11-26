@@ -15,7 +15,7 @@ A responsive retail web application built with **Next.js (App Router)**, **TypeS
    ```
 
 3. Open [http://localhost:3000](http://localhost:3000) for the Customer Website.
-4. Open [http://localhost:3000/login](http://localhost:3000/login) for the Admin Management Portal (one-click demo access for Owner & Staff).
+4. Open [http://localhost:3000/login](http://localhost:3000/login) for the Admin Management Portal. Set `ADMIN_EMAIL`, `ADMIN_PASSWORD` and `SESSION_SECRET` (32+ random characters) in `.env.local` first.
 
 ## Key Modules
 

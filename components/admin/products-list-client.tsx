@@ -97,7 +97,7 @@ export function ProductsListClient({
       {/* Header Bar */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 bg-white p-5 rounded-xl border border-slate-200 shadow-xs">
         <div>
-          <h1 className="text-xl font-bold text-slate-900 tracking-tight flex items-center gap-2">
+          <h1 className="text-xl font-semibold text-slate-900 tracking-tight flex items-center gap-2">
             <Package className="w-5 h-5 text-blue-600" />
             Product Catalog
           </h1>
@@ -179,7 +179,7 @@ export function ProductsListClient({
       <div className="bg-white rounded-xl border border-slate-200 shadow-xs overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-left text-xs">
-            <thead className="bg-slate-50 text-slate-500 uppercase text-[10px] tracking-wider border-b border-slate-100">
+            <thead className="bg-slate-50 text-slate-500 text-2xs border-b border-slate-100">
               <tr>
                 <th className="py-3 px-4 font-semibold">Product & Code</th>
                 <th className="py-3 px-4 font-semibold">Category</th>
@@ -225,10 +225,10 @@ export function ProductsListClient({
                             />
                           )}
                           <div>
-                            <div className="font-bold text-slate-900 flex items-center gap-1.5">
+                            <div className="font-semibold text-slate-900 flex items-center gap-1.5">
                               {product.name}
                             </div>
-                            <div className="text-[11px] text-slate-400 flex items-center gap-1 mt-0.5">
+                            <div className="text-2xs text-slate-400 flex items-center gap-1 mt-0.5">
                               <span className="font-mono text-slate-600 bg-slate-100 px-1 rounded">
                                 {product.product_code}
                               </span>
@@ -255,7 +255,7 @@ export function ProductsListClient({
                           {product.variants.slice(0, 3).map((v) => (
                             <span
                               key={v.id}
-                              className={`px-1.5 py-0.5 rounded text-[10px] font-medium border ${
+                              className={`px-1.5 py-0.5 rounded text-2xs font-medium border ${
                                 v.stock_quantity <= v.low_stock_threshold
                                   ? "bg-red-50 text-red-700 border-red-200"
                                   : "bg-slate-50 text-slate-700 border-slate-200"
@@ -265,14 +265,14 @@ export function ProductsListClient({
                             </span>
                           ))}
                           {product.variants.length > 3 && (
-                            <span className="text-[10px] text-slate-400">
+                            <span className="text-2xs text-slate-400">
                               +{product.variants.length - 3} more
                             </span>
                           )}
                         </div>
                         <div className="mt-1 flex items-center gap-2">
                           <span
-                            className={`text-[10px] font-semibold ${
+                            className={`text-2xs font-semibold ${
                               totalStock === 0
                                 ? "text-red-600"
                                 : hasLowStock
@@ -286,7 +286,7 @@ export function ProductsListClient({
                       </td>
 
                       {/* Selling Price */}
-                      <td className="py-3.5 px-4 font-bold text-slate-900">
+                      <td className="py-3.5 px-4 font-semibold text-slate-900">
                         {formatCurrency(product.selling_price)}
                       </td>
 
@@ -301,7 +301,7 @@ export function ProductsListClient({
                       <td className="py-3.5 px-4">
                         <button
                           onClick={() => handleTogglePublish(product)}
-                          className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-semibold transition ${
+                          className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-2xs font-semibold transition ${
                             product.is_published
                               ? "bg-emerald-50 text-emerald-700 hover:bg-emerald-100"
                               : "bg-slate-100 text-slate-500 hover:bg-slate-200"

@@ -92,7 +92,7 @@ export function ProductDetailClient({
               ) : (
                 <Footprints className="w-36 h-36 text-slate-300" />
               )}
-              <span className="absolute top-4 left-4 text-xs font-mono font-bold bg-white/90 backdrop-blur-xs px-2.5 py-1 rounded-lg text-slate-700 shadow-xs">
+              <span className="absolute top-4 left-4 text-xs font-mono font-semibold bg-white/90 backdrop-blur-xs px-2.5 py-1 rounded-lg text-slate-700 shadow-xs">
                 {product.product_code}
               </span>
               <span className="absolute bottom-4 right-4 text-xs font-semibold bg-blue-600/10 text-blue-700 px-3 py-1 rounded-full border border-blue-200">
@@ -106,7 +106,7 @@ export function ProductDetailClient({
                 <button
                   key={c}
                   onClick={() => setSelectedColour(c)}
-                  className={`px-3 py-1.5 rounded-xl text-xs font-bold border transition ${
+                  className={`px-3 py-1.5 rounded-xl text-xs font-semibold border transition ${
                     selectedColour === c
                       ? "bg-slate-900 text-white border-slate-900 shadow-xs"
                       : "bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100"
@@ -121,14 +121,14 @@ export function ProductDetailClient({
           {/* Right: Product Details & WhatsApp Ordering */}
           <div className="space-y-6">
             <div>
-              <span className="text-xs font-bold text-blue-600 uppercase tracking-wider block">
+              <span className="text-xs font-semibold text-blue-600 block">
                 {product.brand}
               </span>
-              <h1 className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight mt-1">
+              <h1 className="text-2xl sm:text-3xl font-bold text-slate-900 tracking-tight mt-1">
                 {product.name}
               </h1>
               <div className="mt-2 flex items-center gap-3">
-                <span className="text-2xl font-black text-slate-900">
+                <span className="text-2xl font-bold text-slate-900">
                   {formatCurrency(product.selling_price)}
                 </span>
                 <span className="text-xs text-slate-400">Inclusive of all local shop taxes</span>
@@ -142,7 +142,7 @@ export function ProductDetailClient({
 
             {/* Select Colour */}
             <div className="space-y-2">
-              <label className="block text-xs font-bold text-slate-800 uppercase tracking-wider">
+              <label className="block text-xs font-semibold text-slate-800">
                 1. Select Colour: <span className="text-blue-600 font-semibold">{selectedColour}</span>
               </label>
               <div className="flex flex-wrap gap-2">
@@ -164,7 +164,7 @@ export function ProductDetailClient({
 
             {/* Select Size */}
             <div className="space-y-2">
-              <label className="block text-xs font-bold text-slate-800 uppercase tracking-wider">
+              <label className="block text-xs font-semibold text-slate-800">
                 2. Select Footwear Size: <span className="text-blue-600 font-semibold">Size {selectedSize}</span>
               </label>
               <div className="flex flex-wrap gap-2">
@@ -180,7 +180,7 @@ export function ProductDetailClient({
                     <button
                       key={sz}
                       onClick={() => setSelectedSize(sz)}
-                      className={`w-12 h-10 rounded-xl text-xs font-bold border transition flex flex-col items-center justify-center ${
+                      className={`w-12 h-10 rounded-xl text-xs font-semibold border transition flex flex-col items-center justify-center ${
                         selectedSize === sz
                           ? "bg-slate-900 text-white border-slate-900 shadow-xs"
                           : isSzInStock
@@ -201,17 +201,17 @@ export function ProductDetailClient({
                 <span className="font-semibold text-slate-700 block">
                   Status for {selectedColour} (Size {selectedSize}):
                 </span>
-                <span className="text-[11px] text-slate-500">
+                <span className="text-2xs text-slate-500">
                   SKU: {activeVariant?.sku || "Pending Selection"}
                 </span>
               </div>
               <div>
                 {isInStock ? (
-                  <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-bold bg-emerald-100 text-emerald-800">
+                  <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-800">
                     <Check className="w-3.5 h-3.5" /> In Stock ({activeVariant?.stock_quantity} left)
                   </span>
                 ) : (
-                  <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-bold bg-red-100 text-red-700">
+                  <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold bg-red-100 text-red-700">
                     <AlertTriangle className="w-3.5 h-3.5" /> Depleted / Out of Stock
                   </span>
                 )}
@@ -224,12 +224,12 @@ export function ProductDetailClient({
                 href={whatsAppUrl}
                 target="_blank"
                 rel="noreferrer"
-                className="w-full py-4 bg-emerald-600 hover:bg-emerald-700 text-white rounded-2xl text-sm font-bold shadow-md transition flex items-center justify-center gap-2 text-center"
+                className="w-full py-4 bg-emerald-600 hover:bg-emerald-700 text-white rounded-2xl text-sm font-semibold shadow-md transition flex items-center justify-center gap-2 text-center"
               >
                 <Phone className="w-4 h-4" />
                 Order via WhatsApp ({selectedColour}, Size {selectedSize})
               </a>
-              <p className="text-[11px] text-slate-400 text-center">
+              <p className="text-2xs text-slate-400 text-center">
                 Tapping opens WhatsApp with your prefilled model & size details. Our counter staff confirms availability before reserving.
               </p>
             </div>
@@ -251,7 +251,7 @@ export function ProductDetailClient({
         {/* Related Products Grid */}
         {relatedProducts.length > 0 && (
           <section className="space-y-6 pt-6 border-t border-slate-200">
-            <h2 className="text-xl font-bold text-slate-900 tracking-tight">
+            <h2 className="text-xl font-semibold text-slate-900 tracking-tight">
               Customers Also Liked
             </h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">

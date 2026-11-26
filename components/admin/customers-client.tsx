@@ -69,7 +69,7 @@ export function CustomersClient({ customers }: CustomersClientProps) {
       {/* Header Bar */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 bg-white p-5 rounded-xl border border-slate-200 shadow-xs">
         <div>
-          <h1 className="text-xl font-bold text-slate-900 tracking-tight flex items-center gap-2">
+          <h1 className="text-xl font-semibold text-slate-900 tracking-tight flex items-center gap-2">
             <Users className="w-5 h-5 text-blue-600" />
             Customer Directory
           </h1>
@@ -110,7 +110,7 @@ export function CustomersClient({ customers }: CustomersClientProps) {
 
         <div className="overflow-x-auto">
           <table className="w-full text-left text-xs">
-            <thead className="bg-slate-50 text-slate-500 uppercase text-[10px] tracking-wider border-b border-slate-100">
+            <thead className="bg-slate-50 text-slate-500 text-2xs border-b border-slate-100">
               <tr>
                 <th className="py-3 px-4 font-semibold">Customer Name</th>
                 <th className="py-3 px-4 font-semibold">Phone Number</th>
@@ -130,7 +130,7 @@ export function CustomersClient({ customers }: CustomersClientProps) {
               ) : (
                 filtered.map((c) => (
                   <tr key={c.id} className="hover:bg-slate-50/70 transition">
-                    <td className="py-3.5 px-4 font-bold text-slate-900">
+                    <td className="py-3.5 px-4 font-semibold text-slate-900">
                       {c.name}
                     </td>
                     <td className="py-3.5 px-4 font-mono text-slate-600">
@@ -145,12 +145,12 @@ export function CustomersClient({ customers }: CustomersClientProps) {
                         {c.totalBills}
                       </span>
                     </td>
-                    <td className="py-3.5 px-4 font-bold text-slate-900">
+                    <td className="py-3.5 px-4 font-semibold text-slate-900">
                       {formatCurrency(c.totalPurchased)}
                     </td>
                     <td className="py-3.5 px-4">
                       <span
-                        className={`font-bold ${
+                        className={`font-semibold ${
                           (c.outstanding_balance || 0) > 0
                             ? "text-red-600"
                             : "text-emerald-600"
@@ -171,7 +171,7 @@ export function CustomersClient({ customers }: CustomersClientProps) {
       {isOpenAdd && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-xs">
           <div className="bg-white rounded-xl max-w-md w-full p-6 shadow-xl border border-slate-200">
-            <h2 className="text-base font-bold text-slate-900 mb-1">Add Customer</h2>
+            <h2 className="text-base font-semibold text-slate-900 mb-1">Add Customer</h2>
             <p className="text-xs text-slate-500 mb-4">
               Create a record to track customer orders and credit ledger balances.
             </p>

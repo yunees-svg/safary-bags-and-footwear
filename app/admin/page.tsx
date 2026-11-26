@@ -22,7 +22,7 @@ export default async function AdminOverviewPage() {
       {/* Top Banner / Welcome */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 bg-white p-5 rounded-xl border border-slate-200 shadow-xs">
         <div>
-          <h1 className="text-xl font-bold text-slate-900 tracking-tight">
+          <h1 className="text-xl font-semibold text-slate-900 tracking-tight">
             Shop Operations Overview
           </h1>
           <p className="text-xs text-slate-500 mt-0.5">
@@ -52,7 +52,7 @@ export default async function AdminOverviewPage() {
         {/* Today's Sales */}
         <div className="bg-white p-5 rounded-xl border border-slate-200 shadow-xs">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-medium text-slate-500 uppercase tracking-wider">
+            <span className="text-xs font-medium text-slate-500">
               Today's Sales
             </span>
             <div className="w-8 h-8 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center">
@@ -60,20 +60,20 @@ export default async function AdminOverviewPage() {
             </div>
           </div>
           <div className="mt-2 flex items-baseline gap-2">
-            <span className="text-2xl font-bold text-slate-900">
+            <span className="text-2xl font-semibold text-slate-900">
               {formatCurrency(data.todaySales)}
             </span>
-            <span className="text-[11px] font-medium text-emerald-600">
+            <span className="text-2xs font-medium text-emerald-600">
               {data.todayBillCount} {data.todayBillCount === 1 ? "bill" : "bills"}
             </span>
           </div>
-          <p className="text-[11px] text-slate-400 mt-1">Live confirmed counter sales</p>
+          <p className="text-2xs text-slate-400 mt-1">Live confirmed counter sales</p>
         </div>
 
         {/* Total Revenue */}
         <div className="bg-white p-5 rounded-xl border border-slate-200 shadow-xs">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-medium text-slate-500 uppercase tracking-wider">
+            <span className="text-xs font-medium text-slate-500">
               Total Revenue
             </span>
             <div className="w-8 h-8 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center">
@@ -81,18 +81,18 @@ export default async function AdminOverviewPage() {
             </div>
           </div>
           <div className="mt-2 flex items-baseline gap-2">
-            <span className="text-2xl font-bold text-slate-900">
+            <span className="text-2xl font-semibold text-slate-900">
               {formatCurrency(data.totalRevenue)}
             </span>
           </div>
-          <p className="text-[11px] text-slate-400 mt-1">Accumulated completed transactions</p>
+          <p className="text-2xs text-slate-400 mt-1">Accumulated completed transactions</p>
         </div>
 
         {/* Estimated Gross Profit (Owner only) */}
         {data.isOwner && (
           <div className="bg-white p-5 rounded-xl border border-slate-200 shadow-xs">
             <div className="flex items-center justify-between">
-              <span className="text-xs font-medium text-slate-500 uppercase tracking-wider">
+              <span className="text-xs font-medium text-slate-500">
                 Est. Gross Profit
               </span>
               <div className="w-8 h-8 rounded-lg bg-indigo-50 text-indigo-600 flex items-center justify-center">
@@ -100,18 +100,18 @@ export default async function AdminOverviewPage() {
               </div>
             </div>
             <div className="mt-2 flex items-baseline gap-2">
-              <span className="text-2xl font-bold text-indigo-900">
+              <span className="text-2xl font-semibold text-indigo-900">
                 {formatCurrency(data.estimatedGrossProfit ?? 0)}
               </span>
             </div>
-            <p className="text-[11px] text-slate-400 mt-1">Cost vs selling price margin</p>
+            <p className="text-2xs text-slate-400 mt-1">Cost vs selling price margin</p>
           </div>
         )}
 
         {/* Low Stock Alert Card */}
         <div className="bg-white p-5 rounded-xl border border-slate-200 shadow-xs">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-medium text-slate-500 uppercase tracking-wider">
+            <span className="text-xs font-medium text-slate-500">
               Low Stock Warnings
             </span>
             <div className="w-8 h-8 rounded-lg bg-amber-50 text-amber-600 flex items-center justify-center">
@@ -119,14 +119,14 @@ export default async function AdminOverviewPage() {
             </div>
           </div>
           <div className="mt-2 flex items-baseline gap-2">
-            <span className={`text-2xl font-bold ${data.lowStockItems.length > 0 ? "text-amber-600" : "text-slate-900"}`}>
+            <span className={`text-2xl font-semibold ${data.lowStockItems.length > 0 ? "text-amber-600" : "text-slate-900"}`}>
               {data.lowStockItems.length}
             </span>
-            <span className="text-[11px] font-medium text-slate-500">
+            <span className="text-2xs font-medium text-slate-500">
               variants critical
             </span>
           </div>
-          <p className="text-[11px] text-slate-400 mt-1">Stock ≤ threshold quantity</p>
+          <p className="text-2xs text-slate-400 mt-1">Stock ≤ threshold quantity</p>
         </div>
       </div>
 
@@ -136,7 +136,7 @@ export default async function AdminOverviewPage() {
           <div className="flex items-start gap-3">
             <AlertTriangle className="w-5 h-5 text-amber-600 shrink-0 mt-0.5" />
             <div>
-              <h3 className="text-xs font-bold text-amber-900">
+              <h3 className="text-xs font-semibold text-amber-900">
                 Action Needed: {data.lowStockItems.length} Product Variants Running Low
               </h3>
               <p className="text-xs text-amber-700 mt-0.5">
@@ -160,8 +160,8 @@ export default async function AdminOverviewPage() {
         <div className="lg:col-span-2 bg-white rounded-xl border border-slate-200 shadow-xs overflow-hidden">
           <div className="p-4 border-b border-slate-100 flex items-center justify-between">
             <div>
-              <h2 className="text-sm font-bold text-slate-900">Recent Transactions</h2>
-              <p className="text-[11px] text-slate-400">Latest completed point-of-sale bills</p>
+              <h2 className="text-sm font-semibold text-slate-900">Recent Transactions</h2>
+              <p className="text-2xs text-slate-400">Latest completed point-of-sale bills</p>
             </div>
             <Link
               href="/admin/pos"
@@ -173,7 +173,7 @@ export default async function AdminOverviewPage() {
 
           <div className="overflow-x-auto">
             <table className="w-full text-left text-xs">
-              <thead className="bg-slate-50 text-slate-500 uppercase text-[10px] tracking-wider border-b border-slate-100">
+              <thead className="bg-slate-50 text-slate-500 text-2xs border-b border-slate-100">
                 <tr>
                   <th className="py-2.5 px-4 font-semibold">Bill #</th>
                   <th className="py-2.5 px-4 font-semibold">Items</th>
@@ -200,11 +200,11 @@ export default async function AdminOverviewPage() {
                           {b.items?.map((it) => `${it.product_name_snapshot} (${it.quantity})`).join(", ")}
                         </span>
                       </td>
-                      <td className="py-3 px-4 font-bold text-slate-900">
+                      <td className="py-3 px-4 font-semibold text-slate-900">
                         {formatCurrency(b.total_amount)}
                       </td>
                       <td className="py-3 px-4">
-                        <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-semibold bg-emerald-50 text-emerald-700 capitalize">
+                        <span className="inline-flex items-center px-2 py-0.5 rounded-full text-2xs font-semibold bg-emerald-50 text-emerald-700 capitalize">
                           {b.payments?.[0]?.payment_method || b.payment_status}
                         </span>
                       </td>
@@ -223,8 +223,8 @@ export default async function AdminOverviewPage() {
         <div className="bg-white rounded-xl border border-slate-200 shadow-xs p-4">
           <div className="flex items-center justify-between mb-4">
             <div>
-              <h2 className="text-sm font-bold text-slate-900">Top Sellers</h2>
-              <p className="text-[11px] text-slate-400">Most purchased slippers</p>
+              <h2 className="text-sm font-semibold text-slate-900">Top Sellers</h2>
+              <p className="text-2xs text-slate-400">Most purchased slippers</p>
             </div>
             <Layers className="w-4 h-4 text-slate-400" />
           </div>
@@ -244,15 +244,15 @@ export default async function AdminOverviewPage() {
                     <p className="text-xs font-semibold text-slate-800 truncate">
                       {item.name}
                     </p>
-                    <p className="text-[11px] text-slate-500">
+                    <p className="text-2xs text-slate-500">
                       {item.colour} • Size {item.size}
                     </p>
                   </div>
                   <div className="text-right shrink-0">
-                    <span className="text-xs font-bold text-blue-600 block">
+                    <span className="text-xs font-semibold text-blue-600 block">
                       {item.quantity} sold
                     </span>
-                    <span className="text-[10px] text-slate-400">
+                    <span className="text-2xs text-slate-400">
                       {formatCurrency(item.totalRevenue)}
                     </span>
                   </div>

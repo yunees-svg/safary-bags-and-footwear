@@ -68,7 +68,7 @@ export function PurchasesClient({ purchases, suppliers }: PurchasesClientProps) 
       {/* Header Bar */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 bg-white p-5 rounded-xl border border-slate-200 shadow-xs">
         <div>
-          <h1 className="text-xl font-bold text-slate-900 tracking-tight flex items-center gap-2">
+          <h1 className="text-xl font-semibold text-slate-900 tracking-tight flex items-center gap-2">
             <Truck className="w-5 h-5 text-blue-600" />
             Purchases & Supplier Stock-In
           </h1>
@@ -103,15 +103,15 @@ export function PurchasesClient({ purchases, suppliers }: PurchasesClientProps) 
 
       {/* Supplier Directory Quick Glance */}
       <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-xs">
-        <h2 className="text-xs font-bold text-slate-800 mb-2.5 uppercase tracking-wider flex items-center gap-1.5">
+        <h2 className="text-xs font-semibold text-slate-800 mb-2.5 flex items-center gap-1.5">
           <Building className="w-3.5 h-3.5 text-blue-600" /> Active Slipper Suppliers ({suppliers.length})
         </h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
           {suppliers.map((s) => (
             <div key={s.id} className="p-2.5 rounded-lg bg-slate-50 border border-slate-100 text-xs">
-              <p className="font-bold text-slate-900">{s.name}</p>
-              <p className="text-[11px] text-slate-500">{s.phone}</p>
-              {s.address && <p className="text-[10px] text-slate-400 truncate mt-0.5">{s.address}</p>}
+              <p className="font-semibold text-slate-900">{s.name}</p>
+              <p className="text-2xs text-slate-500">{s.phone}</p>
+              {s.address && <p className="text-2xs text-slate-400 truncate mt-0.5">{s.address}</p>}
             </div>
           ))}
         </div>
@@ -134,7 +134,7 @@ export function PurchasesClient({ purchases, suppliers }: PurchasesClientProps) 
 
         <div className="overflow-x-auto">
           <table className="w-full text-left text-xs">
-            <thead className="bg-slate-50 text-slate-500 uppercase text-[10px] tracking-wider border-b border-slate-100">
+            <thead className="bg-slate-50 text-slate-500 text-2xs border-b border-slate-100">
               <tr>
                 <th className="py-3 px-4 font-semibold">Invoice No.</th>
                 <th className="py-3 px-4 font-semibold">Supplier</th>
@@ -154,7 +154,7 @@ export function PurchasesClient({ purchases, suppliers }: PurchasesClientProps) 
               ) : (
                 filtered.map((p) => (
                   <tr key={p.id} className="hover:bg-slate-50/70 transition">
-                    <td className="py-3.5 px-4 font-mono font-bold text-slate-900">
+                    <td className="py-3.5 px-4 font-mono font-semibold text-slate-900">
                       {p.invoice_number}
                     </td>
                     <td className="py-3.5 px-4 font-medium text-slate-900">
@@ -163,12 +163,12 @@ export function PurchasesClient({ purchases, suppliers }: PurchasesClientProps) 
                     <td className="py-3.5 px-4 text-slate-500">
                       {p.purchase_date}
                     </td>
-                    <td className="py-3.5 px-4 font-bold text-slate-900">
+                    <td className="py-3.5 px-4 font-semibold text-slate-900">
                       {formatCurrency(p.total_amount)}
                     </td>
                     <td className="py-3.5 px-4">
                       <span
-                        className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-semibold capitalize ${
+                        className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-2xs font-semibold capitalize ${
                           p.status === "confirmed"
                             ? "bg-emerald-50 text-emerald-700"
                             : p.status === "draft"
@@ -201,7 +201,7 @@ export function PurchasesClient({ purchases, suppliers }: PurchasesClientProps) 
       {isOpenAddSupplier && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-xs">
           <div className="bg-white rounded-xl max-w-md w-full p-6 shadow-xl border border-slate-200">
-            <h2 className="text-base font-bold text-slate-900 mb-1">Add Footwear Supplier</h2>
+            <h2 className="text-base font-semibold text-slate-900 mb-1">Add Footwear Supplier</h2>
             <p className="text-xs text-slate-500 mb-4">
               Enter wholesaler or distributor details for purchasing stock.
             </p>

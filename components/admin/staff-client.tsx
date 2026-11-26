@@ -34,7 +34,7 @@ export function StaffClient({ staffList, isOwner }: StaffClientProps) {
     return (
       <div className="bg-white p-8 rounded-xl border border-slate-200 text-center max-w-lg mx-auto space-y-3">
         <ShieldAlert className="w-10 h-10 text-amber-500 mx-auto" />
-        <h2 className="text-base font-bold text-slate-900">Owner Access Required</h2>
+        <h2 className="text-base font-semibold text-slate-900">Owner Access Required</h2>
         <p className="text-xs text-slate-500">
           Only the store owner is authorized to manage user credentials and staff permission assignments.
         </p>
@@ -76,7 +76,7 @@ export function StaffClient({ staffList, isOwner }: StaffClientProps) {
       {/* Header Bar */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 bg-white p-5 rounded-xl border border-slate-200 shadow-xs">
         <div>
-          <h1 className="text-xl font-bold text-slate-900 tracking-tight flex items-center gap-2">
+          <h1 className="text-xl font-semibold text-slate-900 tracking-tight flex items-center gap-2">
             <UserCog className="w-5 h-5 text-blue-600" />
             Staff & Role Management
           </h1>
@@ -104,7 +104,7 @@ export function StaffClient({ staffList, isOwner }: StaffClientProps) {
       <div className="bg-white rounded-xl border border-slate-200 shadow-xs overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-left text-xs">
-            <thead className="bg-slate-50 text-slate-500 uppercase text-[10px] tracking-wider border-b border-slate-100">
+            <thead className="bg-slate-50 text-slate-500 text-2xs border-b border-slate-100">
               <tr>
                 <th className="py-3 px-4 font-semibold">Staff Name</th>
                 <th className="py-3 px-4 font-semibold">Email</th>
@@ -117,13 +117,13 @@ export function StaffClient({ staffList, isOwner }: StaffClientProps) {
             <tbody className="divide-y divide-slate-100 text-slate-700">
               {staffList.map((m) => (
                 <tr key={m.id} className="hover:bg-slate-50/70 transition">
-                  <td className="py-3.5 px-4 font-bold text-slate-900">
+                  <td className="py-3.5 px-4 font-semibold text-slate-900">
                     {m.full_name}
                   </td>
                   <td className="py-3.5 px-4 text-slate-500">{m.email}</td>
                   <td className="py-3.5 px-4">
                     <span
-                      className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold capitalize ${
+                      className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-2xs font-semibold capitalize ${
                         m.role === "owner"
                           ? "bg-blue-50 text-blue-700"
                           : "bg-emerald-50 text-emerald-700"
@@ -139,7 +139,7 @@ export function StaffClient({ staffList, isOwner }: StaffClientProps) {
                   </td>
                   <td className="py-3.5 px-4">
                     <span
-                      className={`inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-semibold ${
+                      className={`inline-flex items-center gap-1 px-2 py-0.5 rounded text-2xs font-semibold ${
                         m.is_active
                           ? "bg-emerald-50 text-emerald-700"
                           : "bg-red-50 text-red-700"
@@ -155,7 +155,7 @@ export function StaffClient({ staffList, isOwner }: StaffClientProps) {
                     {m.role !== "owner" && (
                       <button
                         onClick={() => handleToggleStatus(m)}
-                        className={`px-2.5 py-1 rounded text-[11px] font-semibold transition ${
+                        className={`px-2.5 py-1 rounded text-2xs font-semibold transition ${
                           m.is_active
                             ? "bg-slate-100 hover:bg-red-50 hover:text-red-600 text-slate-600"
                             : "bg-emerald-50 text-emerald-700 hover:bg-emerald-100"
@@ -176,7 +176,7 @@ export function StaffClient({ staffList, isOwner }: StaffClientProps) {
       {isOpenAdd && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-xs">
           <div className="bg-white rounded-xl max-w-md w-full p-6 shadow-xl border border-slate-200">
-            <h2 className="text-base font-bold text-slate-900 mb-1">
+            <h2 className="text-base font-semibold text-slate-900 mb-1">
               Add Staff Member
             </h2>
             <p className="text-xs text-slate-500 mb-4">

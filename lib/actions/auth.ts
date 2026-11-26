@@ -5,18 +5,13 @@ import { redirect } from "next/navigation";
 import { Profile, UserRole } from "@/lib/types/database";
 import { mockStore } from "@/lib/data/mock-store";
 import { createClient } from "@/lib/supabase/server";
+import { SESSION_COOKIE, SESSION_MAX_AGE, createSessionToken, isValidSessionToken } from "@/lib/session";
 
 export async function getCurrentUser(): Promise<Profile | null> {
   const cookieStore = await cookies();
-  const demoCookie = cookieStore.get("demo_user")?.value;
-
-  if (demoCookie) {
-    try {
-      const parsed = JSON.parse(demoCookie) as Profile;
-      return parsed;
-    } catch {
-      // ignore
-    }
+  if (await isValidSessionToken(cookieStore.get(SESSION_COOKIE)?.value)) {
+    const owner = mockStore.getProfiles().find((p) => p.role === "owner");
+    if (owner) return { ...owner, email: process.env.ADMIN_EMAIL || owner.email };
   }
 
   // Attempt Supabase live user
@@ -59,18 +54,31 @@ export async function loginWithEmail(formData: FormData) {
     return { error: "Please enter both email and password." };
   }
 
-  // Check demo credentials first
+  // Owner login configured in .env.local
+  const adminEmail = process.env.ADMIN_EMAIL;
+  const adminPassword = process.env.ADMIN_PASSWORD;
   if (
-    (email === "owner@safary.com" || email === "owner@solemate.com") &&
-    password === "owner123"
+    adminEmail &&
+    adminPassword &&
+    email.trim().toLowerCase() === adminEmail.toLowerCase() &&
+    password === adminPassword
   ) {
-    return await loginAsDemo("owner");
+    const token = await createSessionToken();
+    if (!token) return { error: "Login is not set up. Add SESSION_SECRET to .env.local." };
+
+    const cookieStore = await cookies();
+    cookieStore.set(SESSION_COOKIE, token, {
+      path: "/",
+      httpOnly: true,
+      sameSite: "lax",
+      secure: process.env.NODE_ENV === "production",
+      maxAge: SESSION_MAX_AGE,
+    });
+    redirect("/admin");
   }
-  if (
-    (email === "staff@safary.com" || email === "staff@solemate.com") &&
-    password === "staff123"
-  ) {
-    return await loginAsDemo("staff");
+
+  if (!process.env.NEXT_PUBLIC_SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL.includes("placeholder")) {
+    return { error: "Wrong email or password." };
   }
 
   // Try Supabase auth
@@ -92,31 +100,9 @@ export async function loginWithEmail(formData: FormData) {
   redirect("/admin");
 }
 
-export async function loginAsDemo(role: UserRole) {
-  const cookieStore = await cookies();
-  const profiles = mockStore.getProfiles();
-  const user = profiles.find((p) => p.role === role) || {
-    id: role === "owner" ? "usr_owner_01" : "usr_staff_01",
-    full_name: role === "owner" ? "Shop Owner" : "Shop Staff",
-    email: role === "owner" ? "owner@safary.com" : "staff@safary.com",
-    role,
-    is_active: true,
-    created_at: new Date().toISOString(),
-  };
-
-  cookieStore.set("demo_user", JSON.stringify(user), {
-    path: "/",
-    httpOnly: true,
-    sameSite: "lax",
-    maxAge: 60 * 60 * 24 * 7, // 7 days
-  });
-
-  redirect("/admin");
-}
-
 export async function logout() {
   const cookieStore = await cookies();
-  cookieStore.delete("demo_user");
+  cookieStore.delete(SESSION_COOKIE);
 
   try {
     const supabase = await createClient();

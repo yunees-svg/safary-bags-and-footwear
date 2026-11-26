@@ -253,7 +253,7 @@ export function PosClient({ products, categories, customers, settings }: PosClie
             <div className="h-full flex flex-col items-center justify-center text-center text-slate-400">
               <Tag className="w-8 h-8 mb-2 text-slate-300" />
               <p className="text-xs font-semibold">No slippers found</p>
-              <p className="text-[11px]">Try adjusting your search query or category filter.</p>
+              <p className="text-2xs">Try adjusting your search query or category filter.</p>
             </div>
           ) : (
             <div className="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-4 gap-3">
@@ -273,7 +273,7 @@ export function PosClient({ products, categories, customers, settings }: PosClie
                     }`}
                   >
                     <div>
-                      <div className="flex items-center justify-between text-[10px] text-slate-400 mb-1">
+                      <div className="flex items-center justify-between text-2xs text-slate-400 mb-1">
                         <span className="font-mono bg-slate-100 px-1 rounded">{p.product_code}</span>
                         <span
                           className={`font-semibold ${
@@ -283,17 +283,17 @@ export function PosClient({ products, categories, customers, settings }: PosClie
                           {totalStock} in stock
                         </span>
                       </div>
-                      <h3 className="text-xs font-bold text-slate-900 group-hover:text-blue-600 transition line-clamp-2">
+                      <h3 className="text-xs font-semibold text-slate-900 group-hover:text-blue-600 transition line-clamp-2">
                         {p.name}
                       </h3>
-                      <p className="text-[10px] text-slate-400 mt-0.5">{p.brand}</p>
+                      <p className="text-2xs text-slate-400 mt-0.5">{p.brand}</p>
                     </div>
 
                     <div className="mt-3 pt-2 border-t border-slate-100 flex items-center justify-between">
-                      <span className="text-xs font-black text-slate-900">
+                      <span className="text-xs font-bold text-slate-900">
                         {formatCurrency(p.selling_price)}
                       </span>
-                      <span className="text-[10px] font-medium text-blue-600 group-hover:underline">
+                      <span className="text-2xs font-medium text-blue-600 group-hover:underline">
                         {p.variants.length > 1 ? `${p.variants.length} Options` : "Quick Add"}
                       </span>
                     </div>
@@ -310,12 +310,12 @@ export function PosClient({ products, categories, customers, settings }: PosClie
         {/* Customer Select Header */}
         <div className="p-3 bg-slate-50 border-b border-slate-200 space-y-2">
           <div className="flex items-center justify-between text-xs">
-            <span className="font-bold text-slate-800 flex items-center gap-1.5">
+            <span className="font-semibold text-slate-800 flex items-center gap-1.5">
               <User className="w-3.5 h-3.5 text-blue-600" /> Customer:
             </span>
             <button
               onClick={() => setIsAddingCustomer(!isAddingCustomer)}
-              className="text-[11px] font-semibold text-blue-600 hover:underline flex items-center gap-1"
+              className="text-2xs font-semibold text-blue-600 hover:underline flex items-center gap-1"
             >
               {isAddingCustomer ? "Cancel New" : "+ Add New Customer"}
             </button>
@@ -356,7 +356,7 @@ export function PosClient({ products, categories, customers, settings }: PosClie
 
         {/* Error notification if any */}
         {error && (
-          <div className="p-2.5 bg-red-50 border-b border-red-200 text-red-700 text-[11px] flex items-center gap-2">
+          <div className="p-2.5 bg-red-50 border-b border-red-200 text-red-700 text-2xs flex items-center gap-2">
             <AlertCircle className="w-3.5 h-3.5 shrink-0 text-red-600" />
             <span className="truncate">{error}</span>
           </div>
@@ -368,7 +368,7 @@ export function PosClient({ products, categories, customers, settings }: PosClie
             <div className="h-full flex flex-col items-center justify-center text-center text-slate-400 py-12">
               <ShoppingCart className="w-8 h-8 mb-2 text-slate-300" />
               <p className="text-xs font-semibold">Your bill is empty</p>
-              <p className="text-[11px]">Click any slipper on the left to add it.</p>
+              <p className="text-2xs">Click any slipper on the left to add it.</p>
             </div>
           ) : (
             cart.map((item) => (
@@ -377,11 +377,11 @@ export function PosClient({ products, categories, customers, settings }: PosClie
                 className="p-2.5 rounded-lg border border-slate-200 bg-slate-50/50 flex items-center justify-between gap-2"
               >
                 <div className="min-w-0 flex-1">
-                  <p className="text-xs font-bold text-slate-900 truncate">{item.productName}</p>
-                  <p className="text-[11px] text-slate-500">
+                  <p className="text-xs font-semibold text-slate-900 truncate">{item.productName}</p>
+                  <p className="text-2xs text-slate-500">
                     {item.colour} • Size {item.size}
                   </p>
-                  <p className="text-xs font-black text-blue-600 mt-0.5">
+                  <p className="text-xs font-bold text-blue-600 mt-0.5">
                     {formatCurrency(item.unitPrice * item.quantity)}
                   </p>
                 </div>
@@ -393,7 +393,7 @@ export function PosClient({ products, categories, customers, settings }: PosClie
                   >
                     <Minus className="w-3 h-3" />
                   </button>
-                  <span className="text-xs font-bold w-5 text-center">{item.quantity}</span>
+                  <span className="text-xs font-semibold w-5 text-center">{item.quantity}</span>
                   <button
                     onClick={() => updateQuantity(item.variantId, 1)}
                     className="w-6 h-6 rounded bg-white border border-slate-200 flex items-center justify-center text-slate-600 hover:bg-slate-100"
@@ -432,7 +432,7 @@ export function PosClient({ products, categories, customers, settings }: PosClie
                 className="w-20 px-2 py-0.5 text-right font-semibold text-xs border border-slate-200 rounded bg-white"
               />
             </div>
-            <div className="flex justify-between font-black text-sm text-slate-900 pt-1 border-t border-slate-200">
+            <div className="flex justify-between font-bold text-sm text-slate-900 pt-1 border-t border-slate-200">
               <span>Net Payable:</span>
               <span className="text-blue-700">{formatCurrency(finalTotal)}</span>
             </div>
@@ -440,7 +440,7 @@ export function PosClient({ products, categories, customers, settings }: PosClie
 
           {/* Payment Method Selector */}
           <div>
-            <label className="block text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-1.5">
+            <label className="block text-2xs font-semibold text-slate-500 mb-1.5">
               Payment Method
             </label>
             <div className="grid grid-cols-4 gap-1.5">
@@ -477,7 +477,7 @@ export function PosClient({ products, categories, customers, settings }: PosClie
                   className="w-20 px-2 py-0.5 text-right font-semibold text-xs border border-slate-200 rounded"
                 />
                 {tenderedNum > finalTotal && (
-                  <span className="text-[10px] font-bold text-emerald-600">
+                  <span className="text-2xs font-semibold text-emerald-600">
                     Change: {formatCurrency(changeDue)}
                   </span>
                 )}
@@ -507,7 +507,7 @@ export function PosClient({ products, categories, customers, settings }: PosClie
             type="button"
             disabled={cart.length === 0 || loading}
             onClick={handleCheckout}
-            className="w-full py-2.5 bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white rounded-xl text-xs font-bold shadow-xs transition flex items-center justify-center gap-2"
+            className="w-full py-2.5 bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white rounded-xl text-xs font-semibold shadow-xs transition flex items-center justify-center gap-2"
           >
             {loading ? (
               <>
@@ -529,7 +529,7 @@ export function PosClient({ products, categories, customers, settings }: PosClie
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-xs">
           <div className="bg-white rounded-xl max-w-sm w-full p-5 shadow-xl border border-slate-200">
             <div className="flex items-center justify-between mb-2">
-              <h2 className="text-sm font-bold text-slate-900">{selectedProductForVariant.name}</h2>
+              <h2 className="text-sm font-semibold text-slate-900">{selectedProductForVariant.name}</h2>
               <button
                 onClick={() => setSelectedProductForVariant(null)}
                 className="p-1 text-slate-400 hover:text-slate-600"
@@ -559,7 +559,7 @@ export function PosClient({ products, categories, customers, settings }: PosClie
                   </div>
                   <div className="flex items-center gap-2">
                     <span
-                      className={`text-[10px] font-semibold ${
+                      className={`text-2xs font-semibold ${
                         v.stock_quantity <= 0
                           ? "text-red-500"
                           : v.stock_quantity <= 5

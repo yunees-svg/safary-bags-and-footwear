@@ -106,7 +106,7 @@ export function InventoryClient({ items, categories }: InventoryClientProps) {
       {/* Header Bar */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 bg-white p-5 rounded-xl border border-slate-200 shadow-xs">
         <div>
-          <h1 className="text-xl font-bold text-slate-900 tracking-tight flex items-center gap-2">
+          <h1 className="text-xl font-semibold text-slate-900 tracking-tight flex items-center gap-2">
             <Boxes className="w-5 h-5 text-blue-600" />
             Inventory & Stock Control
           </h1>
@@ -128,21 +128,21 @@ export function InventoryClient({ items, categories }: InventoryClientProps) {
       {/* KPI Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-xs">
-          <span className="text-[11px] font-medium text-slate-500 uppercase tracking-wider">
+          <span className="text-2xs font-medium text-slate-500">
             Total Slipper Stock
           </span>
           <div className="mt-1 flex items-baseline gap-2">
-            <span className="text-2xl font-bold text-slate-900">{totalPairs}</span>
+            <span className="text-2xl font-semibold text-slate-900">{totalPairs}</span>
             <span className="text-xs text-slate-400">pairs in store</span>
           </div>
         </div>
 
         <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-xs">
-          <span className="text-[11px] font-medium text-slate-500 uppercase tracking-wider">
+          <span className="text-2xs font-medium text-slate-500">
             Low Stock Variants
           </span>
           <div className="mt-1 flex items-baseline gap-2">
-            <span className={`text-2xl font-bold ${lowStockCount > 0 ? "text-amber-600" : "text-slate-900"}`}>
+            <span className={`text-2xl font-semibold ${lowStockCount > 0 ? "text-amber-600" : "text-slate-900"}`}>
               {lowStockCount}
             </span>
             <span className="text-xs text-slate-400">below threshold</span>
@@ -150,11 +150,11 @@ export function InventoryClient({ items, categories }: InventoryClientProps) {
         </div>
 
         <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-xs">
-          <span className="text-[11px] font-medium text-slate-500 uppercase tracking-wider">
+          <span className="text-2xs font-medium text-slate-500">
             Out of Stock
           </span>
           <div className="mt-1 flex items-baseline gap-2">
-            <span className={`text-2xl font-bold ${outOfStockCount > 0 ? "text-red-600" : "text-slate-900"}`}>
+            <span className={`text-2xl font-semibold ${outOfStockCount > 0 ? "text-red-600" : "text-slate-900"}`}>
               {outOfStockCount}
             </span>
             <span className="text-xs text-slate-400">depleted</span>
@@ -223,7 +223,7 @@ export function InventoryClient({ items, categories }: InventoryClientProps) {
       <div className="bg-white rounded-xl border border-slate-200 shadow-xs overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-left text-xs">
-            <thead className="bg-slate-50 text-slate-500 uppercase text-[10px] tracking-wider border-b border-slate-100">
+            <thead className="bg-slate-50 text-slate-500 text-2xs border-b border-slate-100">
               <tr>
                 <th className="py-3 px-4 font-semibold">Slipper Model</th>
                 <th className="py-3 px-4 font-semibold">Colour</th>
@@ -245,9 +245,9 @@ export function InventoryClient({ items, categories }: InventoryClientProps) {
               ) : (
                 filtered.map((item) => (
                   <tr key={item.id} className="hover:bg-slate-50/70 transition">
-                    <td className="py-3.5 px-4 font-bold text-slate-900">
+                    <td className="py-3.5 px-4 font-semibold text-slate-900">
                       <div>{item.product.name}</div>
-                      <div className="text-[10px] font-normal text-slate-400">
+                      <div className="text-2xs font-normal text-slate-400">
                         {item.category?.name || "Uncategorized"}
                       </div>
                     </td>
@@ -257,13 +257,13 @@ export function InventoryClient({ items, categories }: InventoryClientProps) {
                     <td className="py-3.5 px-4 font-semibold text-slate-900">
                       Size {item.size}
                     </td>
-                    <td className="py-3.5 px-4 font-mono text-[11px] text-slate-500">
+                    <td className="py-3.5 px-4 font-mono text-2xs text-slate-500">
                       {item.sku}
                     </td>
                     <td className="py-3.5 px-4">
                       <div className="flex items-center gap-2">
                         <span
-                          className={`font-bold text-sm ${
+                          className={`font-semibold text-sm ${
                             item.isOutOfStock
                               ? "text-red-600"
                               : item.isLowStock
@@ -274,15 +274,15 @@ export function InventoryClient({ items, categories }: InventoryClientProps) {
                           {item.stock_quantity}
                         </span>
                         {item.isOutOfStock ? (
-                          <span className="px-1.5 py-0.5 rounded text-[9px] font-bold bg-red-100 text-red-700">
+                          <span className="px-1.5 py-0.5 rounded text-2xs font-semibold bg-red-100 text-red-700">
                             Depleted
                           </span>
                         ) : item.isLowStock ? (
-                          <span className="px-1.5 py-0.5 rounded text-[9px] font-bold bg-amber-100 text-amber-700 flex items-center gap-0.5">
+                          <span className="px-1.5 py-0.5 rounded text-2xs font-semibold bg-amber-100 text-amber-700 flex items-center gap-0.5">
                             <AlertTriangle className="w-2.5 h-2.5" /> Low Stock
                           </span>
                         ) : (
-                          <span className="text-[10px] text-slate-400">in stock</span>
+                          <span className="text-2xs text-slate-400">in stock</span>
                         )}
                       </div>
                     </td>
@@ -310,7 +310,7 @@ export function InventoryClient({ items, categories }: InventoryClientProps) {
       {adjustingItem && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-xs">
           <div className="bg-white rounded-xl max-w-md w-full p-6 shadow-xl border border-slate-200">
-            <h2 className="text-base font-bold text-slate-900 mb-1">
+            <h2 className="text-base font-semibold text-slate-900 mb-1">
               Adjust Inventory Stock
             </h2>
             <p className="text-xs text-slate-500 mb-4">
@@ -320,7 +320,7 @@ export function InventoryClient({ items, categories }: InventoryClientProps) {
             <form onSubmit={handleSaveAdjustment} className="space-y-4">
               <div className="p-3 bg-slate-50 rounded-lg border border-slate-200 flex items-center justify-between text-xs">
                 <span className="text-slate-500">Current Recorded Stock:</span>
-                <span className="font-bold text-slate-900 text-sm">
+                <span className="font-semibold text-slate-900 text-sm">
                   {adjustingItem.stock_quantity} pairs
                 </span>
               </div>
@@ -335,9 +335,9 @@ export function InventoryClient({ items, categories }: InventoryClientProps) {
                   required
                   value={newQuantity}
                   onChange={(e) => setNewQuantity(parseInt(e.target.value) || 0)}
-                  className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm font-bold text-slate-900 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                  className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm font-semibold text-slate-900 focus:outline-none focus:ring-1 focus:ring-blue-500"
                 />
-                <div className="mt-1 flex items-center justify-between text-[11px]">
+                <div className="mt-1 flex items-center justify-between text-2xs">
                   <span className="text-slate-400">Adjustment delta:</span>
                   <span
                     className={`font-semibold ${

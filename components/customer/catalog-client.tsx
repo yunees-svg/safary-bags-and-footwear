@@ -109,7 +109,7 @@ export function CatalogClient({
         {/* Title & Mobile Filter Button */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-200 pb-4">
           <div>
-            <h1 className="text-2xl font-black text-slate-900 tracking-tight">
+            <h1 className="text-2xl font-bold text-slate-900 tracking-tight">
               Slipper Catalog
             </h1>
             <p className="text-xs text-slate-500 mt-0.5">
@@ -147,12 +147,12 @@ export function CatalogClient({
             }`}
           >
             <div className="flex items-center justify-between pb-3 border-b border-slate-100">
-              <span className="text-xs font-bold text-slate-900 uppercase tracking-wider flex items-center gap-1.5">
+              <span className="text-xs font-semibold text-slate-900 flex items-center gap-1.5">
                 <Filter className="w-3.5 h-3.5 text-blue-600" /> Filters
               </span>
               <button
                 onClick={resetFilters}
-                className="text-[11px] font-semibold text-blue-600 hover:underline"
+                className="text-2xs font-semibold text-blue-600 hover:underline"
               >
                 Reset All
               </button>
@@ -182,7 +182,7 @@ export function CatalogClient({
                   onClick={() => setSelectedCategorySlug("all")}
                   className={`w-full text-left px-2 py-1.5 rounded-lg text-xs font-medium transition ${
                     selectedCategorySlug === "all"
-                      ? "bg-blue-50 text-blue-700 font-bold"
+                      ? "bg-blue-50 text-blue-700 font-semibold"
                       : "text-slate-600 hover:bg-slate-50"
                   }`}
                 >
@@ -195,7 +195,7 @@ export function CatalogClient({
                     onClick={() => setSelectedCategorySlug(c.slug)}
                     className={`w-full text-left px-2 py-1.5 rounded-lg text-xs font-medium transition ${
                       selectedCategorySlug === c.slug
-                        ? "bg-blue-50 text-blue-700 font-bold"
+                        ? "bg-blue-50 text-blue-700 font-semibold"
                         : "text-slate-600 hover:bg-slate-50"
                     }`}
                   >
@@ -271,7 +271,7 @@ export function CatalogClient({
             {filteredProducts.length === 0 ? (
               <div className="bg-white rounded-2xl border border-slate-200 p-12 text-center text-slate-400 space-y-3">
                 <Package className="w-12 h-12 mx-auto text-slate-300" />
-                <h3 className="text-base font-bold text-slate-800">No Slippers Match Your Filter</h3>
+                <h3 className="text-base font-semibold text-slate-800">No Slippers Match Your Filter</h3>
                 <p className="text-xs text-slate-500 max-w-sm mx-auto">
                   Try clearing some filters or searching for another slipper code or name.
                 </p>
