@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { Supplier, Product, ProductVariant } from "@/lib/types/database";
 import { createPurchaseEntryAction } from "@/lib/actions/purchases";
-import { parseSupplierInvoiceAction, ParsedInvoiceResult } from "@/lib/actions/ai-document";
+import { parseSupplierInvoiceAction, applyMarginPriceUpdatesAction, ParsedInvoiceResult } from "@/lib/actions/ai-document";
 import { formatCurrency } from "@/lib/utils";
 import {
   ArrowLeft,
@@ -20,6 +20,8 @@ import {
   Upload,
   CheckCircle2,
   Scan,
+  AlertTriangle,
+  TrendingUp,
 } from "lucide-react";
 
 interface VariantOption extends ProductVariant {
@@ -57,6 +59,7 @@ export function NewPurchaseClient({ suppliers, variants }: NewPurchaseClientProp
   // AI Invoice Scanner State
   const [isScanning, setIsScanning] = useState(false);
   const [scanResult, setScanResult] = useState<ParsedInvoiceResult | null>(null);
+  const [autoUpdateMargins, setAutoUpdateMargins] = useState(true);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
   async function handleScanFile(e: React.ChangeEvent<HTMLInputElement>) {
@@ -180,6 +183,19 @@ export function NewPurchaseClient({ suppliers, variants }: NewPurchaseClientProp
       setError(res.error);
       setLoading(false);
     } else {
+      // If AI detected cost price increases and owner enabled Margin Guard, update catalog prices!
+      if (autoUpdateMargins && scanResult && scanResult.marginAlertCount > 0) {
+        const marginUpdates = scanResult.items
+          .filter((it) => it.costIncreased && it.matchedProductId)
+          .map((it) => ({
+            productId: it.matchedProductId!,
+            newCostPrice: it.unitCost,
+            newSellingPrice: it.recommendedSellingPrice,
+          }));
+        if (marginUpdates.length > 0) {
+          await applyMarginPriceUpdatesAction(marginUpdates);
+        }
+      }
       router.push("/admin/purchases");
     }
   }
@@ -288,16 +304,51 @@ export function NewPurchaseClient({ suppliers, variants }: NewPurchaseClientProp
 
         {/* Scan Confirmation Notice if scanned */}
         {scanResult && scanResult.success && (
-          <div className="p-3 rounded-xl bg-emerald-950/70 border border-emerald-500/40 text-emerald-200 text-xs flex items-center justify-between gap-2">
-            <div className="flex items-center gap-2">
-              <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
-              <span>
-                <strong>AI Recognized:</strong> {scanResult.rawSummary} Extracted {scanResult.items.length} line items (Total {formatCurrency(scanResult.totalAmount)}).
+          <div className="space-y-2.5">
+            <div className="p-3 rounded-xl bg-emerald-950/70 border border-emerald-500/40 text-emerald-200 text-xs flex items-center justify-between gap-2">
+              <div className="flex items-center gap-2">
+                <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
+                <span>
+                  <strong>AI Recognized:</strong> {scanResult.rawSummary} Extracted {scanResult.items.length} line items (Total {formatCurrency(scanResult.totalAmount)}).
+                </span>
+              </div>
+              <span className="text-2xs font-semibold px-2 py-0.5 rounded-full bg-emerald-900 text-emerald-300 shrink-0">
+                Form Auto-Filled ✓
               </span>
             </div>
-            <span className="text-2xs font-semibold px-2 py-0.5 rounded-full bg-emerald-900 text-emerald-300">
-              Form Auto-Filled ✓
-            </span>
+
+            {/* Smart Margin Guard Alert */}
+            {scanResult.marginAlertCount > 0 && (
+              <div className="p-3.5 rounded-xl bg-amber-950/80 border border-amber-500/50 text-amber-100 text-xs space-y-2">
+                <div className="flex items-center justify-between gap-2">
+                  <div className="flex items-center gap-2 font-semibold text-amber-300">
+                    <AlertTriangle className="w-4 h-4 text-amber-400 shrink-0" />
+                    <span>Smart Margin Guard: Wholesale Cost Increased on {scanResult.marginAlertCount} Item(s)</span>
+                  </div>
+                  <label className="flex items-center gap-1.5 text-2xs font-semibold cursor-pointer bg-amber-900/60 px-2.5 py-1 rounded-lg border border-amber-500/30">
+                    <input
+                      type="checkbox"
+                      checked={autoUpdateMargins}
+                      onChange={(e) => setAutoUpdateMargins(e.target.checked)}
+                      className="rounded text-amber-500"
+                    />
+                    Auto-Adjust Retail Price on Save
+                  </label>
+                </div>
+                <div className="space-y-1 pl-6 text-2xs text-amber-200/90">
+                  {scanResult.items
+                    .filter((it) => it.costIncreased)
+                    .map((it, idx) => (
+                      <div key={idx} className="flex items-center gap-1.5">
+                        <TrendingUp className="w-3 h-3 text-amber-400 shrink-0" />
+                        <span>
+                          <strong>{it.matchedVariantName}:</strong> {it.marginWarning}
+                        </span>
+                      </div>
+                    ))}
+                </div>
+              </div>
+            )}
           </div>
         )}
       </div>

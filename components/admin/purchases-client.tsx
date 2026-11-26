@@ -16,6 +16,7 @@ import {
   UserPlus,
   AlertCircle,
   Loader2,
+  Sparkles,
 } from "lucide-react";
 
 interface PurchasesClientProps {
@@ -76,7 +77,7 @@ export function PurchasesClient({ purchases, suppliers }: PurchasesClientProps) 
             Log supplier purchases and automatically increase slipper inventory upon confirmation.
           </p>
         </div>
-        <div className="flex items-center gap-2">
+        <div className="flex flex-wrap items-center gap-2">
           <button
             onClick={() => setIsOpenAddSupplier(true)}
             className="inline-flex items-center gap-1.5 px-3 py-2 border border-slate-200 text-slate-700 hover:bg-slate-50 rounded-lg text-xs font-semibold transition"
@@ -86,10 +87,10 @@ export function PurchasesClient({ purchases, suppliers }: PurchasesClientProps) 
           </button>
           <Link
             href="/admin/purchases/new"
-            className="inline-flex items-center gap-1.5 px-3.5 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-xs font-semibold shadow-xs transition"
+            className="inline-flex items-center gap-1.5 px-3.5 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg text-xs font-semibold shadow-xs transition"
           >
-            <Plus className="w-4 h-4" />
-            New Purchase Invoice
+            <Sparkles className="w-4 h-4" />
+            AI Scan Wholesale Bill
           </Link>
         </div>
       </div>

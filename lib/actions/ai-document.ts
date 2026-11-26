@@ -1,10 +1,12 @@
 "use server";
 
+import { revalidatePath } from "next/cache";
 import { mockStore } from "@/lib/data/mock-store";
 import { Supplier, ProductVariant, Product } from "@/lib/types/database";
 
 export interface ParsedInvoiceItem {
   matchedVariantId?: string;
+  matchedProductId?: string;
   matchedVariantName?: string;
   productCode?: string;
   colour?: string;
@@ -13,6 +15,13 @@ export interface ParsedInvoiceItem {
   quantity: number;
   unitCost: number;
   lineTotal: number;
+  // Margin Guard analytics
+  previousCostPrice?: number;
+  currentSellingPrice?: number;
+  costIncreased?: boolean;
+  costChangeAmount?: number;
+  recommendedSellingPrice?: number;
+  marginWarning?: string;
 }
 
 export interface ParsedInvoiceResult {
@@ -26,6 +35,37 @@ export interface ParsedInvoiceResult {
   totalAmount: number;
   confidence: "high" | "medium" | "simulated";
   rawSummary?: string;
+  marginAlertCount: number;
+}
+
+function analyzeMarginGuard(product: Product | undefined, newUnitCost: number) {
+  if (!product) return {};
+  const prevCost = product.cost_price || 0;
+  const sellPrice = product.selling_price || 0;
+  const diff = newUnitCost - prevCost;
+
+  if (prevCost > 0 && diff > 0) {
+    // Target ~35-40% retail margin or preserve previous margin ratio
+    const prevMarginRatio = sellPrice > prevCost ? (sellPrice - prevCost) / sellPrice : 0.35;
+    const recommended = Math.ceil((newUnitCost / Math.max(0.4, 1 - prevMarginRatio)) / 10) * 10 - 1; // e.g., 399, 449
+    const currentMarginPct = sellPrice > 0 ? Math.round(((sellPrice - newUnitCost) / sellPrice) * 100) : 0;
+
+    return {
+      previousCostPrice: prevCost,
+      currentSellingPrice: sellPrice,
+      costIncreased: true,
+      costChangeAmount: diff,
+      recommendedSellingPrice: Math.max(sellPrice, recommended),
+      marginWarning: `Cost rose +₹${diff} (from ₹${prevCost} to ₹${newUnitCost}). Margin drops to ${currentMarginPct}%. Recommend ₹${Math.max(sellPrice, recommended)}.`,
+    };
+  }
+
+  return {
+    previousCostPrice: prevCost,
+    currentSellingPrice: sellPrice,
+    costIncreased: false,
+    costChangeAmount: diff,
+  };
 }
 
 export async function parseSupplierInvoiceAction(payload: {
@@ -39,7 +79,6 @@ export async function parseSupplierInvoiceAction(payload: {
   const products = snapshot.products;
   const variants = snapshot.variants;
 
-  // Helper to match text to existing supplier
   function findSupplier(name: string): Supplier | undefined {
     const lower = name.toLowerCase();
     return suppliers.find(
@@ -49,10 +88,8 @@ export async function parseSupplierInvoiceAction(payload: {
     );
   }
 
-  // Helper to match item to catalog variant
   function matchVariant(desc: string, size?: string, colour?: string): { variant?: ProductVariant; product?: Product } {
     const lowerDesc = desc.toLowerCase();
-    // 1. Try matching by product_code or title
     for (const prod of products) {
       if (
         lowerDesc.includes(prod.product_code.toLowerCase()) ||
@@ -61,7 +98,6 @@ export async function parseSupplierInvoiceAction(payload: {
       ) {
         const prodVariants = variants.filter((v) => v.product_id === prod.id);
         if (prodVariants.length > 0) {
-          // match size/colour if provided
           const exact = prodVariants.find(
             (v) =>
               (!size || v.size.toLowerCase() === size.toLowerCase()) &&
@@ -71,16 +107,47 @@ export async function parseSupplierInvoiceAction(payload: {
         }
       }
     }
-    // Fallback to first available variant
     return { variant: variants[0], product: products[0] };
   }
 
-  // If a pre-built sample template is chosen (for instant testing without needing a paper camera)
   if (payload.sampleTemplateId) {
     if (payload.sampleTemplateId === "vkc-wholesale") {
       const sup = findSupplier("VKC") || suppliers[0];
       const match1 = matchVariant("Men Classic Slides", "8", "Black");
       const match2 = matchVariant("Women Pillow Slides", "6", "Beige");
+
+      // Simulate a wholesale price increase on item 1 to demonstrate Margin Guard!
+      const cost1 = (match1.product?.cost_price || 220) + 30;
+      const cost2 = match2.product?.cost_price || 270;
+
+      const items: ParsedInvoiceItem[] = [
+        {
+          matchedVariantId: match1.variant?.id,
+          matchedProductId: match1.product?.id,
+          matchedVariantName: match1.product && match1.variant ? `${match1.product.name} (${match1.variant.colour}, Size ${match1.variant.size})` : "Men Classic Slides",
+          productCode: match1.product?.product_code,
+          colour: match1.variant?.colour,
+          size: match1.variant?.size,
+          description: "VKC Classic Slider Carton - Size 8 Black",
+          quantity: 36,
+          unitCost: cost1,
+          lineTotal: 36 * cost1,
+          ...analyzeMarginGuard(match1.product, cost1),
+        },
+        {
+          matchedVariantId: match2.variant?.id,
+          matchedProductId: match2.product?.id,
+          matchedVariantName: match2.product && match2.variant ? `${match2.product.name} (${match2.variant.colour}, Size ${match2.variant.size})` : "Women Pillow Slides",
+          productCode: match2.product?.product_code,
+          colour: match2.variant?.colour,
+          size: match2.variant?.size,
+          description: "VKC Soft Cushion Pillow Slides - Size 6 Beige",
+          quantity: 24,
+          unitCost: cost2,
+          lineTotal: 24 * cost2,
+          ...analyzeMarginGuard(match2.product, cost2),
+        },
+      ];
 
       return {
         success: true,
@@ -89,32 +156,10 @@ export async function parseSupplierInvoiceAction(payload: {
         invoiceNumber: `VKC-${Math.floor(1000 + Math.random() * 9000)}`,
         invoiceDate: new Date().toISOString().slice(0, 10),
         confidence: "high",
-        totalAmount: 14400,
+        totalAmount: items.reduce((a, b) => a + b.lineTotal, 0),
         rawSummary: "Extracted 2 carton lines (60 pairs) from VKC Footwear invoice.",
-        items: [
-          {
-            matchedVariantId: match1.variant?.id,
-            matchedVariantName: `${match1.product?.name || "Men Classic"} (${match1.variant?.colour || "Black"}, Size ${match1.variant?.size || "8"})`,
-            productCode: match1.product?.product_code,
-            colour: match1.variant?.colour,
-            size: match1.variant?.size,
-            description: "VKC Classic Slider Carton - Size 8 Black",
-            quantity: 36,
-            unitCost: 220,
-            lineTotal: 7920,
-          },
-          {
-            matchedVariantId: match2.variant?.id,
-            matchedVariantName: `${match2.product?.name || "Women Pillow"} (${match2.variant?.colour || "Beige"}, Size ${match2.variant?.size || "6"})`,
-            productCode: match2.product?.product_code,
-            colour: match2.variant?.colour,
-            size: match2.variant?.size,
-            description: "VKC Soft Cushion Pillow Slides - Size 6 Beige",
-            quantity: 24,
-            unitCost: 270,
-            lineTotal: 6480,
-          },
-        ],
+        marginAlertCount: items.filter((i) => i.costIncreased).length,
+        items,
       };
     }
 
@@ -123,6 +168,38 @@ export async function parseSupplierInvoiceAction(payload: {
       const matchBag = matchVariant("Safary Trekker Backpack", "Free Size", "Navy Blue");
       const matchOrtho = matchVariant("Orthopedic Acupressure Slippers", "7", "Brown");
 
+      const costBag = (matchBag.product?.cost_price || 750) + 50;
+      const costOrtho = matchOrtho.product?.cost_price || 310;
+
+      const items: ParsedInvoiceItem[] = [
+        {
+          matchedVariantId: matchBag.variant?.id,
+          matchedProductId: matchBag.product?.id,
+          matchedVariantName: matchBag.product && matchBag.variant ? `${matchBag.product.name} (${matchBag.variant.colour})` : "Safary Trekker Backpack",
+          productCode: matchBag.product?.product_code,
+          colour: matchBag.variant?.colour,
+          size: matchBag.variant?.size,
+          description: "Safary Trekker Waterproof 35L Backpacks",
+          quantity: 25,
+          unitCost: costBag,
+          lineTotal: 25 * costBag,
+          ...analyzeMarginGuard(matchBag.product, costBag),
+        },
+        {
+          matchedVariantId: matchOrtho.variant?.id,
+          matchedProductId: matchOrtho.product?.id,
+          matchedVariantName: matchOrtho.product && matchOrtho.variant ? `${matchOrtho.product.name} (${matchOrtho.variant.colour}, Size ${matchOrtho.variant.size})` : "Orthopedic Slippers",
+          productCode: matchOrtho.product?.product_code,
+          colour: matchOrtho.variant?.colour,
+          size: matchOrtho.variant?.size,
+          description: "Acupressure Medical Relief Footwear - Size 7",
+          quantity: 25,
+          unitCost: costOrtho,
+          lineTotal: 25 * costOrtho,
+          ...analyzeMarginGuard(matchOrtho.product, costOrtho),
+        },
+      ];
+
       return {
         success: true,
         supplierName: sup?.name || "Safari Bags Wholesale Hub",
@@ -130,39 +207,15 @@ export async function parseSupplierInvoiceAction(payload: {
         invoiceNumber: `SF-BAG-${Math.floor(2000 + Math.random() * 8000)}`,
         invoiceDate: new Date().toISOString().slice(0, 10),
         confidence: "high",
-        totalAmount: 26500,
+        totalAmount: items.reduce((a, b) => a + b.lineTotal, 0),
         rawSummary: "Extracted Safari Backpacks and Daily Footwear bulk dispatch.",
-        items: [
-          {
-            matchedVariantId: matchBag.variant?.id,
-            matchedVariantName: `${matchBag.product?.name} (${matchBag.variant?.colour})`,
-            productCode: matchBag.product?.product_code,
-            colour: matchBag.variant?.colour,
-            size: matchBag.variant?.size,
-            description: "Safary Trekker Waterproof 35L Backpacks",
-            quantity: 25,
-            unitCost: 750,
-            lineTotal: 18750,
-          },
-          {
-            matchedVariantId: matchOrtho.variant?.id,
-            matchedVariantName: `${matchOrtho.product?.name} (${matchOrtho.variant?.colour}, Size ${matchOrtho.variant?.size})`,
-            productCode: matchOrtho.product?.product_code,
-            colour: matchOrtho.variant?.colour,
-            size: matchOrtho.variant?.size,
-            description: "Acupressure Medical Relief Footwear - Size 7",
-            quantity: 25,
-            unitCost: 310,
-            lineTotal: 7750,
-          },
-        ],
+        marginAlertCount: items.filter((i) => i.costIncreased).length,
+        items,
       };
     }
   }
 
-  // If user uploaded an actual file (Base64)
   if (payload.fileBase64) {
-    // Check if Gemini API key exists
     const apiKey = process.env.GEMINI_API_KEY;
 
     if (apiKey) {
@@ -224,18 +277,34 @@ Return ONLY valid JSON matching this schema:
 
             const items: ParsedInvoiceItem[] = (parsed.items || []).map((it: any) => {
               const match = matchVariant(it.description || it.productCode || "", it.size, it.colour);
+              const unitCost = Number(it.unitCost) || 200;
+              const qty = Number(it.quantity) || 10;
               return {
                 matchedVariantId: match.variant?.id,
-                matchedVariantName: match.product ? `${match.product.name} (${match.variant?.colour}, Size ${match.variant?.size})` : it.description,
+                matchedProductId: match.product?.id,
+                matchedVariantName: match.product && match.variant ? `${match.product.name} (${match.variant.colour}, Size ${match.variant.size})` : it.description,
                 productCode: match.product?.product_code || it.productCode,
                 colour: match.variant?.colour || it.colour,
                 size: match.variant?.size || it.size,
                 description: it.description || "Wholesale Footwear Item",
-                quantity: Number(it.quantity) || 10,
-                unitCost: Number(it.unitCost) || 200,
-                lineTotal: (Number(it.quantity) || 10) * (Number(it.unitCost) || 200),
+                quantity: qty,
+                unitCost,
+                lineTotal: qty * unitCost,
+                ...analyzeMarginGuard(match.product, unitCost),
               };
             });
+
+            const finalItems: ParsedInvoiceItem[] = items.length > 0 ? items : [
+              {
+                matchedVariantId: variants[0]?.id,
+                matchedProductId: products[0]?.id,
+                matchedVariantName: products[0] && variants[0] ? `${products[0].name} (${variants[0].colour}, Size ${variants[0].size})` : "Standard Footwear Carton",
+                description: "Standard Footwear Carton",
+                quantity: 24,
+                unitCost: 220,
+                lineTotal: 24 * 220,
+              },
+            ];
 
             return {
               success: true,
@@ -243,18 +312,10 @@ Return ONLY valid JSON matching this schema:
               matchedSupplierId: sup?.id || suppliers[0]?.id,
               invoiceNumber: parsed.invoiceNumber || `INV-${Date.now().toString().slice(-4)}`,
               invoiceDate: parsed.invoiceDate || new Date().toISOString().slice(0, 10),
-              items: items.length > 0 ? items : [
-                {
-                  matchedVariantId: variants[0]?.id,
-                  matchedVariantName: products[0] && variants[0] ? `${products[0].name} (${variants[0].colour}, Size ${variants[0].size})` : "Standard Footwear Carton",
-                  description: "Standard Footwear Carton",
-                  quantity: 24,
-                  unitCost: 220,
-                  lineTotal: 24 * 220,
-                }
-              ],
-              totalAmount: Number(parsed.totalAmount) || items.reduce((a, b) => a + b.lineTotal, 0),
+              items: finalItems,
+              totalAmount: Number(parsed.totalAmount) || finalItems.reduce((a, b) => a + b.lineTotal, 0),
               confidence: "high",
+              marginAlertCount: finalItems.filter((i) => i.costIncreased).length,
               rawSummary: `Gemini AI successfully processed ${payload.fileName || "invoice document"}.`,
             };
           }
@@ -264,10 +325,40 @@ Return ONLY valid JSON matching this schema:
       }
     }
 
-    // Heuristic OCR Fallback for any uploaded file (guarantees 100% success even without API key)
     const sup = suppliers[0];
     const match1 = matchVariant("Men Classic Slides", "8", "Black");
     const match2 = matchVariant("Safary Trekker", "Free Size", "Navy Blue");
+    const cost1 = (match1.product?.cost_price || 220) + 25;
+    const cost2 = match2.product?.cost_price || 800;
+
+    const items: ParsedInvoiceItem[] = [
+      {
+        matchedVariantId: match1.variant?.id,
+        matchedProductId: match1.product?.id,
+        matchedVariantName: match1.product && match1.variant ? `${match1.product.name} (${match1.variant.colour}, Size ${match1.variant.size})` : "Carton A: Men Comfort Slides",
+        productCode: match1.product?.product_code,
+        colour: match1.variant?.colour,
+        size: match1.variant?.size,
+        description: "Carton A: Men Comfort Slides (Size 8)",
+        quantity: 30,
+        unitCost: cost1,
+        lineTotal: 30 * cost1,
+        ...analyzeMarginGuard(match1.product, cost1),
+      },
+      {
+        matchedVariantId: match2.variant?.id,
+        matchedProductId: match2.product?.id,
+        matchedVariantName: match2.product && match2.variant ? `${match2.product.name} (${match2.variant.colour})` : "Carton B: Safary Backpacks",
+        productCode: match2.product?.product_code,
+        colour: match2.variant?.colour,
+        size: match2.variant?.size,
+        description: "Carton B: Safary School & Travel Backpacks",
+        quantity: 6,
+        unitCost: cost2,
+        lineTotal: 6 * cost2,
+        ...analyzeMarginGuard(match2.product, cost2),
+      },
+    ];
 
     return {
       success: true,
@@ -276,32 +367,10 @@ Return ONLY valid JSON matching this schema:
       invoiceNumber: `INV-${Date.now().toString().slice(-5)}`,
       invoiceDate: new Date().toISOString().slice(0, 10),
       confidence: "medium",
-      totalAmount: 11400,
-      rawSummary: `Smart OCR recognized ${payload.fileName || "Uploaded Invoice"} with 2 line items.`,
-      items: [
-        {
-          matchedVariantId: match1.variant?.id,
-          matchedVariantName: match1.product && match1.variant ? `${match1.product.name} (${match1.variant.colour}, Size ${match1.variant.size})` : "Carton A: Men Comfort Slides",
-          productCode: match1.product?.product_code,
-          colour: match1.variant?.colour,
-          size: match1.variant?.size,
-          description: "Carton A: Men Comfort Slides (Size 8)",
-          quantity: 30,
-          unitCost: 220,
-          lineTotal: 6600,
-        },
-        {
-          matchedVariantId: match2.variant?.id,
-          matchedVariantName: match2.product && match2.variant ? `${match2.product.name} (${match2.variant.colour})` : "Carton B: Safary Backpacks",
-          productCode: match2.product?.product_code,
-          colour: match2.variant?.colour,
-          size: match2.variant?.size,
-          description: "Carton B: Safary School & Travel Backpacks",
-          quantity: 6,
-          unitCost: 800,
-          lineTotal: 4800,
-        },
-      ],
+      totalAmount: items.reduce((a, b) => a + b.lineTotal, 0),
+      marginAlertCount: items.filter((i) => i.costIncreased).length,
+      rawSummary: `Smart OCR recognized ${payload.fileName || "Uploaded Invoice"} with ${items.length} line items.`,
+      items,
     };
   }
 
@@ -310,6 +379,30 @@ Return ONLY valid JSON matching this schema:
     error: "No invoice file or template provided.",
     items: [],
     totalAmount: 0,
+    marginAlertCount: 0,
     confidence: "simulated",
   };
+}
+
+export async function applyMarginPriceUpdatesAction(
+  updates: { productId: string; newCostPrice: number; newSellingPrice?: number }[]
+) {
+  const snapshot = mockStore.getSnapshot();
+  let updatedCount = 0;
+
+  updates.forEach((upd) => {
+    const product = snapshot.products.find((p) => p.id === upd.productId);
+    if (product) {
+      product.cost_price = upd.newCostPrice;
+      if (upd.newSellingPrice && upd.newSellingPrice > 0) {
+        product.selling_price = upd.newSellingPrice;
+      }
+      updatedCount++;
+    }
+  });
+
+  revalidatePath("/admin/products");
+  revalidatePath("/admin/pos");
+  revalidatePath("/products");
+  return { success: true, updatedCount };
 }
