@@ -1,6 +1,7 @@
 "use server";
 
 import { cookies } from "next/headers";
+import { connection } from "next/server";
 import { redirect } from "next/navigation";
 import { Profile, UserRole } from "@/lib/types/database";
 import { mockStore } from "@/lib/data/mock-store";
@@ -8,6 +9,7 @@ import { createClient } from "@/lib/supabase/server";
 import { SESSION_COOKIE, SESSION_MAX_AGE, createSessionToken, isValidSessionToken } from "@/lib/session";
 
 export async function getCurrentUser(): Promise<Profile | null> {
+  await connection();
   const cookieStore = await cookies();
   if (await isValidSessionToken(cookieStore.get(SESSION_COOKIE)?.value)) {
     const owner = mockStore.getProfiles().find((p) => p.role === "owner");
