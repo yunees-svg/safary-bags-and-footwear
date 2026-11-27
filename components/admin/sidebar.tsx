@@ -23,6 +23,7 @@ import {
   ChevronLeft,
   ChevronRight,
   ExternalLink,
+  Sparkles,
 } from "lucide-react";
 
 interface SidebarProps {
@@ -66,6 +67,7 @@ export function AdminSidebar({ role, isCollapsed, onToggleCollapse, onNavigate }
       items: [
         { label: "Billing / POS", href: "/admin/pos", icon: CreditCard, badge: "POS" },
         { label: "Purchases", href: "/admin/purchases", icon: Truck },
+        { label: "AI Invoice Agent", href: "/admin/purchases/new", icon: Sparkles, badge: "AI" },
         { label: "Orders & Enquiries", href: "/admin/enquiries", icon: MessageSquareQuote },
         { label: "Returns & Exchanges", href: "/admin/returns", icon: RotateCcw },
       ],
