@@ -37,9 +37,9 @@ export default function AdminLayout({
   }, []);
 
   return (
-    <div className="min-h-screen bg-slate-50 flex">
+    <div className="h-dvh overflow-hidden bg-slate-50 flex">
       {/* Desktop Sidebar */}
-      <div className="hidden lg:block">
+      <div className="hidden lg:block h-full shrink-0">
         <AdminSidebar
           role={user?.role || "staff"}
           isCollapsed={isCollapsed}
@@ -66,7 +66,7 @@ export default function AdminLayout({
       )}
 
       {/* Main Container */}
-      <div className="flex-1 flex flex-col min-w-0">
+      <div className="flex-1 flex flex-col min-w-0 h-full overflow-hidden">
         <AdminHeader
           user={user}
           onOpenMobileSidebar={() => setIsMobileOpen(true)}
