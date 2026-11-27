@@ -16,6 +16,17 @@ export default function AdminLayout({
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [isMobileOpen, setIsMobileOpen] = useState(false);
   const [isAssistantOpen, setIsAssistantOpen] = useState(false);
+  const [scrollProgress, setScrollProgress] = useState(0);
+
+  function handleMainScroll(e: React.UIEvent<HTMLElement>) {
+    const el = e.currentTarget;
+    const maxScroll = el.scrollHeight - el.clientHeight;
+    if (maxScroll <= 0) {
+      setScrollProgress(0);
+    } else {
+      setScrollProgress(Math.min(100, Math.round((el.scrollTop / maxScroll) * 100)));
+    }
+  }
 
   useEffect(() => {
     async function loadUser() {
@@ -73,7 +84,17 @@ export default function AdminLayout({
           isAssistantOpen={isAssistantOpen}
           onToggleAssistant={() => setIsAssistantOpen((prev) => !prev)}
         />
-        <main className="flex-1 p-3 sm:p-4 md:p-6 lg:p-8 overflow-y-auto">
+        {/* Sleek Top Scroll Progress Bar */}
+        <div className="h-0.5 w-full bg-transparent shrink-0 relative overflow-hidden">
+          <div
+            className="h-full bg-gradient-to-r from-blue-500 to-indigo-600 transition-all duration-150 ease-out"
+            style={{ width: `${scrollProgress}%` }}
+          />
+        </div>
+        <main
+          onScroll={handleMainScroll}
+          className="flex-1 p-3 sm:p-4 md:p-6 lg:p-8 overflow-y-auto"
+        >
           {children}
         </main>
       </div>

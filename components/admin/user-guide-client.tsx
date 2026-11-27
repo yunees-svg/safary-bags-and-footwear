@@ -172,7 +172,10 @@ export function UserGuideClient() {
           </aside>
 
           {/* Right Detailed Reading Pane */}
-          <div className="lg:col-span-8 bg-white rounded-2xl border border-slate-200 shadow-xs p-5 sm:p-7 space-y-6">
+          <div
+            key={activeEntry.id}
+            className="lg:col-span-8 bg-white rounded-2xl border border-slate-200 shadow-xs p-5 sm:p-7 space-y-6 animate-fade-up"
+          >
             {/* Chapter Header */}
             <div className="space-y-3 pb-5 border-b border-slate-100">
               <div className="flex flex-wrap items-center justify-between gap-2">
@@ -216,7 +219,8 @@ export function UserGuideClient() {
                 {activeEntry.steps.map((step, idx) => (
                   <div
                     key={idx}
-                    className="p-3.5 rounded-xl bg-slate-50 border border-slate-200 flex items-start gap-3"
+                    style={{ animationDelay: `${idx * 55}ms` }}
+                    className="p-3.5 rounded-xl bg-slate-50 border border-slate-200 flex items-start gap-3 animate-fade-up"
                   >
                     <span className="w-6 h-6 rounded-full bg-blue-600 text-white font-bold text-xs flex items-center justify-center shrink-0 mt-0.5">
                       {idx + 1}

@@ -102,10 +102,11 @@ export function DashboardPulseFeed({ feed, settings, bills }: DashboardPulseFeed
               No recent events in the heartbeat feed.
             </div>
           ) : (
-            feed.map((item) => (
+            feed.map((item, idx) => (
               <div
                 key={item.id}
-                className="p-3.5 hover:bg-slate-50/80 transition flex items-start gap-3 group"
+                style={{ animationDelay: `${idx * 45}ms` }}
+                className="p-3.5 hover:bg-slate-50/80 transition flex items-start gap-3 group animate-fade-up"
               >
                 {/* Icon Circle */}
                 <div className="w-8 h-8 rounded-xl bg-slate-100 flex items-center justify-center shrink-0 mt-0.5 group-hover:scale-105 transition">
