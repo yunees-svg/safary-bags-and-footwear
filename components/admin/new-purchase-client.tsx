@@ -235,7 +235,7 @@ export function NewPurchaseClient({ suppliers, variants }: NewPurchaseClientProp
         </div>
       )}
 
-      {/* AI Document Processing Card (Velom Concept) */}
+      {/* AI Document Processing Card */}
       <div className="bg-gradient-to-r from-indigo-900 via-slate-900 to-blue-950 text-white p-5 rounded-2xl border border-indigo-500/30 shadow-md space-y-4">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <div className="flex items-center gap-2.5">
@@ -244,7 +244,7 @@ export function NewPurchaseClient({ suppliers, variants }: NewPurchaseClientProp
             </div>
             <div>
               <h2 className="text-sm font-bold text-white flex items-center gap-1.5">
-                AI Document Processing <span className="text-2xs font-semibold px-2 py-0.5 rounded-full bg-indigo-500/30 text-indigo-200 border border-indigo-400/30">Velom Smart Ingest</span>
+                AI Document Processing <span className="text-2xs font-semibold px-2 py-0.5 rounded-full bg-indigo-500/30 text-indigo-200 border border-indigo-400/30">Smart Invoice Scanner</span>
               </h2>
               <p className="text-2xs text-slate-300">
                 Upload or photograph a wholesale supplier invoice. AI will extract supplier, bill number, line items, and quantities automatically.
