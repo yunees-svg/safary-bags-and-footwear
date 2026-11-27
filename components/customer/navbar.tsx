@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Category, ShopSettings } from "@/lib/types/database";
@@ -13,6 +13,8 @@ import {
   ShieldCheck,
   ShoppingBag,
   ExternalLink,
+  Sun,
+  Moon,
 } from "lucide-react";
 
 interface CustomerNavbarProps {
@@ -23,7 +25,19 @@ interface CustomerNavbarProps {
 export function CustomerNavbar({ categories, settings }: CustomerNavbarProps) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
+  const [isDark, setIsDark] = useState(false);
   const pathname = usePathname();
+
+  useEffect(() => {
+    setIsDark(document.documentElement.classList.contains("dark"));
+  }, []);
+
+  function toggleTheme() {
+    const next = !isDark;
+    setIsDark(next);
+    document.documentElement.classList.toggle("dark", next);
+    localStorage.setItem("safary_theme", next ? "dark" : "light");
+  }
 
   function handleSearch(e: React.FormEvent) {
     e.preventDefault();
@@ -131,8 +145,18 @@ export function CustomerNavbar({ categories, settings }: CustomerNavbarProps) {
           </Link>
         </nav>
 
-        {/* WhatsApp Direct Ordering Button */}
+        {/* Theme Toggle + WhatsApp Direct Ordering Button */}
         <div className="flex items-center gap-2">
+          <button
+            type="button"
+            onClick={toggleTheme}
+            className="p-2 text-slate-600 hover:bg-slate-100 rounded-full transition"
+            title={isDark ? "Switch to Light Theme" : "Switch to Dark Theme"}
+            aria-label="Toggle Light/Dark Theme"
+          >
+            {isDark ? <Sun className="w-4 h-4 text-blue-400" /> : <Moon className="w-4 h-4" />}
+          </button>
+
           <a
             href={`https://wa.me/${cleanWhatsApp}?text=${encodeURIComponent("Hello, I would like to enquire about slippers available at your store.")}`}
             target="_blank"
