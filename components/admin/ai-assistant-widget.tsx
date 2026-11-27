@@ -91,17 +91,18 @@ export function AiAssistantWidget() {
         <button
           type="button"
           onClick={() => setIsOpen(true)}
-          className="fixed bottom-5 right-5 z-40 inline-flex items-center gap-2 px-4 py-3 bg-gradient-to-r from-indigo-600 to-blue-600 hover:from-indigo-500 hover:to-blue-500 text-white rounded-full shadow-lg hover:shadow-xl transition-all text-xs font-bold"
+          className="fixed bottom-4 right-4 z-40 inline-flex items-center gap-2 px-3.5 py-2.5 sm:px-4 sm:py-3 bg-gradient-to-r from-indigo-600 to-blue-600 hover:from-indigo-500 hover:to-blue-500 text-white rounded-full shadow-lg hover:shadow-xl transition-all text-xs font-bold mb-[env(safe-area-inset-bottom)]"
           aria-label="Open Safary AI Assistant"
         >
           <Sparkles className="w-4 h-4 animate-pulse" />
-          <span>Ask Safary AI</span>
+          <span className="hidden xs:inline sm:inline">Ask Safary AI</span>
+          <span className="sm:hidden">AI</span>
         </button>
       )}
 
       {/* Floating AI Chat Window */}
       {isOpen && (
-        <div className="fixed bottom-4 right-4 left-4 sm:left-auto sm:w-96 z-50 bg-white rounded-2xl border border-slate-200 shadow-2xl flex flex-col overflow-hidden max-h-[82vh]">
+        <div className="fixed inset-x-2 bottom-2 sm:inset-x-auto sm:bottom-4 sm:right-4 sm:w-96 z-50 bg-white rounded-2xl border border-slate-200 shadow-2xl flex flex-col overflow-hidden max-h-[85dvh] pb-[env(safe-area-inset-bottom)]">
           {/* Header */}
           <div className="p-3.5 bg-gradient-to-r from-slate-900 via-indigo-950 to-blue-950 text-white flex items-center justify-between">
             <div className="flex items-center gap-2.5">

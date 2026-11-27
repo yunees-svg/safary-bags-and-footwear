@@ -320,7 +320,7 @@ export function NewPurchaseClient({ suppliers, variants }: NewPurchaseClientProp
             {/* Smart Margin Guard Alert */}
             {scanResult.marginAlertCount > 0 && (
               <div className="p-3.5 rounded-xl bg-amber-950/80 border border-amber-500/50 text-amber-100 text-xs space-y-2">
-                <div className="flex items-center justify-between gap-2">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                   <div className="flex items-center gap-2 font-semibold text-amber-300">
                     <AlertTriangle className="w-4 h-4 text-amber-400 shrink-0" />
                     <span>Smart Margin Guard: Wholesale Cost Increased on {scanResult.marginAlertCount} Item(s)</span>

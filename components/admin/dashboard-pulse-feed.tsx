@@ -133,7 +133,7 @@ export function DashboardPulseFeed({ feed, settings, bills }: DashboardPulseFeed
                     {item.description}
                   </p>
 
-                  <div className="mt-2 flex items-center justify-between text-2xs">
+                  <div className="mt-2 flex flex-wrap items-center justify-between gap-2 text-2xs">
                     <span className="text-slate-400">
                       {formatDate(item.timestamp)}
                     </span>
