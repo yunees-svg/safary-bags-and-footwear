@@ -15,6 +15,7 @@ export default function AdminLayout({
   const [user, setUser] = useState<Profile | null>(null);
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [isMobileOpen, setIsMobileOpen] = useState(false);
+  const [isAssistantOpen, setIsAssistantOpen] = useState(false);
 
   useEffect(() => {
     async function loadUser() {
@@ -22,6 +23,17 @@ export default function AdminLayout({
       setUser(u);
     }
     loadUser();
+  }, []);
+
+  useEffect(() => {
+    function handleKeyDown(e: KeyboardEvent) {
+      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "k") {
+        e.preventDefault();
+        setIsAssistantOpen((prev) => !prev);
+      }
+    }
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
   }, []);
 
   return (
@@ -58,14 +70,20 @@ export default function AdminLayout({
         <AdminHeader
           user={user}
           onOpenMobileSidebar={() => setIsMobileOpen(true)}
+          isAssistantOpen={isAssistantOpen}
+          onToggleAssistant={() => setIsAssistantOpen((prev) => !prev)}
         />
-        <main className="flex-1 p-3 sm:p-4 md:p-6 lg:p-8 pb-24 lg:pb-8 overflow-y-auto">
+        <main className="flex-1 p-3 sm:p-4 md:p-6 lg:p-8 overflow-y-auto">
           {children}
         </main>
       </div>
 
-      {/* Floating Safary AI Assistant */}
-      <AiAssistantWidget />
+      {/* Docked Right Safary AI Assistant Panel */}
+      <AiAssistantWidget
+        isOpen={isAssistantOpen}
+        onClose={() => setIsAssistantOpen(false)}
+        userName={user?.full_name}
+      />
     </div>
   );
 }

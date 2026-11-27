@@ -10,15 +10,23 @@ import {
   User,
   Shield,
   Menu,
+  Sparkles,
 } from "lucide-react";
 import Link from "next/link";
 
 interface HeaderProps {
   user: Profile | null;
   onOpenMobileSidebar: () => void;
+  isAssistantOpen?: boolean;
+  onToggleAssistant?: () => void;
 }
 
-export function AdminHeader({ user, onOpenMobileSidebar }: HeaderProps) {
+export function AdminHeader({
+  user,
+  onOpenMobileSidebar,
+  isAssistantOpen,
+  onToggleAssistant,
+}: HeaderProps) {
   const [showProfileMenu, setShowProfileMenu] = useState(false);
 
   return (
@@ -43,8 +51,24 @@ export function AdminHeader({ user, onOpenMobileSidebar }: HeaderProps) {
         </div>
       </div>
 
-      {/* Right Actions: POS Fast Action, Notifications, User Chip */}
-      <div className="flex items-center gap-3">
+      {/* Right Actions: AI Assistant, POS Fast Action, Notifications, User Chip */}
+      <div className="flex items-center gap-2 sm:gap-3">
+        {onToggleAssistant && (
+          <button
+            type="button"
+            onClick={onToggleAssistant}
+            className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold border transition ${
+              isAssistantOpen
+                ? "bg-amber-400 text-slate-900 border-amber-500 shadow-xs"
+                : "bg-amber-50 hover:bg-amber-100 text-amber-900 border-amber-200"
+            }`}
+            title="Toggle Safary AI Assistant (Ctrl+K)"
+          >
+            <Sparkles className="w-3.5 h-3.5 text-amber-600" />
+            <span className="hidden xs:inline sm:inline">Assistant</span>
+          </button>
+        )}
+
         <Link
           href="/admin/pos"
           className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-blue-600 text-white hover:bg-blue-700 shadow-sm transition"
