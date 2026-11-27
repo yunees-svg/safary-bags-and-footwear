@@ -93,16 +93,6 @@ export default function LoginPage() {
           </form>
 
         </div>
-
-        {/* Back to Customer Store Link */}
-        <div className="text-center mt-4">
-          <a
-            href="/"
-            className="text-xs font-medium text-slate-600 hover:text-blue-600 transition"
-          >
-            ← View Customer Website & Slipper Catalog
-          </a>
-        </div>
       </div>
     </div>
   );

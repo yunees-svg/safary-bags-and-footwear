@@ -192,22 +192,6 @@ export function AdminSidebar({ role, isCollapsed, onToggleCollapse, onNavigate }
           );
         })}
       </div>
-
-      {/* Customer Website Link at Bottom */}
-      <div className="p-3 border-t border-slate-100">
-        <Link
-          href="/"
-          target="_blank"
-          className={cn(
-            "flex items-center gap-2.5 px-2.5 py-2 rounded-lg text-xs font-medium text-slate-600 hover:bg-slate-100 transition",
-            isCollapsed && "justify-center"
-          )}
-          title="Open Customer Website"
-        >
-          <ExternalLink className="w-4 h-4 text-slate-400 shrink-0" />
-          {!isCollapsed && <span>View Storefront</span>}
-        </Link>
-      </div>
     </aside>
   );
 }

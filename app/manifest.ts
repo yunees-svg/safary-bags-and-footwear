@@ -4,8 +4,8 @@ export default function manifest(): MetadataRoute.Manifest {
   return {
     name: "Safary Bags and Footwear",
     short_name: "Safary Hub",
-    description: "Footwear, Slippers & Bags Catalog, POS Billing & Inventory Management",
-    start_url: "/",
+    description: "POS Billing, Inventory & Shop Management Console",
+    start_url: "/admin",
     display: "standalone",
     background_color: "#f8fafc",
     theme_color: "#2563eb",
