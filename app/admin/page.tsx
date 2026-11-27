@@ -1,5 +1,6 @@
 import { getDashboardMetrics } from "@/lib/actions/dashboard";
 import { DashboardPulseFeed } from "@/components/admin/dashboard-pulse-feed";
+import { AnimatedNumber } from "@/components/admin/animated-number";
 import { formatCurrency, formatDate } from "@/lib/utils";
 import Link from "next/link";
 import {
@@ -51,10 +52,13 @@ export default async function AdminOverviewPage() {
       {/* KPI Stats Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {/* Today's Sales */}
-        <div className="bg-white p-5 rounded-xl border border-slate-200 shadow-xs">
+        <div
+          className="bg-white p-5 rounded-xl border border-slate-200 shadow-xs animate-fade-up hover-lift"
+          style={{ animationDelay: "0ms" }}
+        >
           <div className="flex items-center justify-between">
             <span className="text-xs font-medium text-slate-500">
-              Today's Sales
+              Today&apos;s Sales
             </span>
             <div className="w-8 h-8 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center">
               <TrendingUp className="w-4 h-4" />
@@ -62,7 +66,7 @@ export default async function AdminOverviewPage() {
           </div>
           <div className="mt-2 flex items-baseline gap-2">
             <span className="text-2xl font-semibold text-slate-900">
-              {formatCurrency(data.todaySales)}
+              <AnimatedNumber value={data.todaySales} />
             </span>
             <span className="text-2xs font-medium text-emerald-600">
               {data.todayBillCount} {data.todayBillCount === 1 ? "bill" : "bills"}
@@ -72,7 +76,10 @@ export default async function AdminOverviewPage() {
         </div>
 
         {/* Total Revenue */}
-        <div className="bg-white p-5 rounded-xl border border-slate-200 shadow-xs">
+        <div
+          className="bg-white p-5 rounded-xl border border-slate-200 shadow-xs animate-fade-up hover-lift"
+          style={{ animationDelay: "60ms" }}
+        >
           <div className="flex items-center justify-between">
             <span className="text-xs font-medium text-slate-500">
               Total Revenue
@@ -83,7 +90,7 @@ export default async function AdminOverviewPage() {
           </div>
           <div className="mt-2 flex items-baseline gap-2">
             <span className="text-2xl font-semibold text-slate-900">
-              {formatCurrency(data.totalRevenue)}
+              <AnimatedNumber value={data.totalRevenue} />
             </span>
           </div>
           <p className="text-2xs text-slate-400 mt-1">Accumulated completed transactions</p>
@@ -91,7 +98,10 @@ export default async function AdminOverviewPage() {
 
         {/* Estimated Gross Profit (Owner only) */}
         {data.isOwner && (
-          <div className="bg-white p-5 rounded-xl border border-slate-200 shadow-xs">
+          <div
+            className="bg-white p-5 rounded-xl border border-slate-200 shadow-xs animate-fade-up hover-lift"
+            style={{ animationDelay: "120ms" }}
+          >
             <div className="flex items-center justify-between">
               <span className="text-xs font-medium text-slate-500">
                 Est. Gross Profit
@@ -102,7 +112,7 @@ export default async function AdminOverviewPage() {
             </div>
             <div className="mt-2 flex items-baseline gap-2">
               <span className="text-2xl font-semibold text-indigo-900">
-                {formatCurrency(data.estimatedGrossProfit ?? 0)}
+                <AnimatedNumber value={data.estimatedGrossProfit ?? 0} />
               </span>
             </div>
             <p className="text-2xs text-slate-400 mt-1">Cost vs selling price margin</p>
@@ -110,7 +120,10 @@ export default async function AdminOverviewPage() {
         )}
 
         {/* Low Stock Alert Card */}
-        <div className="bg-white p-5 rounded-xl border border-slate-200 shadow-xs">
+        <div
+          className="bg-white p-5 rounded-xl border border-slate-200 shadow-xs animate-fade-up hover-lift"
+          style={{ animationDelay: "180ms" }}
+        >
           <div className="flex items-center justify-between">
             <span className="text-xs font-medium text-slate-500">
               Low Stock Warnings
@@ -121,7 +134,7 @@ export default async function AdminOverviewPage() {
           </div>
           <div className="mt-2 flex items-baseline gap-2">
             <span className={`text-2xl font-semibold ${data.lowStockItems.length > 0 ? "text-amber-600" : "text-slate-900"}`}>
-              {data.lowStockItems.length}
+              <AnimatedNumber value={data.lowStockItems.length} isCurrency={false} />
             </span>
             <span className="text-2xs font-medium text-slate-500">
               variants critical

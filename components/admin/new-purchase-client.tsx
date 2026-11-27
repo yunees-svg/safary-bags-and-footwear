@@ -302,9 +302,32 @@ export function NewPurchaseClient({ suppliers, variants }: NewPurchaseClientProp
           </button>
         </div>
 
+        {/* Laser Scan Motion Graphic while AI is processing */}
+        {isScanning && (
+          <div className="p-4 rounded-xl bg-slate-950/70 border border-indigo-400/40 flex items-center gap-4 animate-scale-in">
+            <div className="relative w-14 h-16 rounded-lg bg-slate-900 border border-indigo-400/40 flex flex-col justify-center gap-1.5 p-2 overflow-hidden shrink-0">
+              <div className="h-1 w-8 bg-slate-700 rounded" />
+              <div className="h-1 w-10 bg-slate-700 rounded" />
+              <div className="h-1 w-6 bg-slate-700 rounded" />
+              <div className="h-1 w-9 bg-slate-700 rounded" />
+              {/* Sweeping Blue Laser Beam */}
+              <div className="absolute left-0 right-0 h-0.5 bg-blue-400 shadow-[0_0_10px_2px_rgba(96,165,250,0.9)] animate-laser-scan" />
+            </div>
+            <div className="space-y-1 text-xs">
+              <p className="font-bold text-indigo-200 flex items-center gap-2">
+                <Loader2 className="w-3.5 h-3.5 animate-spin text-blue-400" />
+                Scanning Wholesale Invoice...
+              </p>
+              <p className="text-2xs text-slate-300">
+                Reading supplier details, matching slipper & bag SKUs, and checking Smart Margin Guard...
+              </p>
+            </div>
+          </div>
+        )}
+
         {/* Scan Confirmation Notice if scanned */}
-        {scanResult && scanResult.success && (
-          <div className="space-y-2.5">
+        {scanResult && scanResult.success && !isScanning && (
+          <div className="space-y-2.5 animate-fade-up">
             <div className="p-3 rounded-xl bg-emerald-950/70 border border-emerald-500/40 text-emerald-200 text-xs flex items-center justify-between gap-2">
               <div className="flex items-center gap-2">
                 <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />

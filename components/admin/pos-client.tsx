@@ -446,7 +446,7 @@ export function PosClient({ products, categories, customers, settings }: PosClie
             cart.map((item) => (
               <div
                 key={item.variantId}
-                className="p-2.5 rounded-lg border border-slate-200 bg-slate-50/50 flex items-center justify-between gap-2"
+                className="p-2.5 rounded-lg border border-slate-200 bg-slate-50/50 flex items-center justify-between gap-2 animate-fade-up"
               >
                 <div className="min-w-0 flex-1">
                   <p className="text-xs font-semibold text-slate-900 truncate">{item.productName}</p>
@@ -559,7 +559,7 @@ export function PosClient({ products, categories, customers, settings }: PosClie
 
           {/* Dynamic GPay / UPI QR Code at POS Checkout */}
           {paymentMethod === "upi" && (
-            <div className="p-3 bg-white rounded-xl border border-blue-200 shadow-xs space-y-2.5">
+            <div className="p-3 bg-white rounded-xl border border-blue-200 shadow-xs space-y-2.5 animate-scale-in">
               <div className="flex items-center justify-between text-xs">
                 <span className="font-semibold text-slate-800 flex items-center gap-1.5">
                   <QrCode className="w-4 h-4 text-blue-600" /> Dynamic GPay / UPI QR

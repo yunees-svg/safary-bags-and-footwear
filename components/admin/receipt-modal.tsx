@@ -17,7 +17,7 @@ export function ReceiptModal({ bill, settings, onClose }: ReceiptModalProps) {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-xs">
-      <div className="bg-white rounded-2xl max-w-md w-full max-h-[90vh] flex flex-col shadow-2xl border border-slate-200 overflow-hidden">
+      <div className="bg-white rounded-2xl max-w-md w-full max-h-[90vh] flex flex-col shadow-2xl border border-slate-200 overflow-hidden animate-paper-slide">
         {/* Modal Top Actions (Hidden on print) */}
         <div className="no-print p-4 bg-slate-900 text-white flex items-center justify-between">
           <div className="flex items-center gap-2">

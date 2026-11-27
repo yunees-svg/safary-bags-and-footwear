@@ -122,7 +122,7 @@ export function AiAssistantWidget({ isOpen, onClose, userName }: AiAssistantWidg
   }
 
   return (
-    <aside className="fixed inset-0 z-50 lg:static lg:inset-auto lg:z-30 w-full lg:w-[350px] xl:w-[380px] h-dvh lg:h-screen lg:sticky lg:top-0 bg-white dark:bg-slate-900 border-l border-slate-200 dark:border-slate-800 flex flex-col shrink-0 shadow-xl lg:shadow-none">
+    <aside className="fixed inset-0 z-50 lg:static lg:inset-auto lg:z-30 w-full lg:w-[350px] xl:w-[380px] h-dvh lg:h-screen lg:sticky lg:top-0 bg-white dark:bg-slate-900 border-l border-slate-200 dark:border-slate-800 flex flex-col shrink-0 shadow-xl lg:shadow-none animate-slide-in-right">
       {/* Top Header Bar */}
       <div className="h-16 px-4 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between shrink-0 bg-white dark:bg-slate-900">
         <div className="flex items-center gap-2.5">
@@ -253,7 +253,7 @@ export function AiAssistantWidget({ isOpen, onClose, userName }: AiAssistantWidg
             {messages.map((m) => (
               <div
                 key={m.id}
-                className={`flex flex-col ${
+                className={`flex flex-col animate-fade-up ${
                   m.sender === "user" ? "items-end" : "items-start"
                 }`}
               >
@@ -293,9 +293,13 @@ export function AiAssistantWidget({ isOpen, onClose, userName }: AiAssistantWidg
             ))}
 
             {loading && (
-              <div className="flex items-center gap-2 text-xs text-slate-400 pl-1">
-                <Loader2 className="w-3.5 h-3.5 animate-spin text-blue-600" />
-                <span>Checking live store data...</span>
+              <div className="flex items-center gap-2 text-xs text-slate-500 pl-1 animate-fade-up">
+                <div className="flex items-center gap-1 px-3 py-2 rounded-2xl bg-white border border-slate-200 shadow-2xs">
+                  <span className="w-1.5 h-1.5 rounded-full bg-blue-600 animate-typing-dot" style={{ animationDelay: "0ms" }} />
+                  <span className="w-1.5 h-1.5 rounded-full bg-blue-600 animate-typing-dot" style={{ animationDelay: "150ms" }} />
+                  <span className="w-1.5 h-1.5 rounded-full bg-blue-600 animate-typing-dot" style={{ animationDelay: "300ms" }} />
+                </div>
+                <span className="text-2xs">Checking store data...</span>
               </div>
             )}
           </div>
