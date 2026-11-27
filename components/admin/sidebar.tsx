@@ -151,6 +151,8 @@ export function AdminSidebar({ role, isCollapsed, onToggleCollapse, onNavigate }
                   const isActive =
                     item.href === "/admin"
                       ? pathname === "/admin"
+                      : item.href === "/admin/purchases"
+                      ? pathname === "/admin/purchases"
                       : pathname.startsWith(item.href);
 
                   return (
