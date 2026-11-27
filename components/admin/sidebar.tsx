@@ -24,6 +24,7 @@ import {
   ChevronRight,
   ExternalLink,
   Sparkles,
+  BookOpen,
 } from "lucide-react";
 
 interface SidebarProps {
@@ -91,6 +92,7 @@ export function AdminSidebar({ role, isCollapsed, onToggleCollapse, onNavigate }
       items: [
         { label: "Staff Management", href: "/admin/staff", icon: UserCog, ownerOnly: true },
         { label: "Settings", href: "/admin/settings", icon: Settings, ownerOnly: true },
+        { label: "User Guide", href: "/admin/guide", icon: BookOpen },
       ],
     },
   ];
