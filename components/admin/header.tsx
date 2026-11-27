@@ -1,10 +1,8 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { usePathname } from "next/navigation";
 import { Profile } from "@/lib/types/database";
 import { logout } from "@/lib/actions/auth";
-import { GUIDE_ENTRIES } from "@/lib/data/user-guide-data";
 import {
   Bell,
   Search,
@@ -15,10 +13,6 @@ import {
   Sparkles,
   Sun,
   Moon,
-  BookOpen,
-  X,
-  ArrowRight,
-  Info,
 } from "lucide-react";
 import Link from "next/link";
 
@@ -36,14 +30,7 @@ export function AdminHeader({
   onToggleAssistant,
 }: HeaderProps) {
   const [showProfileMenu, setShowProfileMenu] = useState(false);
-  const [showHowToUse, setShowHowToUse] = useState(false);
   const [isDark, setIsDark] = useState(false);
-  const pathname = usePathname();
-
-  const currentPageGuide =
-    GUIDE_ENTRIES.find((g) => g.route === pathname) ||
-    GUIDE_ENTRIES.find((g) => g.route !== "/admin" && pathname.startsWith(g.route)) ||
-    GUIDE_ENTRIES[1];
 
   useEffect(() => {
     const saved = localStorage.getItem("safary_theme");
@@ -60,7 +47,6 @@ export function AdminHeader({
   }
 
   return (
-    <>
     <header className="h-16 bg-white border-b border-slate-200 sticky top-0 z-20 px-3 sm:px-4 md:px-6 flex items-center justify-between gap-2">
       {/* Mobile Drawer Trigger & Quick Search */}
       <div className="flex items-center gap-2 sm:gap-3 flex-1 min-w-0">
@@ -82,19 +68,8 @@ export function AdminHeader({
         </div>
       </div>
 
-      {/* Right Actions: How to use, Theme Toggle, AI Assistant, POS Fast Action, Notifications, User Chip */}
+      {/* Right Actions: Theme Toggle, AI Assistant, POS Fast Action, Notifications, User Chip */}
       <div className="flex items-center gap-1.5 sm:gap-2.5 shrink-0">
-        {/* Velom-style "How to use" context guide button */}
-        <button
-          type="button"
-          onClick={() => setShowHowToUse(true)}
-          className="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-semibold bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-200 transition whitespace-nowrap shrink-0"
-          title="How to use this page"
-        >
-          <BookOpen className="w-3.5 h-3.5 text-blue-600" />
-          <span className="hidden md:inline">How to use</span>
-        </button>
-
         {/* Light / Dark Theme Toggle */}
         <button
           type="button"
@@ -190,81 +165,5 @@ export function AdminHeader({
         </div>
       </div>
     </header>
-
-    {/* Context-Aware "How to use" Modal */}
-    {showHowToUse && currentPageGuide && (
-      <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-xs">
-        <div className="bg-white rounded-2xl max-w-lg w-full shadow-2xl border border-slate-200 overflow-hidden flex flex-col max-h-[85dvh]">
-          <div className="p-4 border-b border-slate-200 flex items-center justify-between gap-2 bg-slate-50">
-            <div className="flex items-center gap-2.5 min-w-0">
-              <div className="w-8 h-8 rounded-xl bg-blue-600 text-white flex items-center justify-center shrink-0">
-                <BookOpen className="w-4 h-4" />
-              </div>
-              <div className="min-w-0">
-                <h2 className="text-sm font-bold text-slate-900 truncate">
-                  How to Use: {currentPageGuide.title.replace(/^\d+\.\s*/, "")}
-                </h2>
-                <span className="text-2xs font-mono text-slate-400">
-                  {currentPageGuide.route} • {currentPageGuide.role}
-                </span>
-              </div>
-            </div>
-            <button
-              type="button"
-              onClick={() => setShowHowToUse(false)}
-              className="p-1.5 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-200/60 transition shrink-0"
-              aria-label="Close guide"
-            >
-              <X className="w-4 h-4" />
-            </button>
-          </div>
-
-          <div className="p-5 overflow-y-auto space-y-4">
-            <p className="text-xs text-slate-600 leading-relaxed">
-              {currentPageGuide.summary}
-            </p>
-
-            <div className="space-y-2.5">
-              {currentPageGuide.steps.map((step, idx) => (
-                <div
-                  key={idx}
-                  className="p-3 rounded-xl bg-slate-50 border border-slate-200 flex items-start gap-2.5"
-                >
-                  <span className="w-5 h-5 rounded-full bg-blue-600 text-white font-bold text-2xs flex items-center justify-center shrink-0 mt-0.5">
-                    {idx + 1}
-                  </span>
-                  <span className="text-xs text-slate-800 leading-relaxed">{step}</span>
-                </div>
-              ))}
-            </div>
-
-            <div className="p-3 rounded-xl bg-blue-50 border border-blue-200 flex items-start gap-2 text-xs text-blue-900">
-              <Info className="w-4 h-4 text-blue-600 shrink-0 mt-0.5" />
-              <span>
-                <strong>Tip:</strong> {currentPageGuide.tip}
-              </span>
-            </div>
-          </div>
-
-          <div className="p-4 border-t border-slate-200 bg-slate-50 flex items-center justify-between gap-2">
-            <button
-              type="button"
-              onClick={() => setShowHowToUse(false)}
-              className="px-3.5 py-2 text-xs font-semibold text-slate-600 hover:text-slate-900"
-            >
-              Close
-            </button>
-            <Link
-              href="/admin/guide"
-              onClick={() => setShowHowToUse(false)}
-              className="inline-flex items-center gap-1.5 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-semibold shadow-xs transition"
-            >
-              Open Full User Guide <ArrowRight className="w-3.5 h-3.5" />
-            </Link>
-          </div>
-        </div>
-      </div>
-    )}
-    </>
   );
 }
