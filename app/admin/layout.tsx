@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { Profile } from "@/lib/types/database";
 import { AdminSidebar } from "@/lib/../components/admin/sidebar";
 import { AdminHeader } from "@/lib/../components/admin/header";
+import { AiAssistantWidget } from "@/components/admin/ai-assistant-widget";
 import { getCurrentUser } from "@/lib/actions/auth";
 
 export default function AdminLayout({
@@ -62,6 +63,9 @@ export default function AdminLayout({
           {children}
         </main>
       </div>
+
+      {/* Floating Safary AI Assistant */}
+      <AiAssistantWidget />
     </div>
   );
 }
