@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Profile } from "@/lib/types/database";
 import { logout } from "@/lib/actions/auth";
 import {
@@ -11,6 +11,8 @@ import {
   Shield,
   Menu,
   Sparkles,
+  Sun,
+  Moon,
 } from "lucide-react";
 import Link from "next/link";
 
@@ -28,58 +30,84 @@ export function AdminHeader({
   onToggleAssistant,
 }: HeaderProps) {
   const [showProfileMenu, setShowProfileMenu] = useState(false);
+  const [isDark, setIsDark] = useState(false);
+
+  useEffect(() => {
+    const saved = localStorage.getItem("safary_theme");
+    const prefersDark = saved === "dark";
+    setIsDark(prefersDark);
+    document.documentElement.classList.toggle("dark", prefersDark);
+  }, []);
+
+  function toggleTheme() {
+    const next = !isDark;
+    setIsDark(next);
+    document.documentElement.classList.toggle("dark", next);
+    localStorage.setItem("safary_theme", next ? "dark" : "light");
+  }
 
   return (
-    <header className="h-16 bg-white border-b border-slate-200 sticky top-0 z-20 px-4 md:px-6 flex items-center justify-between">
+    <header className="h-16 bg-white border-b border-slate-200 sticky top-0 z-20 px-3 sm:px-4 md:px-6 flex items-center justify-between gap-2">
       {/* Mobile Drawer Trigger & Quick Search */}
-      <div className="flex items-center gap-3">
+      <div className="flex items-center gap-2 sm:gap-3 flex-1 min-w-0">
         <button
           onClick={onOpenMobileSidebar}
-          className="lg:hidden p-2 rounded-lg text-slate-500 hover:bg-slate-100 transition"
+          className="lg:hidden p-2 rounded-lg text-slate-500 hover:bg-slate-100 transition shrink-0"
           aria-label="Open Navigation"
         >
           <Menu className="w-5 h-5" />
         </button>
 
-        <div className="relative hidden sm:block w-64 md:w-80">
+        <div className="relative hidden sm:block flex-1 max-w-xs min-w-[140px]">
           <Search className="w-4 h-4 text-slate-400 absolute left-3 top-2.5" />
           <input
             type="text"
-            placeholder="Search slippers, bills, customers..."
+            placeholder="Search slippers, bills..."
             className="w-full pl-9 pr-3 py-1.5 text-xs bg-slate-50 border border-slate-200 rounded-lg text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-blue-500 focus:bg-white transition"
           />
         </div>
       </div>
 
-      {/* Right Actions: AI Assistant, POS Fast Action, Notifications, User Chip */}
-      <div className="flex items-center gap-2 sm:gap-3">
+      {/* Right Actions: Theme Toggle, AI Assistant, POS Fast Action, Notifications, User Chip */}
+      <div className="flex items-center gap-1.5 sm:gap-2.5 shrink-0">
+        {/* Light / Dark Theme Toggle */}
+        <button
+          type="button"
+          onClick={toggleTheme}
+          className="p-2 rounded-lg text-slate-500 hover:text-slate-800 hover:bg-slate-100 transition shrink-0"
+          title={isDark ? "Switch to Light Theme" : "Switch to Dark Theme"}
+          aria-label="Toggle Light/Dark Theme"
+        >
+          {isDark ? <Sun className="w-4 h-4 text-blue-400" /> : <Moon className="w-4 h-4" />}
+        </button>
+
         {onToggleAssistant && (
           <button
             type="button"
             onClick={onToggleAssistant}
-            className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold border transition ${
+            className={`inline-flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-lg text-xs font-semibold border transition whitespace-nowrap shrink-0 ${
               isAssistantOpen
-                ? "bg-amber-400 text-slate-900 border-amber-500 shadow-xs"
-                : "bg-amber-50 hover:bg-amber-100 text-amber-900 border-amber-200"
+                ? "bg-blue-600 text-white border-blue-600 shadow-xs"
+                : "bg-blue-50 hover:bg-blue-100 text-blue-700 border-blue-200 dark:bg-blue-950/60 dark:text-blue-300 dark:border-blue-800"
             }`}
             title="Toggle Safary AI Assistant (Ctrl+K)"
           >
-            <Sparkles className="w-3.5 h-3.5 text-amber-600" />
+            <Sparkles className={`w-3.5 h-3.5 ${isAssistantOpen ? "text-white" : "text-blue-600 dark:text-blue-400"}`} />
             <span className="hidden xs:inline sm:inline">Assistant</span>
           </button>
         )}
 
         <Link
           href="/admin/pos"
-          className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-blue-600 text-white hover:bg-blue-700 shadow-sm transition"
+          className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-blue-600 text-white hover:bg-blue-700 shadow-sm transition whitespace-nowrap shrink-0"
         >
-          + Quick POS Bill
+          + Quick POS
         </Link>
 
         {/* Low-stock / alerts bell */}
         <Link
           href="/admin/inventory"
-          className="p-2 text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-lg relative transition"
+          className="p-2 text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-lg relative transition shrink-0"
           title="Stock Alerts"
         >
           <Bell className="w-4 h-4" />

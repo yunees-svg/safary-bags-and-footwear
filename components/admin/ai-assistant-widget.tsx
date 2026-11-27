@@ -122,14 +122,14 @@ export function AiAssistantWidget({ isOpen, onClose, userName }: AiAssistantWidg
   }
 
   return (
-    <aside className="fixed inset-0 z-50 lg:static lg:inset-auto lg:z-30 w-full lg:w-[370px] xl:w-[400px] h-dvh lg:h-screen lg:sticky lg:top-0 bg-white border-l border-slate-200 flex flex-col shrink-0 shadow-xl lg:shadow-none">
+    <aside className="fixed inset-0 z-50 lg:static lg:inset-auto lg:z-30 w-full lg:w-[350px] xl:w-[380px] h-dvh lg:h-screen lg:sticky lg:top-0 bg-white dark:bg-slate-900 border-l border-slate-200 dark:border-slate-800 flex flex-col shrink-0 shadow-xl lg:shadow-none">
       {/* Top Header Bar */}
-      <div className="h-16 px-4 border-b border-slate-200 flex items-center justify-between shrink-0 bg-white">
+      <div className="h-16 px-4 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between shrink-0 bg-white dark:bg-slate-900">
         <div className="flex items-center gap-2.5">
-          <div className="w-8 h-8 rounded-xl bg-amber-400/20 border border-amber-400/50 text-amber-600 flex items-center justify-center">
+          <div className="w-8 h-8 rounded-xl bg-blue-50 dark:bg-blue-950 border border-blue-200 dark:border-blue-800 text-blue-600 dark:text-blue-400 flex items-center justify-center">
             <Sparkles className="w-4 h-4" />
           </div>
-          <span className="text-sm font-bold text-slate-900">Safary Assistant</span>
+          <span className="text-sm font-bold text-slate-900 dark:text-white">Safary Assistant</span>
         </div>
 
         <div className="flex items-center gap-1">
@@ -187,7 +187,7 @@ export function AiAssistantWidget({ isOpen, onClose, userName }: AiAssistantWidg
                   onClick={() => {
                     if (window.innerWidth < 1024) onClose();
                   }}
-                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-amber-50 hover:bg-amber-100 text-amber-900 border border-amber-200 text-xs font-semibold transition"
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold shadow-2xs transition"
                 >
                   Scan a wholesale bill
                 </Link>
@@ -196,14 +196,14 @@ export function AiAssistantWidget({ isOpen, onClose, userName }: AiAssistantWidg
                   onClick={() => {
                     if (window.innerWidth < 1024) onClose();
                   }}
-                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-blue-50 hover:bg-blue-100 text-blue-800 border border-blue-200 text-xs font-semibold transition"
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-blue-50 hover:bg-blue-100 text-blue-700 border border-blue-200 dark:bg-blue-950/60 dark:text-blue-300 dark:border-blue-800 text-xs font-semibold transition"
                 >
                   Open Billing POS
                 </Link>
               </div>
             </div>
 
-            {/* Vertical Stacked Prompt Cards (Velom Layout) */}
+            {/* Vertical Stacked Prompt Cards */}
             <div className="space-y-2 pt-2">
               {[
                 { text: "How much sales today?" },
@@ -215,11 +215,11 @@ export function AiAssistantWidget({ isOpen, onClose, userName }: AiAssistantWidg
                   key={item.text}
                   type="button"
                   onClick={() => handleAsk(item.text)}
-                  className="w-full p-3 rounded-xl bg-white hover:bg-slate-50 border border-slate-200 hover:border-blue-300 text-left flex items-center justify-between gap-2 transition group shadow-2xs"
+                  className="w-full p-3 rounded-xl bg-white dark:bg-slate-800/80 hover:bg-slate-50 dark:hover:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:border-blue-400 text-left flex items-center justify-between gap-2 transition group shadow-2xs"
                 >
                   <div className="flex items-center gap-2.5 min-w-0">
-                    <Sparkles className="w-3.5 h-3.5 text-amber-500 shrink-0" />
-                    <span className="text-xs font-medium text-slate-800 truncate">
+                    <Sparkles className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400 shrink-0" />
+                    <span className="text-xs font-medium text-slate-800 dark:text-slate-100 truncate">
                       {item.text}
                     </span>
                   </div>
@@ -230,16 +230,16 @@ export function AiAssistantWidget({ isOpen, onClose, userName }: AiAssistantWidg
               <button
                 type="button"
                 onClick={() => handleAsk("How do I scan a wholesale supplier invoice?")}
-                className="w-full p-3 rounded-xl bg-white hover:bg-slate-50 border border-slate-200 hover:border-blue-300 text-left flex items-center justify-between gap-2 transition group shadow-2xs"
+                className="w-full p-3 rounded-xl bg-white dark:bg-slate-800/80 hover:bg-slate-50 dark:hover:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:border-blue-400 text-left flex items-center justify-between gap-2 transition group shadow-2xs"
               >
                 <div className="flex items-center gap-2.5 min-w-0">
-                  <Compass className="w-3.5 h-3.5 text-slate-500 shrink-0" />
-                  <span className="text-xs font-medium text-slate-800 truncate">
+                  <Compass className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400 shrink-0" />
+                  <span className="text-xs font-medium text-slate-800 dark:text-slate-100 truncate">
                     How do I scan a supplier bill?
                   </span>
                 </div>
                 <div className="flex items-center gap-1.5 shrink-0">
-                  <span className="px-2 py-0.5 rounded-md bg-amber-50 text-amber-800 border border-amber-200 text-2xs font-semibold">
+                  <span className="px-2 py-0.5 rounded-md bg-blue-50 dark:bg-blue-950 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-800 text-2xs font-semibold">
                     Guide me
                   </span>
                   <ChevronRight className="w-4 h-4 text-slate-400 group-hover:text-blue-600 transition" />
@@ -329,7 +329,7 @@ export function AiAssistantWidget({ isOpen, onClose, userName }: AiAssistantWidg
           <button
             type="submit"
             disabled={!input.trim() || loading}
-            className="w-8 h-8 rounded-full bg-amber-400 hover:bg-amber-500 disabled:opacity-40 text-slate-900 flex items-center justify-center transition shrink-0 shadow-2xs"
+            className="w-8 h-8 rounded-full bg-blue-600 hover:bg-blue-700 disabled:opacity-40 text-white flex items-center justify-center transition shrink-0 shadow-2xs"
             aria-label="Send message"
           >
             <ArrowUp className="w-4 h-4 stroke-[2.5]" />
