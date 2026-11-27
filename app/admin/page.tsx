@@ -1,6 +1,7 @@
 import { getDashboardMetrics } from "@/lib/actions/dashboard";
 import { DashboardPulseFeed } from "@/components/admin/dashboard-pulse-feed";
 import { AnimatedNumber } from "@/components/admin/animated-number";
+import { ScrollReveal } from "@/components/admin/scroll-reveal";
 import { formatCurrency, formatDate } from "@/lib/utils";
 import Link from "next/link";
 import {
@@ -168,15 +169,18 @@ export default async function AdminOverviewPage() {
         </div>
       )}
 
-      {/* Live Store Heartbeat & Activity Pulse (Velom Concept) */}
-      <DashboardPulseFeed
-        feed={data.pulseFeed}
-        settings={data.settings}
-        bills={data.recentBills}
-      />
+      {/* Live Store Heartbeat & Activity Pulse */}
+      <ScrollReveal delayMs={80}>
+        <DashboardPulseFeed
+          feed={data.pulseFeed}
+          settings={data.settings}
+          bills={data.recentBills}
+        />
+      </ScrollReveal>
 
       {/* Main Grid: Recent Transactions & Best Sellers */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <ScrollReveal delayMs={140}>
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Recent Bills (2 Columns) */}
         <div className="lg:col-span-2 bg-white rounded-xl border border-slate-200 shadow-xs overflow-hidden">
           <div className="p-4 border-b border-slate-100 flex items-center justify-between">
@@ -283,6 +287,7 @@ export default async function AdminOverviewPage() {
           </div>
         </div>
       </div>
+      </ScrollReveal>
     </div>
   );
 }
