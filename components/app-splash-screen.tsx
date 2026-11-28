@@ -25,8 +25,8 @@ export function AppSplashScreen() {
 
     setVisible(true);
 
-    const exitTimer = setTimeout(() => setExiting(true), 1350);
-    const hideTimer = setTimeout(() => setVisible(false), 1750);
+    const exitTimer = setTimeout(() => setExiting(true), 1750);
+    const hideTimer = setTimeout(() => setVisible(false), 2150);
 
     return () => {
       clearTimeout(exitTimer);
@@ -65,8 +65,9 @@ export function AppSplashScreen() {
       {/* Center Motion Graphic */}
       <div className="relative flex flex-col items-center text-center px-6 animate-scale-in">
         <div className="relative flex items-center justify-center mb-7">
-          {/* Outer Rotating Ring */}
+          {/* Outer Rotating Rings */}
           <div className="absolute w-32 h-32 rounded-full border border-dashed border-[#1f5fff]/45 animate-[spin_10s_linear_infinite]" />
+          <div className="absolute w-28 h-28 rounded-full border border-dotted border-[#5b8cff]/35 animate-[spin_14s_linear_infinite_reverse]" />
           {/* Inner Glow Halo */}
           <div className="absolute w-24 h-24 rounded-3xl bg-[#1f5fff]/25 blur-xl animate-pulse" />
 
