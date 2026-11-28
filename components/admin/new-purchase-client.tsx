@@ -50,13 +50,7 @@ export function NewPurchaseClient({ suppliers, variants }: NewPurchaseClientProp
     variant_id: string;
     quantity: number;
     unit_cost: number;
-  }[]>([
-    {
-      variant_id: variants[0]?.id || "",
-      quantity: 20,
-      unit_cost: variants[0]?.product.cost_price || 200,
-    },
-  ]);
+  }[]>([]);
 
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
@@ -632,8 +626,15 @@ export function NewPurchaseClient({ suppliers, variants }: NewPurchaseClientProp
                 <th className="py-2.5 px-3 font-semibold text-center w-12">Action</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-100">
-              {items.map((row, idx) => (
+            <tbody className="divide-y divide-slate-100 dark:divide-[#1e2a44]">
+              {items.length === 0 ? (
+                <tr>
+                  <td colSpan={5} className="py-8 text-center text-xs text-slate-400 dark:text-[#8896b3]">
+                    No items added yet. Upload/scan an invoice above or click &quot;+ Add Item Row&quot;.
+                  </td>
+                </tr>
+              ) : (
+                items.map((row, idx) => (
                 <tr key={idx}>
                   <td className="py-2 px-3">
                     <select
@@ -683,7 +684,8 @@ export function NewPurchaseClient({ suppliers, variants }: NewPurchaseClientProp
                     </button>
                   </td>
                 </tr>
-              ))}
+              ))
+              )}
             </tbody>
           </table>
         </div>
