@@ -4,7 +4,7 @@ import { useState, useRef } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { Supplier, Product, ProductVariant } from "@/lib/types/database";
-import { createPurchaseEntryAction } from "@/lib/actions/purchases";
+import { createPurchaseEntryAction, createSupplierAction } from "@/lib/actions/purchases";
 import { parseSupplierInvoiceAction, applyMarginPriceUpdatesAction, ParsedInvoiceResult } from "@/lib/actions/ai-document";
 import { formatCurrency } from "@/lib/utils";
 import {
@@ -36,7 +36,12 @@ interface NewPurchaseClientProps {
 export function NewPurchaseClient({ suppliers, variants }: NewPurchaseClientProps) {
   const router = useRouter();
 
+  const [supplierList, setSupplierList] = useState<Supplier[]>(suppliers);
   const [supplierId, setSupplierId] = useState(suppliers[0]?.id || "");
+  const [showAddSupplier, setShowAddSupplier] = useState(false);
+  const [newSupName, setNewSupName] = useState("");
+  const [newSupPhone, setNewSupPhone] = useState("");
+  const [addingSupplier, setAddingSupplier] = useState(false);
   const [invoiceNumber, setInvoiceNumber] = useState("");
   const [purchaseDate, setPurchaseDate] = useState(new Date().toISOString().slice(0, 10));
   const [status, setStatus] = useState<"confirmed" | "draft">("confirmed");
@@ -226,6 +231,29 @@ export function NewPurchaseClient({ suppliers, variants }: NewPurchaseClientProp
   }
 
   const grandTotal = items.reduce((acc, i) => acc + (i.quantity || 0) * (i.unit_cost || 0), 0);
+
+  async function handleQuickAddSupplier() {
+    if (!newSupName.trim() || !newSupPhone.trim()) {
+      setError("Enter both supplier name and phone number.");
+      return;
+    }
+    setAddingSupplier(true);
+    setError(null);
+    const res = await createSupplierAction({
+      name: newSupName.trim(),
+      phone: newSupPhone.trim(),
+    });
+    if (res?.error) {
+      setError(res.error);
+    } else if (res?.supplier) {
+      setSupplierList((prev) => [...prev, res.supplier!]);
+      setSupplierId(res.supplier.id);
+      setNewSupName("");
+      setNewSupPhone("");
+      setShowAddSupplier(false);
+    }
+    setAddingSupplier(false);
+  }
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -481,24 +509,61 @@ export function NewPurchaseClient({ suppliers, variants }: NewPurchaseClientProp
 
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
           <div>
-            <label className="block text-xs font-semibold text-slate-700 mb-1">
-              Supplier *
-            </label>
+            <div className="flex items-center justify-between mb-1">
+              <label className="block text-xs font-semibold text-slate-700 dark:text-[#8896b3]">
+                Supplier *
+              </label>
+              <button
+                type="button"
+                onClick={() => setShowAddSupplier((prev) => !prev)}
+                className="text-2xs font-semibold text-[#5b8cff] hover:underline"
+              >
+                {showAddSupplier ? "Close" : "+ Quick Add"}
+              </button>
+            </div>
             <select
               value={supplierId}
               onChange={(e) => setSupplierId(e.target.value)}
               className="w-full px-3 py-2 border border-slate-300 dark:border-[#1e2a44] bg-white dark:bg-[#162036] rounded-lg text-xs text-slate-900 dark:text-[#f4f7fc] focus:outline-none focus:ring-1 focus:ring-blue-500"
             >
-              {suppliers.length === 0 ? (
-                <option value="">No suppliers yet — add one in Purchases</option>
+              {supplierList.length === 0 ? (
+                <option value="">No suppliers yet — click + Quick Add</option>
               ) : (
-                suppliers.map((s) => (
+                supplierList.map((s) => (
                   <option key={s.id} value={s.id}>
                     {s.name}
                   </option>
                 ))
               )}
             </select>
+            {showAddSupplier && (
+              <div className="mt-2 p-2.5 rounded-lg bg-slate-50 dark:bg-[#162036] border border-slate-200 dark:border-[#1e2a44] space-y-2">
+                <input
+                  type="text"
+                  placeholder="Supplier Name"
+                  value={newSupName}
+                  onChange={(e) => setNewSupName(e.target.value)}
+                  className="w-full px-2.5 py-1.5 rounded border border-slate-300 dark:border-[#1e2a44] bg-white dark:bg-[#0d1424] text-xs text-slate-900 dark:text-[#f4f7fc]"
+                />
+                <div className="flex gap-1.5">
+                  <input
+                    type="text"
+                    placeholder="Phone"
+                    value={newSupPhone}
+                    onChange={(e) => setNewSupPhone(e.target.value)}
+                    className="flex-1 min-w-0 px-2.5 py-1.5 rounded border border-slate-300 dark:border-[#1e2a44] bg-white dark:bg-[#0d1424] text-xs text-slate-900 dark:text-[#f4f7fc]"
+                  />
+                  <button
+                    type="button"
+                    disabled={addingSupplier}
+                    onClick={handleQuickAddSupplier}
+                    className="px-2.5 py-1.5 rounded bg-[#1f5fff] hover:bg-blue-600 text-white text-xs font-semibold shrink-0 disabled:opacity-50"
+                  >
+                    {addingSupplier ? "..." : "Save"}
+                  </button>
+                </div>
+              </div>
+            )}
           </div>
 
           <div>
