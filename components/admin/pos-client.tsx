@@ -61,6 +61,7 @@ export function PosClient({ products, categories, customers, settings }: PosClie
 
   // Payment controls
   const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>("cash");
+  const [customSubtotal, setCustomSubtotal] = useState<number | null>(null);
   const [discountPercent, setDiscountPercent] = useState<number>(0);
   const [cashTendered, setCashTendered] = useState<string>("");
   const [referenceNumber, setReferenceNumber] = useState<string>("");
@@ -84,7 +85,8 @@ export function PosClient({ products, categories, customers, settings }: PosClie
   });
 
   // Calculate cart totals
-  const subtotal = cart.reduce((acc, item) => acc + item.unitPrice * item.quantity, 0);
+  const cartSubtotal = cart.reduce((acc, item) => acc + item.unitPrice * item.quantity, 0);
+  const subtotal = customSubtotal !== null ? customSubtotal : cartSubtotal;
   const discountAmount = Number(((subtotal * discountPercent) / 100).toFixed(2));
   const finalTotal = Math.max(0, subtotal - discountAmount);
   const tenderedNum = parseFloat(cashTendered) || 0;
@@ -134,6 +136,7 @@ export function PosClient({ products, categories, customers, settings }: PosClie
     }
 
     setSelectedProductForVariant(null);
+    setCustomSubtotal(null);
   }
 
   function updateQuantity(variantId: string, delta: number) {
@@ -153,6 +156,7 @@ export function PosClient({ products, categories, customers, settings }: PosClie
       updated[index].quantity = newQty;
       setCart(updated);
     }
+    setCustomSubtotal(null);
   }
 
   function removeFromCart(variantId: string) {
@@ -178,7 +182,7 @@ export function PosClient({ products, categories, customers, settings }: PosClie
         variant_id: i.variantId,
         quantity: i.quantity,
       })),
-      discount: discountAmount,
+      discount: Math.max(0, Number((cartSubtotal - finalTotal).toFixed(2))),
       payment_method: paymentMethod,
       paid_amount: paidAmount,
       reference_number: referenceNumber || undefined,
@@ -191,6 +195,7 @@ export function PosClient({ products, categories, customers, settings }: PosClie
       setConfirmedBill(res.bill);
       // Reset cart
       setCart([]);
+      setCustomSubtotal(null);
       setDiscountPercent(0);
       setCashTendered("");
       setReferenceNumber("");
@@ -490,9 +495,24 @@ export function PosClient({ products, categories, customers, settings }: PosClie
         <div className="p-3 bg-slate-50 border-t border-slate-200 space-y-3">
           {/* Subtotal & Discount */}
           <div className="space-y-1 text-xs">
-            <div className="flex justify-between text-slate-600">
+            <div className="flex items-center justify-between text-slate-600 dark:text-[#8896b3]">
               <span>Subtotal ({cart.reduce((a, b) => a + b.quantity, 0)} items):</span>
-              <span className="font-semibold">{formatCurrency(subtotal)}</span>
+              <div className="relative flex items-center">
+                <span className="absolute left-2 text-2xs font-semibold text-slate-400 pointer-events-none">₹</span>
+                <input
+                  type="number"
+                  min="0"
+                  step="0.01"
+                  value={subtotal === 0 && customSubtotal === null ? "" : subtotal}
+                  onChange={(e) => {
+                    const raw = e.target.value;
+                    setCustomSubtotal(raw === "" ? 0 : Math.max(0, parseFloat(raw) || 0));
+                  }}
+                  placeholder="0.00"
+                  className="w-24 pl-5 pr-2 py-0.5 text-right font-semibold text-xs border border-slate-200 dark:border-[#1e2a44] rounded bg-white dark:bg-[#162036] text-slate-900 dark:text-[#f4f7fc]"
+                  aria-label="Editable subtotal"
+                />
+              </div>
             </div>
             <div className="flex items-center justify-between text-slate-600 dark:text-[#8896b3]">
               <span>Discount (%):</span>
