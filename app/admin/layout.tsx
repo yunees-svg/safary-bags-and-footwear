@@ -81,6 +81,8 @@ export default function AdminLayout({
         <AdminHeader
           user={user}
           onOpenMobileSidebar={() => setIsMobileOpen(true)}
+          isSidebarCollapsed={isCollapsed}
+          onToggleSidebar={() => setIsCollapsed(!isCollapsed)}
           isAssistantOpen={isAssistantOpen}
           onToggleAssistant={() => setIsAssistantOpen((prev) => !prev)}
         />
