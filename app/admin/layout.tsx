@@ -13,7 +13,7 @@ export default function AdminLayout({
   children: React.ReactNode;
 }) {
   const [user, setUser] = useState<Profile | null>(null);
-  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+  const [isCollapsed, setIsCollapsed] = useState(false);
   const [isMobileOpen, setIsMobileOpen] = useState(false);
   const [isAssistantOpen, setIsAssistantOpen] = useState(false);
   const [scrollProgress, setScrollProgress] = useState(0);
@@ -49,16 +49,14 @@ export default function AdminLayout({
 
   return (
     <div className="h-dvh overflow-hidden bg-slate-50 flex">
-      {/* Desktop Sidebar (Collapsible Toggle) */}
-      {isSidebarOpen && (
-        <div className="hidden lg:block h-full shrink-0">
-          <AdminSidebar
-            role={user?.role || "staff"}
-            isCollapsed={false}
-            onToggleCollapse={() => setIsSidebarOpen(false)}
-          />
-        </div>
-      )}
+      {/* Desktop Sidebar */}
+      <div className="hidden lg:block h-full shrink-0">
+        <AdminSidebar
+          role={user?.role || "staff"}
+          isCollapsed={isCollapsed}
+          onToggleCollapse={() => setIsCollapsed(!isCollapsed)}
+        />
+      </div>
 
       {/* Mobile Drawer */}
       {isMobileOpen && (
@@ -83,15 +81,13 @@ export default function AdminLayout({
         <AdminHeader
           user={user}
           onOpenMobileSidebar={() => setIsMobileOpen(true)}
-          isSidebarOpen={isSidebarOpen}
-          onToggleDesktopSidebar={() => setIsSidebarOpen((prev) => !prev)}
           isAssistantOpen={isAssistantOpen}
           onToggleAssistant={() => setIsAssistantOpen((prev) => !prev)}
         />
         {/* Sleek Top Scroll Progress Bar */}
         <div className="h-0.5 w-full bg-transparent shrink-0 relative overflow-hidden">
           <div
-            className="h-full bg-gradient-to-r from-blue-500 to-indigo-600 transition-all duration-150 ease-out"
+            className="h-full bg-gradient-to-r from-[#1f5fff] to-[#5b8cff] transition-all duration-150 ease-out"
             style={{ width: `${scrollProgress}%` }}
           />
         </div>

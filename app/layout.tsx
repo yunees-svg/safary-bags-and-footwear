@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Inter, Geist_Mono } from "next/font/google";
+import { AppSplashScreen } from "@/components/app-splash-screen";
 import "./globals.css";
 
 const interSans = Inter({
@@ -25,8 +26,8 @@ export const metadata: Metadata = {
     "Browse premium daily slippers, orthopedic footwear, and travel bags. Direct WhatsApp ordering & shop management.",
   appleWebApp: {
     capable: true,
-    statusBarStyle: "default",
-    title: "Safary Hub",
+    statusBarStyle: "black-translucent",
+    title: "Safary Bags and Footwear",
   },
   icons: {
     icon: [
@@ -51,7 +52,10 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           }}
         />
       </head>
-      <body className="min-h-full flex flex-col">{children}</body>
+      <body className="min-h-full flex flex-col">
+        <AppSplashScreen />
+        {children}
+      </body>
     </html>
   );
 }

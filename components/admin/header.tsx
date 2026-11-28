@@ -10,7 +10,6 @@ import {
   User,
   Shield,
   Menu,
-  PanelLeft,
   Sparkles,
   Sun,
   Moon,
@@ -20,8 +19,6 @@ import Link from "next/link";
 interface HeaderProps {
   user: Profile | null;
   onOpenMobileSidebar: () => void;
-  isSidebarOpen?: boolean;
-  onToggleDesktopSidebar?: () => void;
   isAssistantOpen?: boolean;
   onToggleAssistant?: () => void;
 }
@@ -29,8 +26,6 @@ interface HeaderProps {
 export function AdminHeader({
   user,
   onOpenMobileSidebar,
-  isSidebarOpen = true,
-  onToggleDesktopSidebar,
   isAssistantOpen,
   onToggleAssistant,
 }: HeaderProps) {
@@ -62,18 +57,6 @@ export function AdminHeader({
         >
           <Menu className="w-5 h-5" />
         </button>
-
-        {onToggleDesktopSidebar && (
-          <button
-            type="button"
-            onClick={onToggleDesktopSidebar}
-            className="hidden lg:flex items-center justify-center p-2 rounded-xl text-slate-500 dark:text-[#8896b3] hover:text-slate-800 dark:hover:text-[#f4f7fc] hover:bg-slate-100 dark:hover:bg-[#162036] border border-transparent hover:border-slate-200 dark:hover:border-[#1e2a44] transition shrink-0"
-            title={isSidebarOpen ? "Hide Sidebar" : "Show Sidebar"}
-            aria-label={isSidebarOpen ? "Hide Sidebar" : "Show Sidebar"}
-          >
-            <PanelLeft className="w-4 h-4" />
-          </button>
-        )}
 
         <div className="relative hidden sm:block flex-1 max-w-xs min-w-[140px]">
           <Search className="w-4 h-4 text-slate-400 dark:text-[#8896b3] absolute left-3.5 top-2.5" />
