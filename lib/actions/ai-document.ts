@@ -217,6 +217,7 @@ export async function parseSupplierInvoiceAction(payload: {
 
   if (payload.fileBase64) {
     const apiKey = process.env.GEMINI_API_KEY;
+    let fallbackReason = "GEMINI_API_KEY is not configured in environment variables.";
 
     if (apiKey) {
       try {
@@ -234,10 +235,10 @@ export async function parseSupplierInvoiceAction(payload: {
                   parts: [
                     {
                       text: `You are an expert Indian retail document processor for a footwear and bag shop named "Safary Bags and Footwear".
-Extract the following information from this supplier wholesale invoice image or PDF:
-1. supplierName (string)
-2. invoiceNumber (string)
-3. invoiceDate (YYYY-MM-DD string)
+Extract the following information from this supplier wholesale invoice, quotation, or handwritten bill image/PDF:
+1. supplierName (string, or "Handwritten Supplier Bill" if not printed)
+2. invoiceNumber (string, or generate a short code from the bill if absent)
+3. invoiceDate (YYYY-MM-DD string, convert DD/MM/YY or DD/MM/YYYY to YYYY-MM-DD)
 4. items: array of objects with { description, productCode, colour, size, quantity (number), unitCost (number in INR), lineTotal (number) }
 5. totalAmount (total invoice number)
 
@@ -270,9 +271,13 @@ Return ONLY valid JSON matching this schema:
 
         if (response.ok) {
           const result = await response.json();
-          const text = result?.candidates?.[0]?.content?.parts?.[0]?.text;
-          if (text) {
-            const parsed = JSON.parse(text);
+          const rawText = result?.candidates?.[0]?.content?.parts?.[0]?.text;
+          if (rawText) {
+            const cleanJson = rawText
+              .replace(/^```(?:json)?\s*/i, "")
+              .replace(/\s*```$/i, "")
+              .trim();
+            const parsed = JSON.parse(cleanJson);
             const sup = findSupplier(parsed.supplierName || "");
 
             const items: ParsedInvoiceItem[] = (parsed.items || []).map((it: any) => {
@@ -318,9 +323,14 @@ Return ONLY valid JSON matching this schema:
               marginAlertCount: finalItems.filter((i) => i.costIncreased).length,
               rawSummary: `Gemini AI successfully processed ${payload.fileName || "invoice document"}.`,
             };
+          } else {
+            fallbackReason = "Gemini API returned an empty response.";
           }
+        } else {
+          fallbackReason = `Gemini API returned HTTP ${response.status}.`;
         }
       } catch (err: any) {
+        fallbackReason = err?.message || "Gemini API call failed.";
         console.warn("Gemini API call failed, falling back to local invoice parser:", err);
       }
     }
@@ -366,10 +376,10 @@ Return ONLY valid JSON matching this schema:
       matchedSupplierId: sup?.id,
       invoiceNumber: `INV-${Date.now().toString().slice(-5)}`,
       invoiceDate: new Date().toISOString().slice(0, 10),
-      confidence: "medium",
+      confidence: "simulated",
       totalAmount: items.reduce((a, b) => a + b.lineTotal, 0),
       marginAlertCount: items.filter((i) => i.costIncreased).length,
-      rawSummary: `Smart OCR recognized ${payload.fileName || "Uploaded Invoice"} with ${items.length} line items.`,
+      rawSummary: `Demo Fallback (${fallbackReason}) Loaded sample items instead of reading ${payload.fileName || "uploaded file"}.`,
       items,
     };
   }

@@ -66,24 +66,36 @@ export function NewPurchaseClient({ suppliers, variants }: NewPurchaseClientProp
     const file = e.target.files?.[0];
     if (!file) return;
 
+    if (file.size > 9 * 1024 * 1024) {
+      setError("Invoice file is too large (max 9 MB). Please upload a smaller image or PDF.");
+      e.target.value = "";
+      return;
+    }
+
     setIsScanning(true);
     setError(null);
 
     const reader = new FileReader();
     reader.onload = async () => {
-      const base64 = reader.result as string;
-      const res = await parseSupplierInvoiceAction({
-        fileBase64: base64,
-        fileName: file.name,
-        fileType: file.type,
-      });
-
-      applyScanResult(res);
-      setIsScanning(false);
+      try {
+        const base64 = reader.result as string;
+        const res = await parseSupplierInvoiceAction({
+          fileBase64: base64,
+          fileName: file.name,
+          fileType: file.type,
+        });
+        applyScanResult(res);
+      } catch (err: any) {
+        setError(err?.message || "Failed to scan invoice file. Please try again.");
+      } finally {
+        setIsScanning(false);
+        if (fileInputRef.current) fileInputRef.current.value = "";
+      }
     };
     reader.onerror = () => {
       setError("Failed to read invoice file.");
       setIsScanning(false);
+      if (fileInputRef.current) fileInputRef.current.value = "";
     };
     reader.readAsDataURL(file);
   }
@@ -91,9 +103,14 @@ export function NewPurchaseClient({ suppliers, variants }: NewPurchaseClientProp
   async function handleSampleScan(templateId: "vkc-wholesale" | "safary-bags") {
     setIsScanning(true);
     setError(null);
-    const res = await parseSupplierInvoiceAction({ sampleTemplateId: templateId });
-    applyScanResult(res);
-    setIsScanning(false);
+    try {
+      const res = await parseSupplierInvoiceAction({ sampleTemplateId: templateId });
+      applyScanResult(res);
+    } catch (err: any) {
+      setError(err?.message || "Failed to load sample invoice template.");
+    } finally {
+      setIsScanning(false);
+    }
   }
 
   function applyScanResult(res: ParsedInvoiceResult) {
@@ -328,17 +345,31 @@ export function NewPurchaseClient({ suppliers, variants }: NewPurchaseClientProp
         {/* Scan Confirmation Notice if scanned */}
         {scanResult && scanResult.success && !isScanning && (
           <div className="space-y-2.5 animate-fade-up">
-            <div className="p-3 rounded-xl bg-emerald-950/70 border border-emerald-500/40 text-emerald-200 text-xs flex items-center justify-between gap-2">
-              <div className="flex items-center gap-2">
-                <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
-                <span>
-                  <strong>AI Recognized:</strong> {scanResult.rawSummary} Extracted {scanResult.items.length} line items (Total {formatCurrency(scanResult.totalAmount)}).
+            {scanResult.confidence === "simulated" ? (
+              <div className="p-3 rounded-xl bg-amber-950/70 border border-amber-500/40 text-amber-200 text-xs flex items-center justify-between gap-2">
+                <div className="flex items-center gap-2">
+                  <AlertTriangle className="w-4 h-4 text-amber-400 shrink-0" />
+                  <span>
+                    <strong>Simulated Mode:</strong> {scanResult.rawSummary}
+                  </span>
+                </div>
+                <span className="text-2xs font-semibold px-2 py-0.5 rounded-full bg-amber-900 text-amber-300 shrink-0">
+                  Demo Fallback
                 </span>
               </div>
-              <span className="text-2xs font-semibold px-2 py-0.5 rounded-full bg-emerald-900 text-emerald-300 shrink-0">
-                Form Auto-Filled ✓
-              </span>
-            </div>
+            ) : (
+              <div className="p-3 rounded-xl bg-emerald-950/70 border border-emerald-500/40 text-emerald-200 text-xs flex items-center justify-between gap-2">
+                <div className="flex items-center gap-2">
+                  <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
+                  <span>
+                    <strong>AI Recognized:</strong> {scanResult.rawSummary} Extracted {scanResult.items.length} line items (Total {formatCurrency(scanResult.totalAmount)}).
+                  </span>
+                </div>
+                <span className="text-2xs font-semibold px-2 py-0.5 rounded-full bg-emerald-900 text-emerald-300 shrink-0">
+                  Form Auto-Filled ✓
+                </span>
+              </div>
+            )}
 
             {/* Smart Margin Guard Alert */}
             {scanResult.marginAlertCount > 0 && (
