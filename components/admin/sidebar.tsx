@@ -101,13 +101,23 @@ export function AdminSidebar({ role, isCollapsed, onToggleCollapse, onNavigate }
     <aside
       className={cn(
         "h-screen sticky top-0 bg-white dark:bg-[#0d1424] border-r border-slate-200 dark:border-[#1e2a44] flex flex-col transition-all duration-200 z-30",
-        isCollapsed ? "w-18" : "w-[268px]"
+        isCollapsed ? "w-[76px]" : "w-[268px]"
       )}
     >
       {/* Brand Header */}
-      <div className="h-16 flex items-center justify-between px-4 border-b border-slate-100 dark:border-[#1e2a44]">
-        <Link href="/admin" className="flex items-center gap-3 overflow-hidden">
-          <div className="w-9 h-9 rounded-xl bg-[#162036] border border-[#1f5fff] text-[#f4f7fc] font-extrabold text-sm flex items-center justify-center shrink-0 shadow-[0_0_16px_rgba(31,95,255,0.4)]">
+      <div
+        className={cn(
+          "h-16 flex items-center justify-between border-b border-slate-100 dark:border-[#1e2a44]",
+          isCollapsed ? "px-2.5 gap-1" : "px-4"
+        )}
+      >
+        <Link href="/admin" className="flex items-center gap-3 overflow-hidden min-w-0">
+          <div
+            className={cn(
+              "rounded-xl bg-[#162036] border border-[#1f5fff] text-[#f4f7fc] font-extrabold text-sm flex items-center justify-center shrink-0 shadow-[0_0_16px_rgba(31,95,255,0.4)]",
+              isCollapsed ? "w-8 h-8 text-xs" : "w-9 h-9"
+            )}
+          >
             S
           </div>
           {!isCollapsed && (
@@ -123,7 +133,10 @@ export function AdminSidebar({ role, isCollapsed, onToggleCollapse, onNavigate }
         </Link>
         <button
           onClick={onToggleCollapse}
-          className="p-1.5 rounded-lg text-slate-400 dark:text-[#8896b3] hover:text-slate-600 dark:hover:text-[#f4f7fc] hover:bg-slate-100 dark:hover:bg-[#162036] transition hidden lg:block"
+          className={cn(
+            "rounded-lg text-slate-400 dark:text-[#8896b3] hover:text-slate-600 dark:hover:text-[#f4f7fc] hover:bg-slate-100 dark:hover:bg-[#162036] transition hidden lg:flex items-center justify-center shrink-0",
+            isCollapsed ? "p-1" : "p-1.5"
+          )}
           title={isCollapsed ? "Expand Sidebar" : "Collapse Sidebar"}
         >
           {isCollapsed ? <ChevronRight className="w-4 h-4" /> : <ChevronLeft className="w-4 h-4" />}
