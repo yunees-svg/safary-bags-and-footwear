@@ -62,12 +62,54 @@ export function NewPurchaseClient({ suppliers, variants }: NewPurchaseClientProp
   const [autoUpdateMargins, setAutoUpdateMargins] = useState(true);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
+  async function compressImageToDataUrl(file: File): Promise<string> {
+    return new Promise((resolve, reject) => {
+      const img = new Image();
+      const url = URL.createObjectURL(file);
+      img.onload = () => {
+        URL.revokeObjectURL(url);
+        const maxDim = 1600;
+        let { width, height } = img;
+        if (width > maxDim || height > maxDim) {
+          const ratio = Math.min(maxDim / width, maxDim / height);
+          width = Math.round(width * ratio);
+          height = Math.round(height * ratio);
+        }
+        const canvas = document.createElement("canvas");
+        canvas.width = width;
+        canvas.height = height;
+        const ctx = canvas.getContext("2d");
+        if (!ctx) {
+          reject(new Error("Could not initialize image compressor."));
+          return;
+        }
+        ctx.drawImage(img, 0, 0, width, height);
+        resolve(canvas.toDataURL("image/jpeg", 0.82));
+      };
+      img.onerror = () => {
+        URL.revokeObjectURL(url);
+        reject(new Error("Failed to load image file."));
+      };
+      img.src = url;
+    });
+  }
+
+  function readFileAsDataUrl(file: File): Promise<string> {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => resolve(reader.result as string);
+      reader.onerror = () => reject(new Error("Failed to read invoice file."));
+      reader.readAsDataURL(file);
+    });
+  }
+
   async function handleScanFile(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
     if (!file) return;
 
-    if (file.size > 9 * 1024 * 1024) {
-      setError("Invoice file is too large (max 9 MB). Please upload a smaller image or PDF.");
+    const isImage = file.type.startsWith("image/");
+    if (!isImage && file.size > 3 * 1024 * 1024) {
+      setError("PDF file is too large (max 3 MB for Vercel). Please upload a smaller PDF or a photo.");
       e.target.value = "";
       return;
     }
@@ -75,29 +117,23 @@ export function NewPurchaseClient({ suppliers, variants }: NewPurchaseClientProp
     setIsScanning(true);
     setError(null);
 
-    const reader = new FileReader();
-    reader.onload = async () => {
-      try {
-        const base64 = reader.result as string;
-        const res = await parseSupplierInvoiceAction({
-          fileBase64: base64,
-          fileName: file.name,
-          fileType: file.type,
-        });
-        applyScanResult(res);
-      } catch (err: any) {
-        setError(err?.message || "Failed to scan invoice file. Please try again.");
-      } finally {
-        setIsScanning(false);
-        if (fileInputRef.current) fileInputRef.current.value = "";
-      }
-    };
-    reader.onerror = () => {
-      setError("Failed to read invoice file.");
+    try {
+      const base64 = isImage
+        ? await compressImageToDataUrl(file)
+        : await readFileAsDataUrl(file);
+
+      const res = await parseSupplierInvoiceAction({
+        fileBase64: base64,
+        fileName: file.name,
+        fileType: isImage ? "image/jpeg" : file.type,
+      });
+      applyScanResult(res);
+    } catch (err: any) {
+      setError(err?.message || "Failed to scan invoice file. Please try again.");
+    } finally {
       setIsScanning(false);
       if (fileInputRef.current) fileInputRef.current.value = "";
-    };
-    reader.readAsDataURL(file);
+    }
   }
 
   async function handleSampleScan(templateId: "vkc-wholesale" | "safary-bags") {
@@ -422,7 +458,7 @@ export function NewPurchaseClient({ suppliers, variants }: NewPurchaseClientProp
             <select
               value={supplierId}
               onChange={(e) => setSupplierId(e.target.value)}
-              className="w-full px-3 py-2 border border-slate-300 rounded-lg text-xs text-slate-900 focus:outline-none focus:ring-1 focus:ring-blue-500"
+              className="w-full px-3 py-2 border border-slate-300 dark:border-[#1e2a44] bg-white dark:bg-[#162036] rounded-lg text-xs text-slate-900 dark:text-[#f4f7fc] focus:outline-none focus:ring-1 focus:ring-blue-500"
             >
               {suppliers.map((s) => (
                 <option key={s.id} value={s.id}>
