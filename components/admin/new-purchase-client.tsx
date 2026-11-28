@@ -58,6 +58,7 @@ export function NewPurchaseClient({ suppliers, variants }: NewPurchaseClientProp
 
   // AI Invoice Scanner State
   const [isScanning, setIsScanning] = useState(false);
+  const [scanStage, setScanStage] = useState("Scanning Wholesale Invoice...");
   const [scanResult, setScanResult] = useState<ParsedInvoiceResult | null>(null);
   const [autoUpdateMargins, setAutoUpdateMargins] = useState(true);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
@@ -115,6 +116,7 @@ export function NewPurchaseClient({ suppliers, variants }: NewPurchaseClientProp
     }
 
     setIsScanning(true);
+    setScanStage("Compressing & Reading Bill with Free OCR...");
     setError(null);
 
     try {
@@ -122,16 +124,32 @@ export function NewPurchaseClient({ suppliers, variants }: NewPurchaseClientProp
         ? await compressImageToDataUrl(file)
         : await readFileAsDataUrl(file);
 
+      let ocrText = "";
+      if (isImage) {
+        try {
+          const { createWorker } = await import("tesseract.js");
+          const worker = await createWorker("eng");
+          const { data } = await worker.recognize(base64);
+          ocrText = data?.text || "";
+          await worker.terminate();
+        } catch (ocrErr) {
+          console.warn("Client Tesseract OCR failed:", ocrErr);
+        }
+      }
+
+      setScanStage("Matching Items & Margin Guard...");
       const res = await parseSupplierInvoiceAction({
         fileBase64: base64,
         fileName: file.name,
         fileType: isImage ? "image/jpeg" : file.type,
+        ocrText,
       });
       applyScanResult(res);
     } catch (err: any) {
       setError(err?.message || "Failed to scan invoice file. Please try again.");
     } finally {
       setIsScanning(false);
+      setScanStage("Scanning Wholesale Invoice...");
       if (fileInputRef.current) fileInputRef.current.value = "";
     }
   }
@@ -369,7 +387,7 @@ export function NewPurchaseClient({ suppliers, variants }: NewPurchaseClientProp
             <div className="space-y-1 text-xs">
               <p className="font-bold text-indigo-200 flex items-center gap-2">
                 <Loader2 className="w-3.5 h-3.5 animate-spin text-blue-400" />
-                Scanning Wholesale Invoice...
+                {scanStage}
               </p>
               <p className="text-2xs text-slate-300">
                 Reading supplier details, matching slipper & bag SKUs, and checking Smart Margin Guard...
@@ -405,6 +423,17 @@ export function NewPurchaseClient({ suppliers, variants }: NewPurchaseClientProp
                   Form Auto-Filled ✓
                 </span>
               </div>
+            )}
+
+            {scanResult.ocrRawText && (
+              <details className="p-3 rounded-xl bg-slate-950/60 border border-white/10 text-2xs text-slate-300">
+                <summary className="cursor-pointer font-semibold text-indigo-300 select-none">
+                  View Raw OCR Text Read from Image
+                </summary>
+                <pre className="mt-2 whitespace-pre-wrap font-mono text-2xs text-slate-300/90 max-h-40 overflow-y-auto">
+                  {scanResult.ocrRawText}
+                </pre>
+              </details>
             )}
 
             {/* Smart Margin Guard Alert */}

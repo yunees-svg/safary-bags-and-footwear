@@ -35,6 +35,7 @@ export interface ParsedInvoiceResult {
   totalAmount: number;
   confidence: "high" | "medium" | "simulated";
   rawSummary?: string;
+  ocrRawText?: string;
   marginAlertCount: number;
 }
 
@@ -72,6 +73,7 @@ export async function parseSupplierInvoiceAction(payload: {
   fileBase64?: string;
   fileName?: string;
   fileType?: string;
+  ocrText?: string;
   sampleTemplateId?: string;
 }): Promise<ParsedInvoiceResult> {
   const snapshot = mockStore.getSnapshot();
@@ -333,6 +335,110 @@ Return ONLY valid JSON matching this schema:
         fallbackReason = err?.message || "Gemini API call failed.";
         console.warn("Gemini API call failed, falling back to local invoice parser:", err);
       }
+    }
+
+    if (payload.ocrText && payload.ocrText.trim().length > 0) {
+      const rawText = payload.ocrText.trim();
+      const lines = rawText
+        .split(/\r?\n/)
+        .map((l) => l.trim())
+        .filter((l) => l.length > 1);
+
+      // Extract date (DD/MM/YY, DD/MM/YYYY, DD-MM-YYYY, YYYY-MM-DD)
+      let extractedDate = new Date().toISOString().slice(0, 10);
+      const dmyMatch = rawText.match(/\b(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{2,4})\b/);
+      if (dmyMatch) {
+        const day = dmyMatch[1].padStart(2, "0");
+        const month = dmyMatch[2].padStart(2, "0");
+        const year = dmyMatch[3].length === 2 ? `20${dmyMatch[3]}` : dmyMatch[3];
+        if (Number(month) >= 1 && Number(month) <= 12 && Number(day) >= 1 && Number(day) <= 31) {
+          extractedDate = `${year}-${month}-${day}`;
+        }
+      }
+
+      // Extract invoice / bill number
+      const invMatch = rawText.match(/(?:inv(?:oice)?|bill|no\.?|ref)[\s:#\-]*([a-z0-9\-\/]{2,15})/i);
+      const extractedInvNo = invMatch?.[1]?.toUpperCase() || `OCR-${Date.now().toString().slice(-5)}`;
+
+      // Match supplier from store or header line
+      const matchedSup = suppliers.find((s) => rawText.toLowerCase().includes(s.name.toLowerCase()));
+
+      // Parse item lines: look for lines containing text + numbers (qty, rate, amount)
+      const parsedItems: ParsedInvoiceItem[] = [];
+      const ignoreLineRe = /^(quotation|invoice|bill|date|particulars|qty|rate|amount|total|sub\s*total|sales\s*tax|rs\.?|p\.?)$/i;
+
+      for (const line of lines) {
+        if (ignoreLineRe.test(line)) continue;
+        // Match trailing numeric columns, e.g. "Slipper Black 100 250 25000" or "Item 10 2/50 250"
+        const numMatches = [...line.matchAll(/\b\d+(?:[.,\/]\d+)?\b/g)];
+        if (numMatches.length >= 2) {
+          const firstNumIdx = numMatches[0].index ?? line.length;
+          const desc = line.slice(0, firstNumIdx).replace(/[:|\-]+$/, "").trim() || line;
+          if (desc.length < 2 || /^(date|total|tax|gst)/i.test(desc)) continue;
+
+          const nums = numMatches.map((m) => {
+            const raw = m[0].replace("/", ".").replace(",", "");
+            return parseFloat(raw) || 0;
+          });
+
+          const qty = nums[0] > 0 ? Math.round(nums[0]) : 1;
+          const unitCost = nums.length >= 3 ? nums[1] : nums[1] > 0 ? nums[1] : 0;
+          const lineTotal = nums.length >= 3 ? nums[2] : qty * unitCost;
+          const match = matchVariant(desc);
+
+          parsedItems.push({
+            matchedVariantId: match.variant?.id,
+            matchedProductId: match.product?.id,
+            matchedVariantName:
+              match.product && match.variant
+                ? `${match.product.name} (${match.variant.colour}, Size ${match.variant.size})`
+                : desc,
+            productCode: match.product?.product_code,
+            colour: match.variant?.colour,
+            size: match.variant?.size,
+            description: desc,
+            quantity: qty,
+            unitCost,
+            lineTotal: lineTotal > 0 ? lineTotal : qty * unitCost,
+            ...analyzeMarginGuard(match.product, unitCost),
+          });
+        }
+      }
+
+      const finalOcrItems: ParsedInvoiceItem[] =
+        parsedItems.length > 0
+          ? parsedItems
+          : [
+              {
+                matchedVariantId: variants[0]?.id,
+                matchedProductId: products[0]?.id,
+                matchedVariantName:
+                  products[0] && variants[0]
+                    ? `${products[0].name} (${variants[0].colour}, Size ${variants[0].size})`
+                    : lines[0] || "Scanned Item (Review & Edit)",
+                description: lines[0] || "Scanned Item (Review & Edit)",
+                quantity: 1,
+                unitCost: products[0]?.cost_price || 0,
+                lineTotal: products[0]?.cost_price || 0,
+              },
+            ];
+
+      return {
+        success: true,
+        supplierName: matchedSup?.name || "Scanned Supplier Bill",
+        matchedSupplierId: matchedSup?.id || suppliers[0]?.id,
+        invoiceNumber: extractedInvNo,
+        invoiceDate: extractedDate,
+        confidence: "medium",
+        totalAmount: finalOcrItems.reduce((a, b) => a + b.lineTotal, 0),
+        marginAlertCount: finalOcrItems.filter((i) => i.costIncreased).length,
+        rawSummary:
+          parsedItems.length > 0
+            ? `Free Browser OCR (Tesseract) read ${payload.fileName || "image"} and extracted ${parsedItems.length} line item(s).`
+            : `Free Browser OCR read text from ${payload.fileName || "image"}, but couldn't auto-detect table columns (handwriting may need manual edit below).`,
+        ocrRawText: rawText,
+        items: finalOcrItems,
+      };
     }
 
     const sup = suppliers[0];
