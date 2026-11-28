@@ -65,7 +65,7 @@ export default function AdminLayout({
             className="fixed inset-0 bg-black/40 backdrop-blur-xs transition-opacity"
             onClick={() => setIsMobileOpen(false)}
           />
-          <div className="fixed inset-y-0 left-0 w-64 bg-white shadow-xl z-10">
+          <div className="fixed inset-y-0 left-0 w-[268px] bg-white dark:bg-[#0d1424] shadow-xl z-10">
             <AdminSidebar
               role={user?.role || "staff"}
               isCollapsed={false}

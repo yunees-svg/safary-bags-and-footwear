@@ -71,35 +71,41 @@ export function DashboardPulseFeed({ feed, settings, bills }: DashboardPulseFeed
 
   return (
     <>
-      <div className="bg-white rounded-2xl border border-slate-200 shadow-xs overflow-hidden flex flex-col">
+      <div className="bg-white dark:bg-[#111a2e] rounded-[22px] border border-slate-200 dark:border-[#1e2a44] shadow-xs overflow-hidden flex flex-col">
         {/* Header */}
-        <div className="p-4 bg-slate-900 text-white flex items-center justify-between">
-          <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-xl bg-emerald-500/20 border border-emerald-400/30 flex items-center justify-center">
-              <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping" />
+        <div className="p-5 bg-slate-900 dark:bg-[#0d1424] border-b border-slate-800 dark:border-[#1e2a44] text-white flex items-center justify-between gap-3">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-xl bg-[#2ad69a]/15 border border-[#2ad69a]/30 text-[#2ad69a] flex items-center justify-center shrink-0">
+              <Activity className="w-5 h-5" />
             </div>
             <div>
-              <h2 className="text-sm font-bold text-white flex items-center gap-2">
+              <h2 className="text-sm font-bold text-[#f4f7fc] flex flex-wrap items-center gap-2 tracking-tight">
                 Live Store Heartbeat
-                <span className="px-2 py-0.5 rounded-full text-2xs font-semibold bg-emerald-500/20 text-emerald-300 border border-emerald-400/30">
+                <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-2xs font-semibold bg-[#2ad69a]/15 text-[#2ad69a] border border-[#2ad69a]/30">
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#2ad69a] animate-ping" />
                   Real-Time Pulse
                 </span>
               </h2>
-              <p className="text-2xs text-slate-400">
+              <p className="text-2xs text-[#8896b3] mt-0.5">
                 Live counter sales, low stock alerts & customer activity
               </p>
             </div>
           </div>
-          <span className="text-2xs text-slate-400 font-mono hidden sm:inline">
+          <span className="text-2xs text-[#8896b3] font-mono hidden sm:inline shrink-0">
             Active Feed
           </span>
         </div>
 
         {/* Chronological Event Feed */}
-        <div className="divide-y divide-slate-100 max-h-[480px] overflow-y-auto">
+        <div className="divide-y divide-slate-100 dark:divide-[#1e2a44] max-h-[480px] overflow-y-auto">
           {feed.length === 0 ? (
-            <div className="p-8 text-center text-slate-400 text-xs">
-              No recent events in the heartbeat feed.
+            <div className="p-10 text-center flex flex-col items-center justify-center gap-3">
+              <div className="w-12 h-12 rounded-full border-2 border-dashed border-slate-300 dark:border-[#1e2a44] flex items-center justify-center text-slate-400 dark:text-[#8896b3]">
+                <Activity className="w-5 h-5 opacity-60" />
+              </div>
+              <p className="text-xs text-slate-400 dark:text-[#8896b3]">
+                No recent events in the heartbeat feed.
+              </p>
             </div>
           ) : (
             feed.map((item, idx) => (
