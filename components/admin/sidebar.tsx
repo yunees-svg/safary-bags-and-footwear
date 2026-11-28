@@ -108,7 +108,7 @@ export function AdminSidebar({ role, isCollapsed, onToggleCollapse, onNavigate }
       <div className="h-16 flex items-center justify-between px-4 border-b border-slate-100 dark:border-[#1e2a44]">
         <Link href="/admin" className="flex items-center gap-3 overflow-hidden">
           <div className="w-9 h-9 rounded-xl bg-[#162036] border border-[#1f5fff] text-[#f4f7fc] font-extrabold text-sm flex items-center justify-center shrink-0 shadow-[0_0_16px_rgba(31,95,255,0.4)]">
-            N
+            S
           </div>
           {!isCollapsed && (
             <div className="truncate">
