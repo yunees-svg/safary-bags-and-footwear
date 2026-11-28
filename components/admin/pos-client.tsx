@@ -61,7 +61,7 @@ export function PosClient({ products, categories, customers, settings }: PosClie
 
   // Payment controls
   const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>("cash");
-  const [discount, setDiscount] = useState<number>(0);
+  const [discountPercent, setDiscountPercent] = useState<number>(0);
   const [cashTendered, setCashTendered] = useState<string>("");
   const [referenceNumber, setReferenceNumber] = useState<string>("");
 
@@ -85,7 +85,8 @@ export function PosClient({ products, categories, customers, settings }: PosClie
 
   // Calculate cart totals
   const subtotal = cart.reduce((acc, item) => acc + item.unitPrice * item.quantity, 0);
-  const finalTotal = Math.max(0, subtotal - discount);
+  const discountAmount = Number(((subtotal * discountPercent) / 100).toFixed(2));
+  const finalTotal = Math.max(0, subtotal - discountAmount);
   const tenderedNum = parseFloat(cashTendered) || 0;
   const changeDue = Math.max(0, tenderedNum - finalTotal);
 
@@ -177,7 +178,7 @@ export function PosClient({ products, categories, customers, settings }: PosClie
         variant_id: i.variantId,
         quantity: i.quantity,
       })),
-      discount,
+      discount: discountAmount,
       payment_method: paymentMethod,
       paid_amount: paidAmount,
       reference_number: referenceNumber || undefined,
@@ -190,7 +191,7 @@ export function PosClient({ products, categories, customers, settings }: PosClie
       setConfirmedBill(res.bill);
       // Reset cart
       setCart([]);
-      setDiscount(0);
+      setDiscountPercent(0);
       setCashTendered("");
       setReferenceNumber("");
       setIsAddingCustomer(false);
@@ -493,16 +494,28 @@ export function PosClient({ products, categories, customers, settings }: PosClie
               <span>Subtotal ({cart.reduce((a, b) => a + b.quantity, 0)} items):</span>
               <span className="font-semibold">{formatCurrency(subtotal)}</span>
             </div>
-            <div className="flex items-center justify-between text-slate-600">
-              <span>Discount (₹):</span>
-              <input
-                type="number"
-                min="0"
-                value={discount === 0 ? "" : discount}
-                onChange={(e) => setDiscount(Math.max(0, parseFloat(e.target.value) || 0))}
-                placeholder="0.00"
-                className="w-20 px-2 py-0.5 text-right font-semibold text-xs border border-slate-200 rounded bg-white"
-              />
+            <div className="flex items-center justify-between text-slate-600 dark:text-[#8896b3]">
+              <span>Discount (%):</span>
+              <div className="flex items-center gap-2">
+                {discountAmount > 0 && (
+                  <span className="text-2xs font-semibold text-emerald-500">
+                    -{formatCurrency(discountAmount)}
+                  </span>
+                )}
+                <div className="relative flex items-center">
+                  <input
+                    type="number"
+                    min="0"
+                    max="100"
+                    step="0.1"
+                    value={discountPercent === 0 ? "" : discountPercent}
+                    onChange={(e) => setDiscountPercent(Math.min(100, Math.max(0, parseFloat(e.target.value) || 0)))}
+                    placeholder="0"
+                    className="w-20 pl-2 pr-5 py-0.5 text-right font-semibold text-xs border border-slate-200 dark:border-[#1e2a44] rounded bg-white dark:bg-[#162036] text-slate-900 dark:text-[#f4f7fc]"
+                  />
+                  <span className="absolute right-1.5 text-2xs font-semibold text-slate-400 pointer-events-none">%</span>
+                </div>
+              </div>
             </div>
             <div className="flex justify-between font-bold text-sm text-slate-900 pt-1 border-t border-slate-200">
               <span>Net Payable:</span>
