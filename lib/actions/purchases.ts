@@ -119,3 +119,68 @@ export async function createPurchaseEntryAction(payload: CreatePurchasePayload) 
 
   return { success: true, purchase: newPurchase };
 }
+
+export async function updatePurchaseAction(
+  id: string,
+  payload: {
+    invoice_number: string;
+    supplier_id: string;
+    purchase_date: string;
+    total_amount: number;
+    status: PurchaseStatus;
+  }
+) {
+  const snapshot = mockStore.getSnapshot();
+  const purchases: Purchase[] = (snapshot as any).purchases || [];
+  const idx = purchases.findIndex((p) => p.id === id);
+
+  if (idx === -1) {
+    return { error: "Purchase invoice not found." };
+  }
+
+  const supplier = snapshot.suppliers.find((s) => s.id === payload.supplier_id);
+  purchases[idx] = {
+    ...purchases[idx],
+    invoice_number: payload.invoice_number.trim() || purchases[idx].invoice_number,
+    supplier_id: payload.supplier_id || purchases[idx].supplier_id,
+    supplier: supplier || purchases[idx].supplier,
+    purchase_date: payload.purchase_date || purchases[idx].purchase_date,
+    total_amount: Math.max(0, Number(payload.total_amount) || 0),
+    status: payload.status || purchases[idx].status,
+  };
+
+  (snapshot as any).purchases = purchases;
+  revalidatePath("/admin/purchases");
+  revalidatePath("/admin");
+  return { success: true, purchase: purchases[idx] };
+}
+
+export async function deletePurchaseAction(id: string) {
+  const snapshot = mockStore.getSnapshot();
+  const purchases: Purchase[] = (snapshot as any).purchases || [];
+  const target = purchases.find((p) => p.id === id);
+
+  if (!target) {
+    return { error: "Purchase invoice not found." };
+  }
+
+  // Reverse stock quantities if this purchase had already been confirmed
+  if (target.status === "confirmed" && target.items) {
+    for (const item of target.items) {
+      const v = snapshot.variants.find((vr) => vr.id === item.variant_id);
+      if (v) {
+        v.stock_quantity = Math.max(0, v.stock_quantity - item.quantity);
+      }
+    }
+  }
+
+  (snapshot as any).purchases = purchases.filter((p) => p.id !== id);
+
+  revalidatePath("/admin/purchases");
+  revalidatePath("/admin/inventory");
+  revalidatePath("/admin/products");
+  revalidatePath("/admin/pos");
+  revalidatePath("/admin");
+
+  return { success: true };
+}
