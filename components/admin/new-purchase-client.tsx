@@ -218,6 +218,13 @@ export function NewPurchaseClient({ suppliers, variants }: NewPurchaseClientProp
         variant_id: val,
         unit_cost: v?.product.cost_price || updated[index].unit_cost,
       };
+    } else if (field === "subtotal") {
+      const newSubtotal = Math.max(0, Number(val) || 0);
+      const qty = updated[index].quantity > 0 ? updated[index].quantity : 1;
+      updated[index] = {
+        ...updated[index],
+        unit_cost: Number((newSubtotal / qty).toFixed(2)),
+      };
     } else {
       updated[index] = { ...updated[index], [field]: val };
     }
@@ -675,8 +682,17 @@ export function NewPurchaseClient({ suppliers, variants }: NewPurchaseClientProp
                       className="w-full px-2 py-1.5 border border-slate-200 rounded text-xs font-semibold text-slate-900"
                     />
                   </td>
-                  <td className="py-2 px-3 font-semibold text-slate-900 text-right">
-                    {formatCurrency(row.quantity * row.unit_cost)}
+                  <td className="py-2 px-3">
+                    <input
+                      type="number"
+                      min="0"
+                      step="0.01"
+                      required
+                      value={Number((row.quantity * row.unit_cost).toFixed(2))}
+                      onChange={(e) => updateItem(idx, "subtotal", parseFloat(e.target.value) || 0)}
+                      className="w-full px-2 py-1.5 border border-slate-200 dark:border-[#1e2a44] bg-white dark:bg-[#162036] rounded text-xs font-semibold text-slate-900 dark:text-[#f4f7fc] text-right"
+                      aria-label="Editable subtotal"
+                    />
                   </td>
                   <td className="py-2 px-3 text-center">
                     <button
