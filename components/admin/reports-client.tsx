@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { formatCurrency } from "@/lib/utils";
+import { downloadReportPdf } from "@/lib/utils/pdf";
 import {
   BarChart3,
   Download,
@@ -90,6 +91,13 @@ export function ReportsClient({ data }: ReportsClientProps) {
           </p>
         </div>
         <div className="flex items-center gap-2 no-print">
+          <button
+            onClick={() => downloadReportPdf(data)}
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-xs font-semibold shadow-xs transition"
+          >
+            <Download className="w-3.5 h-3.5" />
+            Download PDF
+          </button>
           <button
             onClick={() => window.print()}
             className="inline-flex items-center gap-1.5 px-3 py-1.5 border border-slate-200 text-slate-700 hover:bg-slate-50 rounded-lg text-xs font-semibold transition"

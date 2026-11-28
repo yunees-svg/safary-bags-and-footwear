@@ -2,7 +2,8 @@
 
 import { Bill, ShopSettings } from "@/lib/types/database";
 import { formatCurrency, formatDate } from "@/lib/utils";
-import { Printer, Check, X, Footprints } from "lucide-react";
+import { downloadBillPdf } from "@/lib/utils/pdf";
+import { Printer, Check, X, Footprints, FileDown } from "lucide-react";
 
 interface ReceiptModalProps {
   bill: Bill;
@@ -31,11 +32,18 @@ export function ReceiptModal({ bill, settings, onClose }: ReceiptModalProps) {
           </div>
           <div className="flex items-center gap-2">
             <button
+              onClick={() => downloadBillPdf(bill, settings)}
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold rounded-lg shadow-xs transition"
+            >
+              <FileDown className="w-3.5 h-3.5" />
+              Download PDF
+            </button>
+            <button
               onClick={handlePrint}
               className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold rounded-lg shadow-xs transition"
             >
               <Printer className="w-3.5 h-3.5" />
-              Print Receipt
+              Print
             </button>
             <button
               onClick={onClose}

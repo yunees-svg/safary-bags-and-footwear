@@ -4,6 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { Purchase, PurchaseStatus, Supplier } from "@/lib/types/database";
 import { formatCurrency, formatDate } from "@/lib/utils";
+import { downloadPurchasePdf } from "@/lib/utils/pdf";
 import { createSupplierAction, updatePurchaseAction, deletePurchaseAction } from "@/lib/actions/purchases";
 import {
   Truck,
@@ -103,92 +104,7 @@ export function PurchasesClient({ purchases, suppliers }: PurchasesClientProps) 
   }
 
   function handleDownloadPdf(p: Purchase) {
-    const items = (p.items || []) as any[];
-    const rowsHtml =
-      items.length === 0
-        ? `<tr><td colspan="4" style="padding:12px;text-align:center;color:#64748b;">No item lines recorded</td></tr>`
-        : items
-            .map(
-              (it, i) => `
-          <tr>
-            <td style="padding:8px 10px;border-bottom:1px solid #e2e8f0;">${i + 1}. ${
-                it.item_name || "Purchased Item"
-              }</td>
-            <td style="padding:8px 10px;border-bottom:1px solid #e2e8f0;text-align:right;">${
-              it.quantity
-            }</td>
-            <td style="padding:8px 10px;border-bottom:1px solid #e2e8f0;text-align:right;">${formatCurrency(
-              it.unit_cost
-            )}</td>
-            <td style="padding:8px 10px;border-bottom:1px solid #e2e8f0;text-align:right;font-weight:600;">${formatCurrency(
-              it.subtotal
-            )}</td>
-          </tr>`
-            )
-            .join("");
-
-    const html = `<!doctype html>
-<html>
-<head>
-  <meta charset="utf-8" />
-  <title>Purchase Invoice #${p.invoice_number} - Safary Bags and Footwear</title>
-  <style>
-    body { font-family: Inter, Arial, sans-serif; color: #0f172a; margin: 32px; }
-    .header { display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 2px solid #1f5fff; padding-bottom: 16px; margin-bottom: 20px; }
-    .brand { font-size: 20px; font-weight: 800; color: #0b1120; }
-    .sub { font-size: 12px; color: #475569; margin-top: 4px; }
-    .meta { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 20px; font-size: 13px; background: #f8fafc; padding: 14px; border-radius: 8px; border: 1px solid #e2e8f0; }
-    table { width: 100%; border-collapse: collapse; font-size: 13px; }
-    th { background: #f1f5f9; text-align: left; padding: 10px; font-size: 12px; color: #334155; border-bottom: 1px solid #cbd5e1; }
-    .total { margin-top: 18px; text-align: right; font-size: 16px; font-weight: 800; color: #1f5fff; }
-  </style>
-</head>
-<body>
-  <div class="header">
-    <div>
-      <div class="brand">Safary Bags and Footwear</div>
-      <div class="sub">Supplier Purchase Invoice</div>
-    </div>
-    <div style="text-align:right;font-size:13px;">
-      <div><strong>Invoice #:</strong> ${p.invoice_number}</div>
-      <div><strong>Date:</strong> ${p.purchase_date}</div>
-      <div><strong>Status:</strong> ${p.status.toUpperCase()}</div>
-    </div>
-  </div>
-  <div class="meta">
-    <div><strong>Supplier:</strong> ${p.supplier?.name || "Direct Vendor"}</div>
-    <div><strong>Phone:</strong> ${p.supplier?.phone || "N/A"}</div>
-  </div>
-  <table>
-    <thead>
-      <tr>
-        <th>Purchased Item</th>
-        <th style="text-align:right;">Qty</th>
-        <th style="text-align:right;">Unit Cost</th>
-        <th style="text-align:right;">Subtotal</th>
-      </tr>
-    </thead>
-    <tbody>${rowsHtml}</tbody>
-  </table>
-  <div class="total">Total Purchase Cost: ${formatCurrency(p.total_amount)}</div>
-  <script>window.onload = function(){ window.print(); };</script>
-</body>
-</html>`;
-
-    const win = window.open("", "_blank", "width=850,height=700");
-    if (win) {
-      win.document.open();
-      win.document.write(html);
-      win.document.close();
-    } else {
-      const blob = new Blob([html], { type: "text/html" });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = `purchase-${p.invoice_number}.html`;
-      a.click();
-      URL.revokeObjectURL(url);
-    }
+    downloadPurchasePdf(p);
   }
 
   async function handleAddSupplier(e: React.FormEvent) {
