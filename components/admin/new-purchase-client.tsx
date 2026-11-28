@@ -382,26 +382,26 @@ export function NewPurchaseClient({ suppliers, variants }: NewPurchaseClientProp
         {scanResult && scanResult.success && !isScanning && (
           <div className="space-y-2.5 animate-fade-up">
             {scanResult.confidence === "simulated" ? (
-              <div className="p-3 rounded-xl bg-amber-950/70 border border-amber-500/40 text-amber-200 text-xs flex items-center justify-between gap-2">
-                <div className="flex items-center gap-2">
-                  <AlertTriangle className="w-4 h-4 text-amber-400 shrink-0" />
-                  <span>
+              <div className="p-3 rounded-xl bg-amber-950/70 border border-amber-500/40 text-amber-200 text-xs flex flex-col sm:flex-row sm:items-center justify-between gap-2 overflow-hidden">
+                <div className="flex items-start sm:items-center gap-2 min-w-0">
+                  <AlertTriangle className="w-4 h-4 text-amber-400 shrink-0 mt-0.5 sm:mt-0" />
+                  <span className="break-words min-w-0">
                     <strong>Simulated Mode:</strong> {scanResult.rawSummary}
                   </span>
                 </div>
-                <span className="text-2xs font-semibold px-2 py-0.5 rounded-full bg-amber-900 text-amber-300 shrink-0">
+                <span className="self-start sm:self-auto text-2xs font-semibold px-2 py-0.5 rounded-full bg-amber-900 text-amber-300 shrink-0">
                   Demo Fallback
                 </span>
               </div>
             ) : (
-              <div className="p-3 rounded-xl bg-emerald-950/70 border border-emerald-500/40 text-emerald-200 text-xs flex items-center justify-between gap-2">
-                <div className="flex items-center gap-2">
-                  <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
-                  <span>
+              <div className="p-3 rounded-xl bg-emerald-950/70 border border-emerald-500/40 text-emerald-200 text-xs flex flex-col sm:flex-row sm:items-center justify-between gap-2 overflow-hidden">
+                <div className="flex items-start sm:items-center gap-2 min-w-0">
+                  <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5 sm:mt-0" />
+                  <span className="break-words min-w-0">
                     <strong>AI Recognized:</strong> {scanResult.rawSummary} Extracted {scanResult.items.length} line items (Total {formatCurrency(scanResult.totalAmount)}).
                   </span>
                 </div>
-                <span className="text-2xs font-semibold px-2 py-0.5 rounded-full bg-emerald-900 text-emerald-300 shrink-0">
+                <span className="self-start sm:self-auto text-2xs font-semibold px-2 py-0.5 rounded-full bg-emerald-900 text-emerald-300 shrink-0">
                   Form Auto-Filled ✓
                 </span>
               </div>
@@ -460,11 +460,15 @@ export function NewPurchaseClient({ suppliers, variants }: NewPurchaseClientProp
               onChange={(e) => setSupplierId(e.target.value)}
               className="w-full px-3 py-2 border border-slate-300 dark:border-[#1e2a44] bg-white dark:bg-[#162036] rounded-lg text-xs text-slate-900 dark:text-[#f4f7fc] focus:outline-none focus:ring-1 focus:ring-blue-500"
             >
-              {suppliers.map((s) => (
-                <option key={s.id} value={s.id}>
-                  {s.name}
-                </option>
-              ))}
+              {suppliers.length === 0 ? (
+                <option value="">No suppliers yet — add one in Purchases</option>
+              ) : (
+                suppliers.map((s) => (
+                  <option key={s.id} value={s.id}>
+                    {s.name}
+                  </option>
+                ))
+              )}
             </select>
           </div>
 
