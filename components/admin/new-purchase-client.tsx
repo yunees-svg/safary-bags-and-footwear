@@ -294,7 +294,7 @@ export function NewPurchaseClient({ suppliers, variants }: NewPurchaseClientProp
   }
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-6 max-w-4xl mx-auto pb-12">
+    <form onSubmit={handleSubmit} className="w-full space-y-6 pb-12">
       {/* Top Bar */}
       <div className="flex items-center justify-between">
         <Link
@@ -640,13 +640,17 @@ export function NewPurchaseClient({ suppliers, variants }: NewPurchaseClientProp
                     <select
                       value={row.variant_id}
                       onChange={(e) => updateItem(idx, "variant_id", e.target.value)}
-                      className="w-full px-2 py-1.5 border border-slate-200 rounded text-xs text-slate-900"
+                      className="w-full px-2.5 py-2 border border-slate-200 dark:border-[#1e2a44] bg-white dark:bg-[#162036] rounded-lg text-xs text-slate-900 dark:text-[#f4f7fc]"
                     >
-                      {variants.map((v) => (
-                        <option key={v.id} value={v.id}>
-                          {v.product.name} — {v.colour}, Size {v.size} ({v.sku})
-                        </option>
-                      ))}
+                      {variants.length === 0 ? (
+                        <option value="">No slipper variants yet — add a product first</option>
+                      ) : (
+                        variants.map((v) => (
+                          <option key={v.id} value={v.id}>
+                            {v.product.name} — {v.colour}, Size {v.size} ({v.sku})
+                          </option>
+                        ))
+                      )}
                     </select>
                   </td>
                   <td className="py-2 px-3">
@@ -694,10 +698,10 @@ export function NewPurchaseClient({ suppliers, variants }: NewPurchaseClientProp
           <button
             type="button"
             onClick={addItemRow}
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 border border-slate-200 text-slate-700 hover:bg-slate-50 text-xs font-semibold rounded-lg transition"
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 border border-slate-200 dark:border-[#1e2a44] text-slate-700 dark:text-[#f4f7fc] hover:bg-slate-50 dark:hover:bg-[#162036] text-xs font-semibold rounded-lg transition"
           >
             <Plus className="w-3.5 h-3.5" />
-            + Add Another Slipper Line
+            Add Another Slipper Line
           </button>
         </div>
       </div>

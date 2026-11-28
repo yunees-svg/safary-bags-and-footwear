@@ -200,7 +200,7 @@ export function ProductFormClient({
   const totalStockUnits = variants.reduce((acc, v) => acc + (Number(v.stock_quantity) || 0), 0);
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-6 max-w-4xl mx-auto pb-12">
+    <form onSubmit={handleSubmit} className="w-full space-y-6 pb-12">
       {/* Top Bar */}
       <div className="flex items-center justify-between">
         <Link
