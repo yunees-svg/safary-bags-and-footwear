@@ -123,8 +123,8 @@ export function AdminSidebar({ role, isCollapsed, onToggleCollapse, onNavigate }
           </div>
           {!isCollapsed && (
             <div className="truncate">
-              <span className="font-bold text-slate-900 dark:text-[#f4f7fc] text-sm block leading-tight tracking-tight">
-                Safary Hub
+              <span className="font-bold text-slate-900 dark:text-[#f4f7fc] text-xs block leading-tight tracking-tight">
+                Safary Bags and Footwear
               </span>
               <span className="text-2xs text-slate-400 dark:text-[#8896b3] font-medium capitalize">
                 {role} Console

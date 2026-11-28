@@ -291,11 +291,11 @@ export const GUIDE_ENTRIES: GuideEntry[] = [
     title: "18. Safary AI Assistant, Dark Theme & Mobile App",
     route: "/admin",
     role: "All Staff",
-    summary: "Use the built-in AI Copilot (Ctrl+K), switch Light/Dark themes, and install Safary Hub as a phone app.",
+    summary: "Use the built-in AI Copilot (Ctrl+K), switch Light/Dark themes, and install Safary Bags and Footwear as a phone app.",
     steps: [
       "Safary AI Assistant: Click '✨ Assistant' in the top header (or press Ctrl+K) to open the right side-panel. Ask 'How much sales today?', 'Show low stock alerts', or 'Who owes Khata credit?'.",
       "Light & Dark Theme: Click the Moon (🌙) / Sun (☀️) icon in the top header to switch between Light and Dark mode anytime.",
-      "Install on Android (Chrome): Open the live link in Chrome → tap ⋮ (3 dots) → 'Install app' to add Safary Hub to your home screen.",
+      "Install on Android (Chrome): Open the live link in Chrome → tap ⋮ (3 dots) → 'Install app' to add Safary Bags and Footwear to your home screen.",
       "Install on iPhone (Safari): Open in Safari → tap Share (↑) → 'Add to Home Screen'.",
     ],
     tip: "On mobile, the POS and AI Assistant automatically adjust to full-screen mobile layouts for effortless one-hand operation.",
