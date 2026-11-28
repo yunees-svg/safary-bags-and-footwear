@@ -13,7 +13,7 @@ export default function AdminLayout({
   children: React.ReactNode;
 }) {
   const [user, setUser] = useState<Profile | null>(null);
-  const [isCollapsed, setIsCollapsed] = useState(false);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [isMobileOpen, setIsMobileOpen] = useState(false);
   const [isAssistantOpen, setIsAssistantOpen] = useState(false);
   const [scrollProgress, setScrollProgress] = useState(0);
@@ -49,14 +49,16 @@ export default function AdminLayout({
 
   return (
     <div className="h-dvh overflow-hidden bg-slate-50 flex">
-      {/* Desktop Sidebar */}
-      <div className="hidden lg:block h-full shrink-0">
-        <AdminSidebar
-          role={user?.role || "staff"}
-          isCollapsed={isCollapsed}
-          onToggleCollapse={() => setIsCollapsed(!isCollapsed)}
-        />
-      </div>
+      {/* Desktop Sidebar (Collapsible Toggle) */}
+      {isSidebarOpen && (
+        <div className="hidden lg:block h-full shrink-0">
+          <AdminSidebar
+            role={user?.role || "staff"}
+            isCollapsed={false}
+            onToggleCollapse={() => setIsSidebarOpen(false)}
+          />
+        </div>
+      )}
 
       {/* Mobile Drawer */}
       {isMobileOpen && (
@@ -81,8 +83,8 @@ export default function AdminLayout({
         <AdminHeader
           user={user}
           onOpenMobileSidebar={() => setIsMobileOpen(true)}
-          isSidebarCollapsed={isCollapsed}
-          onToggleSidebar={() => setIsCollapsed(!isCollapsed)}
+          isSidebarOpen={isSidebarOpen}
+          onToggleDesktopSidebar={() => setIsSidebarOpen((prev) => !prev)}
           isAssistantOpen={isAssistantOpen}
           onToggleAssistant={() => setIsAssistantOpen((prev) => !prev)}
         />

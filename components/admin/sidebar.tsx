@@ -98,57 +98,30 @@ export function AdminSidebar({ role, isCollapsed, onToggleCollapse, onNavigate }
   ];
 
   return (
-    <aside
-      className={cn(
-        "relative h-screen sticky top-0 bg-white dark:bg-[#0d1424] border-r border-slate-200 dark:border-[#1e2a44] flex flex-col transition-all duration-200 z-30",
-        isCollapsed ? "w-[76px]" : "w-[268px]"
-      )}
-    >
+    <aside className="relative h-screen sticky top-0 w-[268px] bg-white dark:bg-[#0d1424] border-r border-slate-200 dark:border-[#1e2a44] flex flex-col transition-all duration-200 z-30">
       {/* Brand Header */}
-      <div
-        className={cn(
-          "h-16 flex items-center border-b border-slate-100 dark:border-[#1e2a44]",
-          isCollapsed ? "justify-center px-2" : "justify-between px-4"
-        )}
-      >
-        <Link
-          href="/admin"
-          className={cn(
-            "flex items-center gap-3",
-            !isCollapsed && "overflow-hidden min-w-0"
-          )}
-        >
+      <div className="h-16 flex items-center justify-between px-4 border-b border-slate-100 dark:border-[#1e2a44]">
+        <Link href="/admin" className="flex items-center gap-3 overflow-hidden min-w-0">
           <div className="w-9 h-9 rounded-xl bg-[#162036] border border-[#1f5fff] text-[#f4f7fc] font-extrabold text-sm flex items-center justify-center shrink-0 shadow-[0_0_16px_rgba(31,95,255,0.4)]">
             S
           </div>
-          {!isCollapsed && (
-            <div className="truncate">
-              <span className="font-bold text-slate-900 dark:text-[#f4f7fc] text-xs block leading-tight tracking-tight">
-                Safary Bags and Footwear
-              </span>
-              <span className="text-2xs text-slate-400 dark:text-[#8896b3] font-medium capitalize">
-                {role} Console
-              </span>
-            </div>
-          )}
+          <div className="truncate">
+            <span className="font-bold text-slate-900 dark:text-[#f4f7fc] text-xs block leading-tight tracking-tight">
+              Safary Bags and Footwear
+            </span>
+            <span className="text-2xs text-slate-400 dark:text-[#8896b3] font-medium capitalize">
+              {role} Console
+            </span>
+          </div>
         </Link>
-        {!isCollapsed ? (
-          <button
-            onClick={onToggleCollapse}
-            className="p-1.5 rounded-lg text-slate-400 dark:text-[#8896b3] hover:text-slate-600 dark:hover:text-[#f4f7fc] hover:bg-slate-100 dark:hover:bg-[#162036] transition hidden lg:flex items-center justify-center shrink-0"
-            title="Collapse Sidebar"
-          >
-            <ChevronLeft className="w-4 h-4" />
-          </button>
-        ) : (
-          <button
-            onClick={onToggleCollapse}
-            className="hidden lg:flex items-center justify-center absolute -right-3 top-5 z-40 w-6 h-6 rounded-full bg-white dark:bg-[#111a2e] border border-slate-200 dark:border-[#1e2a44] text-slate-500 dark:text-[#8896b3] hover:text-[#1f5fff] dark:hover:text-[#5b8cff] shadow-md transition"
-            title="Expand Sidebar"
-          >
-            <ChevronRight className="w-3.5 h-3.5" />
-          </button>
-        )}
+        <button
+          onClick={onToggleCollapse}
+          className="p-1.5 rounded-lg text-slate-400 dark:text-[#8896b3] hover:text-slate-600 dark:hover:text-[#f4f7fc] hover:bg-slate-100 dark:hover:bg-[#162036] transition hidden lg:flex items-center justify-center shrink-0"
+          title="Hide Sidebar"
+          aria-label="Hide Sidebar"
+        >
+          <ChevronLeft className="w-4 h-4" />
+        </button>
       </div>
 
       {/* Navigation Links */}

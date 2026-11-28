@@ -10,19 +10,18 @@ import {
   User,
   Shield,
   Menu,
+  PanelLeft,
   Sparkles,
   Sun,
   Moon,
-  PanelLeftClose,
-  PanelLeftOpen,
 } from "lucide-react";
 import Link from "next/link";
 
 interface HeaderProps {
   user: Profile | null;
   onOpenMobileSidebar: () => void;
-  isSidebarCollapsed?: boolean;
-  onToggleSidebar?: () => void;
+  isSidebarOpen?: boolean;
+  onToggleDesktopSidebar?: () => void;
   isAssistantOpen?: boolean;
   onToggleAssistant?: () => void;
 }
@@ -30,8 +29,8 @@ interface HeaderProps {
 export function AdminHeader({
   user,
   onOpenMobileSidebar,
-  isSidebarCollapsed,
-  onToggleSidebar,
+  isSidebarOpen = true,
+  onToggleDesktopSidebar,
   isAssistantOpen,
   onToggleAssistant,
 }: HeaderProps) {
@@ -64,19 +63,15 @@ export function AdminHeader({
           <Menu className="w-5 h-5" />
         </button>
 
-        {onToggleSidebar && (
+        {onToggleDesktopSidebar && (
           <button
             type="button"
-            onClick={onToggleSidebar}
+            onClick={onToggleDesktopSidebar}
             className="hidden lg:flex items-center justify-center p-2 rounded-xl text-slate-500 dark:text-[#8896b3] hover:text-slate-800 dark:hover:text-[#f4f7fc] hover:bg-slate-100 dark:hover:bg-[#162036] border border-transparent hover:border-slate-200 dark:hover:border-[#1e2a44] transition shrink-0"
-            title={isSidebarCollapsed ? "Expand Sidebar" : "Collapse Sidebar"}
-            aria-label={isSidebarCollapsed ? "Expand Sidebar" : "Collapse Sidebar"}
+            title={isSidebarOpen ? "Hide Sidebar" : "Show Sidebar"}
+            aria-label={isSidebarOpen ? "Hide Sidebar" : "Show Sidebar"}
           >
-            {isSidebarCollapsed ? (
-              <PanelLeftOpen className="w-4 h-4 text-[#5b8cff]" />
-            ) : (
-              <PanelLeftClose className="w-4 h-4" />
-            )}
+            <PanelLeft className="w-4 h-4" />
           </button>
         )}
 
