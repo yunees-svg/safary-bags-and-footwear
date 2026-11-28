@@ -87,7 +87,7 @@ export function PurchasesClient({ purchases, suppliers }: PurchasesClientProps) 
           </button>
           <Link
             href="/admin/purchases/new"
-            className="inline-flex items-center gap-1.5 px-3.5 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg text-xs font-semibold shadow-xs transition"
+            className="inline-flex items-center gap-1.5 px-3.5 py-2 bg-[#1f5fff] hover:bg-blue-600 text-white rounded-xl text-xs font-semibold shadow-[0_4px_14px_rgba(31,95,255,0.35)] transition"
           >
             <Sparkles className="w-4 h-4" />
             AI Scan Wholesale Bill

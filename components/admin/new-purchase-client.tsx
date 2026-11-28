@@ -329,17 +329,18 @@ export function NewPurchaseClient({ suppliers, variants }: NewPurchaseClientProp
       )}
 
       {/* AI Document Processing Card */}
-      <div className="bg-gradient-to-r from-indigo-900 via-slate-900 to-blue-950 text-white p-5 rounded-2xl border border-indigo-500/30 shadow-md space-y-4">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+      <div className="relative overflow-hidden bg-gradient-to-br from-[#111a2e] via-[#0d1424] to-[#162036] text-[#f4f7fc] p-5 rounded-[22px] border border-[#1e2a44] shadow-md space-y-4">
+        <div className="pointer-events-none absolute -top-20 -right-20 w-56 h-56 rounded-full bg-[#1f5fff]/15 blur-3xl" />
+        <div className="relative flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-xl bg-indigo-500/30 border border-indigo-400/40 text-indigo-300 flex items-center justify-center">
-              <Sparkles className="w-4 h-4 text-indigo-300 animate-pulse" />
+            <div className="w-8 h-8 rounded-xl bg-[#1f5fff]/20 border border-[#1f5fff]/40 text-[#5b8cff] flex items-center justify-center">
+              <Sparkles className="w-4 h-4 text-[#5b8cff] animate-pulse" />
             </div>
             <div>
-              <h2 className="text-sm font-bold text-white flex items-center gap-1.5">
-                AI Document Processing <span className="text-2xs font-semibold px-2 py-0.5 rounded-full bg-indigo-500/30 text-indigo-200 border border-indigo-400/30">Smart Invoice Scanner</span>
+              <h2 className="text-sm font-bold text-[#f4f7fc] flex items-center gap-1.5">
+                AI Document Processing <span className="text-2xs font-semibold px-2 py-0.5 rounded-full bg-[#1f5fff]/20 text-[#5b8cff] border border-[#1f5fff]/30">Smart Invoice Scanner</span>
               </h2>
-              <p className="text-2xs text-slate-300">
+              <p className="text-2xs text-[#8896b3]">
                 Upload or photograph a wholesale supplier invoice. AI will extract supplier, bill number, line items, and quantities automatically.
               </p>
             </div>
@@ -359,7 +360,7 @@ export function NewPurchaseClient({ suppliers, variants }: NewPurchaseClientProp
               type="button"
               disabled={isScanning}
               onClick={() => fileInputRef.current?.click()}
-              className="px-3.5 py-2 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl text-xs font-semibold shadow-xs transition flex items-center gap-1.5 disabled:opacity-50"
+              className="px-3.5 py-2 bg-[#1f5fff] hover:bg-blue-600 text-white rounded-xl text-xs font-semibold shadow-[0_4px_14px_rgba(31,95,255,0.35)] transition flex items-center gap-1.5 disabled:opacity-50"
             >
               {isScanning ? (
                 <>
@@ -375,13 +376,13 @@ export function NewPurchaseClient({ suppliers, variants }: NewPurchaseClientProp
         </div>
 
         {/* Quick Instant Demo Samples */}
-        <div className="pt-2 border-t border-white/10 flex flex-wrap items-center gap-2 text-2xs">
-          <span className="text-slate-400">Quick Test Templates:</span>
+        <div className="relative pt-2 border-t border-[#1e2a44] flex flex-wrap items-center gap-2 text-2xs">
+          <span className="text-[#8896b3]">Quick Test Templates:</span>
           <button
             type="button"
             disabled={isScanning}
             onClick={() => handleSampleScan("vkc-wholesale")}
-            className="px-2.5 py-1 rounded-lg bg-white/10 hover:bg-white/20 text-indigo-200 border border-white/10 transition flex items-center gap-1"
+            className="px-2.5 py-1 rounded-lg bg-[#162036] hover:bg-[#1e2a44] text-[#5b8cff] border border-[#1e2a44] transition flex items-center gap-1"
           >
             <span>⚡</span> VKC Footwear Bill (60 pairs)
           </button>
@@ -389,7 +390,7 @@ export function NewPurchaseClient({ suppliers, variants }: NewPurchaseClientProp
             type="button"
             disabled={isScanning}
             onClick={() => handleSampleScan("safary-bags")}
-            className="px-2.5 py-1 rounded-lg bg-white/10 hover:bg-white/20 text-blue-200 border border-white/10 transition flex items-center gap-1"
+            className="px-2.5 py-1 rounded-lg bg-[#162036] hover:bg-[#1e2a44] text-[#5b8cff] border border-[#1e2a44] transition flex items-center gap-1"
           >
             <span>⚡</span> Safari Backpacks & Ortho Bill (50 items)
           </button>
@@ -397,18 +398,18 @@ export function NewPurchaseClient({ suppliers, variants }: NewPurchaseClientProp
 
         {/* Laser Scan Motion Graphic while AI is processing */}
         {isScanning && (
-          <div className="p-4 rounded-xl bg-slate-950/70 border border-indigo-400/40 flex items-center gap-4 animate-scale-in">
-            <div className="relative w-14 h-16 rounded-lg bg-slate-900 border border-indigo-400/40 flex flex-col justify-center gap-1.5 p-2 overflow-hidden shrink-0">
-              <div className="h-1 w-8 bg-slate-700 rounded" />
-              <div className="h-1 w-10 bg-slate-700 rounded" />
-              <div className="h-1 w-6 bg-slate-700 rounded" />
-              <div className="h-1 w-9 bg-slate-700 rounded" />
+          <div className="p-4 rounded-xl bg-[#0b1120]/80 border border-[#1f5fff]/40 flex items-center gap-4 animate-scale-in">
+            <div className="relative w-14 h-16 rounded-lg bg-[#111a2e] border border-[#1f5fff]/40 flex flex-col justify-center gap-1.5 p-2 overflow-hidden shrink-0">
+              <div className="h-1 w-8 bg-[#1e2a44] rounded" />
+              <div className="h-1 w-10 bg-[#1e2a44] rounded" />
+              <div className="h-1 w-6 bg-[#1e2a44] rounded" />
+              <div className="h-1 w-9 bg-[#1e2a44] rounded" />
               {/* Sweeping Blue Laser Beam */}
-              <div className="absolute left-0 right-0 h-0.5 bg-blue-400 shadow-[0_0_10px_2px_rgba(96,165,250,0.9)] animate-laser-scan" />
+              <div className="absolute left-0 right-0 h-0.5 bg-[#5b8cff] shadow-[0_0_10px_2px_rgba(31,95,255,0.9)] animate-laser-scan" />
             </div>
             <div className="space-y-1 text-xs">
-              <p className="font-bold text-indigo-200 flex items-center gap-2">
-                <Loader2 className="w-3.5 h-3.5 animate-spin text-blue-400" />
+              <p className="font-bold text-[#5b8cff] flex items-center gap-2">
+                <Loader2 className="w-3.5 h-3.5 animate-spin text-[#5b8cff]" />
                 {scanStage}
               </p>
               <p className="text-2xs text-slate-300">
@@ -449,7 +450,7 @@ export function NewPurchaseClient({ suppliers, variants }: NewPurchaseClientProp
 
             {scanResult.ocrRawText && (
               <details className="p-3 rounded-xl bg-slate-950/60 border border-white/10 text-2xs text-slate-300">
-                <summary className="cursor-pointer font-semibold text-indigo-300 select-none">
+                <summary className="cursor-pointer font-semibold text-[#5b8cff] select-none">
                   View Raw OCR Text Read from Image
                 </summary>
                 <pre className="mt-2 whitespace-pre-wrap font-mono text-2xs text-slate-300/90 max-h-40 overflow-y-auto">
