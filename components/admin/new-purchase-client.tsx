@@ -48,6 +48,7 @@ export function NewPurchaseClient({ suppliers, variants }: NewPurchaseClientProp
 
   const [items, setItems] = useState<{
     variant_id: string;
+    item_name?: string;
     quantity: number;
     unit_cost: number;
   }[]>([]);
@@ -187,6 +188,7 @@ export function NewPurchaseClient({ suppliers, variants }: NewPurchaseClientProp
     if (res.items && res.items.length > 0) {
       const newItems = res.items.map((it) => ({
         variant_id: it.matchedVariantId || variants[0]?.id || "",
+        item_name: it.matchedVariantName || it.description || "",
         quantity: it.quantity,
         unit_cost: it.unitCost,
       }));
@@ -195,12 +197,14 @@ export function NewPurchaseClient({ suppliers, variants }: NewPurchaseClientProp
   }
 
   function addItemRow() {
+    const firstVar = variants[0];
     setItems([
       ...items,
       {
-        variant_id: variants[0]?.id || "",
+        variant_id: firstVar?.id || "",
+        item_name: firstVar ? `${firstVar.product.name} — ${firstVar.colour}, Size ${firstVar.size}` : "",
         quantity: 10,
-        unit_cost: variants[0]?.product.cost_price || 200,
+        unit_cost: firstVar?.product.cost_price || 200,
       },
     ]);
   }
@@ -274,6 +278,7 @@ export function NewPurchaseClient({ suppliers, variants }: NewPurchaseClientProp
       status,
       items: items.map((i) => ({
         variant_id: i.variant_id,
+        item_name: i.item_name,
         quantity: Number(i.quantity),
         unit_cost: Number(i.unit_cost),
       })),
@@ -645,21 +650,27 @@ export function NewPurchaseClient({ suppliers, variants }: NewPurchaseClientProp
                 items.map((row, idx) => (
                 <tr key={idx}>
                   <td className="py-2 px-3">
-                    <select
-                      value={row.variant_id}
-                      onChange={(e) => updateItem(idx, "variant_id", e.target.value)}
-                      className="w-full px-2.5 py-2 border border-slate-200 dark:border-[#1e2a44] bg-white dark:bg-[#162036] rounded-lg text-xs text-slate-900 dark:text-[#f4f7fc]"
-                    >
-                      {variants.length === 0 ? (
-                        <option value="">No slipper variants yet — add a product first</option>
-                      ) : (
-                        variants.map((v) => (
+                    {variants.length === 0 ? (
+                      <input
+                        type="text"
+                        placeholder="Enter purchased item name (e.g., Men Slides)"
+                        value={row.item_name || ""}
+                        onChange={(e) => updateItem(idx, "item_name", e.target.value)}
+                        className="w-full px-2.5 py-2 border border-slate-200 dark:border-[#1e2a44] bg-white dark:bg-[#162036] rounded-lg text-xs text-slate-900 dark:text-[#f4f7fc]"
+                      />
+                    ) : (
+                      <select
+                        value={row.variant_id}
+                        onChange={(e) => updateItem(idx, "variant_id", e.target.value)}
+                        className="w-full px-2.5 py-2 border border-slate-200 dark:border-[#1e2a44] bg-white dark:bg-[#162036] rounded-lg text-xs text-slate-900 dark:text-[#f4f7fc]"
+                      >
+                        {variants.map((v) => (
                           <option key={v.id} value={v.id}>
                             {v.product.name} — {v.colour}, Size {v.size} ({v.sku})
                           </option>
-                        ))
-                      )}
-                    </select>
+                        ))}
+                      </select>
+                    )}
                   </td>
                   <td className="py-2 px-3">
                     <input

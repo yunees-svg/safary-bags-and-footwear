@@ -19,6 +19,7 @@ import {
   Sparkles,
   Pencil,
   Trash2,
+  FileDown,
 } from "lucide-react";
 
 interface PurchasesClientProps {
@@ -98,6 +99,95 @@ export function PurchasesClient({ purchases, suppliers }: PurchasesClientProps) 
     } else {
       setPurchaseList((prev) => prev.filter((item) => item.id !== p.id));
       setSuccess(`Deleted invoice #${p.invoice_number}.`);
+    }
+  }
+
+  function handleDownloadPdf(p: Purchase) {
+    const items = (p.items || []) as any[];
+    const rowsHtml =
+      items.length === 0
+        ? `<tr><td colspan="4" style="padding:12px;text-align:center;color:#64748b;">No item lines recorded</td></tr>`
+        : items
+            .map(
+              (it, i) => `
+          <tr>
+            <td style="padding:8px 10px;border-bottom:1px solid #e2e8f0;">${i + 1}. ${
+                it.item_name || "Purchased Item"
+              }</td>
+            <td style="padding:8px 10px;border-bottom:1px solid #e2e8f0;text-align:right;">${
+              it.quantity
+            }</td>
+            <td style="padding:8px 10px;border-bottom:1px solid #e2e8f0;text-align:right;">${formatCurrency(
+              it.unit_cost
+            )}</td>
+            <td style="padding:8px 10px;border-bottom:1px solid #e2e8f0;text-align:right;font-weight:600;">${formatCurrency(
+              it.subtotal
+            )}</td>
+          </tr>`
+            )
+            .join("");
+
+    const html = `<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>Purchase Invoice #${p.invoice_number} - Safary Bags and Footwear</title>
+  <style>
+    body { font-family: Inter, Arial, sans-serif; color: #0f172a; margin: 32px; }
+    .header { display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 2px solid #1f5fff; padding-bottom: 16px; margin-bottom: 20px; }
+    .brand { font-size: 20px; font-weight: 800; color: #0b1120; }
+    .sub { font-size: 12px; color: #475569; margin-top: 4px; }
+    .meta { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 20px; font-size: 13px; background: #f8fafc; padding: 14px; border-radius: 8px; border: 1px solid #e2e8f0; }
+    table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    th { background: #f1f5f9; text-align: left; padding: 10px; font-size: 12px; color: #334155; border-bottom: 1px solid #cbd5e1; }
+    .total { margin-top: 18px; text-align: right; font-size: 16px; font-weight: 800; color: #1f5fff; }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <div>
+      <div class="brand">Safary Bags and Footwear</div>
+      <div class="sub">Supplier Purchase Invoice</div>
+    </div>
+    <div style="text-align:right;font-size:13px;">
+      <div><strong>Invoice #:</strong> ${p.invoice_number}</div>
+      <div><strong>Date:</strong> ${p.purchase_date}</div>
+      <div><strong>Status:</strong> ${p.status.toUpperCase()}</div>
+    </div>
+  </div>
+  <div class="meta">
+    <div><strong>Supplier:</strong> ${p.supplier?.name || "Direct Vendor"}</div>
+    <div><strong>Phone:</strong> ${p.supplier?.phone || "N/A"}</div>
+  </div>
+  <table>
+    <thead>
+      <tr>
+        <th>Purchased Item</th>
+        <th style="text-align:right;">Qty</th>
+        <th style="text-align:right;">Unit Cost</th>
+        <th style="text-align:right;">Subtotal</th>
+      </tr>
+    </thead>
+    <tbody>${rowsHtml}</tbody>
+  </table>
+  <div class="total">Total Purchase Cost: ${formatCurrency(p.total_amount)}</div>
+  <script>window.onload = function(){ window.print(); };</script>
+</body>
+</html>`;
+
+    const win = window.open("", "_blank", "width=850,height=700");
+    if (win) {
+      win.document.open();
+      win.document.write(html);
+      win.document.close();
+    } else {
+      const blob = new Blob([html], { type: "text/html" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `purchase-${p.invoice_number}.html`;
+      a.click();
+      URL.revokeObjectURL(url);
     }
   }
 
@@ -248,11 +338,37 @@ export function PurchasesClient({ purchases, suppliers }: PurchasesClientProps) 
                         {p.status}
                       </span>
                     </td>
-                    <td className="py-3.5 px-4 text-slate-500">
-                      {p.items?.reduce((a, b) => a + b.quantity, 0) || 0} pairs
+                    <td className="py-3.5 px-4 text-slate-600 dark:text-[#f4f7fc]">
+                      {(() => {
+                        const items = (p.items || []) as any[];
+                        const totalPairs = items.reduce((a, b) => a + (b.quantity || 0), 0);
+                        const firstName = items[0]?.item_name;
+                        return (
+                          <div className="min-w-0">
+                            {firstName && (
+                              <p className="text-xs font-medium text-slate-800 dark:text-[#f4f7fc] truncate max-w-[200px]">
+                                {firstName}
+                                {items.length > 1 ? ` (+${items.length - 1} more)` : ""}
+                              </p>
+                            )}
+                            <p className="text-2xs text-slate-400 dark:text-[#8896b3]">
+                              {totalPairs} pairs
+                            </p>
+                          </div>
+                        );
+                      })()}
                     </td>
                     <td className="py-3.5 px-4 text-right">
                       <div className="inline-flex items-center gap-1.5">
+                        <button
+                          type="button"
+                          onClick={() => handleDownloadPdf(p)}
+                          className="p-1.5 rounded-lg text-slate-400 hover:text-emerald-400 hover:bg-emerald-500/10 transition"
+                          title="Download / Print PDF"
+                          aria-label={`Download PDF for invoice ${p.invoice_number}`}
+                        >
+                          <FileDown className="w-3.5 h-3.5" />
+                        </button>
                         <button
                           type="button"
                           onClick={() => openEditPurchase(p)}

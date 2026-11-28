@@ -30,11 +30,24 @@ export async function createSupplierAction(payload: { name: string; phone: strin
 
 export async function getPurchasesAction() {
   const snapshot = mockStore.getSnapshot();
-  return (snapshot as any).purchases || [];
+  const purchases: Purchase[] = (snapshot as any).purchases || [];
+  return purchases.map((p) => ({
+    ...p,
+    items: (p.items || []).map((it: any) => {
+      if (it.item_name) return it;
+      const v = snapshot.variants.find((vr) => vr.id === it.variant_id);
+      const prod = v ? snapshot.products.find((pr) => pr.id === v.product_id) : undefined;
+      return {
+        ...it,
+        item_name: prod && v ? `${prod.name} (${v.colour}, Size ${v.size})` : it.variant_id || "Purchased Item",
+      };
+    }),
+  }));
 }
 
 export interface PurchaseItemInput {
   variant_id: string;
+  item_name?: string;
   quantity: number;
   unit_cost: number;
 }
@@ -85,10 +98,17 @@ export async function createPurchaseEntryAction(payload: CreatePurchasePayload) 
       }
     }
 
+    const v = variants.find((vr) => vr.id === item.variant_id);
+    const prod = v ? snapshot.products.find((pr) => pr.id === v.product_id) : undefined;
+    const resolvedName =
+      item.item_name?.trim() ||
+      (prod && v ? `${prod.name} (${v.colour}, Size ${v.size})` : "Purchased Item");
+
     return {
       id: `pi_${Date.now()}_${idx}`,
       purchase_id: `pur_${Date.now()}`,
       variant_id: item.variant_id,
+      item_name: resolvedName,
       quantity: item.quantity,
       unit_cost: item.unit_cost,
       subtotal,
